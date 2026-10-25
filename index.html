@@ -841,7 +841,7 @@ class Listener{constructor(onWords,onState){this.onWords=onWords;this.onState=on
  stop(){this.active=false;try{this.r&&this.r.stop()}catch(e){}}
  transcript(){return (this.finalText+" "+this.text).trim()}}
 function sayEn(text){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="en-US";u.rate=.95;speechSynthesis.speak(u)}catch(e){}}
-const RECITERS=[{id:"ghamdi",ar:"الشيخ سعد الغامدي",en:"Shaykh Saʿd al-Ghāmidī",src:"audio/ghamdi.m4a",map:GHAMDI}];
+const RECITERS=[{id:"ghamdi",ar:"الشيخ سعد الغامدي",en:"Shaykh Saʿd al-Ghāmidī",src:"audio/ghamdi.mp3",map:GHAMDI}];
 const R=()=>RECITERS.find(r=>r.id===ST.reciter)||RECITERS[0];
 const AUDIO=R().map;
 const Player={a:null,queue:[],qi:0,left:0,seg:null,raf:0,onWord:null,playing:false,
