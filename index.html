@@ -881,6 +881,92 @@ html[lang="en"] .facts b{font-size:.68rem!important}html[lang="en"] .facts li>sp
 .rpc.all .nm{font-family:var(--font)}
 .cta{flex-wrap:nowrap!important}
 
+/* reading mode switch */
+.vmrow{display:flex;align-items:center;justify-content:center;gap:12px;margin:0 0 22px;flex-wrap:wrap}
+.vmode{border-radius:999px!important}.vmode button{display:inline-flex;align-items:center;gap:6px;padding:8px 16px!important;font-weight:700}
+.pdfdlg{text-align:start!important;gap:12px!important}.pdfdlg .seg{width:max-content}
+/* book PDF */
+#print .bp{display:none}
+@media print{
+ @page{size:A4;margin:12mm 14mm}
+ #print .bp{display:flex;flex-direction:column;height:270mm;page-break-after:always;break-after:page;font-family:var(--text);color:#111;background:#fff;overflow:hidden}
+ #print .bp:last-child{page-break-after:auto;break-after:auto}
+ .bph{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1.2pt solid #111;padding-bottom:2mm;margin-bottom:7mm;font-size:13pt;font-weight:700}
+ .bp.even .bph{flex-direction:row-reverse}
+ .bpn{font-weight:700}
+ .bpb{flex:1}
+ .bpf{display:flex;justify-content:space-between;align-items:flex-end;border-top:.5pt solid #bbb;padding-top:2mm;font-family:"Site",sans-serif;font-size:8.5pt;color:#555}
+ .bpf .qr svg{width:17mm;height:17mm}
+ .pbism{text-align:center;font-size:17pt;margin:0 0 5mm}
+ .pch{text-align:center;font-size:18pt;font-weight:700;color:#3f7f55;margin:0 0 6mm}
+ .pch small{display:block;font-family:"Site",sans-serif;font-size:10pt;font-weight:600;color:#555;margin-top:1mm}
+ .pv{margin:0 0 5mm;padding:0 6mm;break-inside:avoid}
+ .pv .ps,.pv .pa{font-size:20pt;line-height:1.95}
+ .pv .ps{text-align:right}.pv .pa{text-align:left;padding-right:16%}
+ .pv .pn{color:#3f7f55;margin-left:3mm}
+ .pv .qm{color:#3f7f55}
+ .ptl{font-family:"Site",sans-serif;font-size:9.5pt;font-style:italic;color:#444;text-align:left;margin-top:1mm}
+ .ptr{font-family:"Site",sans-serif;font-size:10pt;color:#222;text-align:left;line-height:1.5;margin-top:1mm}
+ .pmn{font-family:var(--text);font-size:12.5pt;color:#333;line-height:1.7;margin-top:1mm;border-right:2pt solid #cfe3d5;padding-right:3mm}
+ .bp.cover{justify-content:space-between;border:1pt solid #3f7f55;outline:.5pt solid #3f7f55;outline-offset:2mm;padding:10mm}
+ .cv{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:7mm}
+ .cvt{font-size:30pt;font-weight:700;color:#3f7f55;line-height:1.6;max-width:150mm}
+ .cva{font-size:17pt}
+ .cve{font-family:"Site",sans-serif;font-size:12pt;line-height:1.7;color:#333}.cve b{font-size:13pt;color:#111}
+ .cvf{display:flex;flex-direction:column;gap:2mm;font-size:14pt}
+ .cvx{font-size:12pt;color:#555}
+ .cvn{font-size:13pt}
+}
+@media print{.cvt{font-size:27pt!important;max-width:175mm!important}}
+/* compact controls, small labels (Tarteel-like) */
+.btn{min-height:34px!important;padding:6px 12px!important;font-size:.84rem!important}
+.btn.sm{min-height:30px!important;padding:4px 10px!important;font-size:.8rem!important}
+.btn svg{width:16px!important;height:16px!important}
+.qk{min-height:30px!important;padding:2px 10px 2px 8px!important;font-size:.78rem!important}.qk svg{width:15px!important;height:15px!important}
+.chip{min-height:32px!important;padding:4px 10px!important;font-size:.82rem!important}
+.seg button{min-height:34px!important;padding:5px 11px!important;font-size:.84rem!important}
+.dock .in{padding:6px!important;gap:4px!important;border-radius:20px!important;grid-template-columns:1fr 1fr 1.4fr 1fr 1fr!important}
+.db{min-height:46px!important;padding:4px 2px!important;font-size:.7rem!important;font-weight:600!important;gap:1px!important;border-radius:12px!important}
+.db svg{width:19px!important;height:19px!important}
+.mic{height:44px!important;min-width:84px!important;font-size:.8rem!important;padding:0 10px!important;gap:4px!important}
+.mic svg{width:17px!important;height:17px!important}
+.mst{font-size:.68rem!important;min-height:1.2em!important}.mst svg{width:11px!important;height:11px!important}
+.games.stick .game{min-height:36px!important;padding:3px 10px!important}.games.stick .game b{font-size:.82rem!important}
+.games.stick .game .ic{width:24px!important;height:24px!important}.games.stick .game .ic svg{width:14px!important;height:14px!important}
+.vmode button{padding:5px 12px!important;font-size:.82rem!important}
+.flipbar .btn{min-height:36px!important;font-size:.84rem!important}
+.gbig{padding:7px!important;font-size:.85rem!important}.gbig svg{width:18px!important;height:18px!important}
+.kopts .opt{min-height:42px!important}
+.tog{min-height:32px!important;font-size:.8rem!important;padding:4px 10px 4px 6px!important}.tog i{width:28px!important;height:17px!important}.tog i::after{width:11px!important;height:11px!important}.tog[aria-pressed="true"] i::after{inset-inline-start:14px!important}
+.sizer button{min-height:32px!important;font-size:.8rem!important;padding:0 10px!important}
+select{min-height:32px!important;font-size:.82rem!important;padding:4px 8px!important}
+.menu a{font-size:.86rem!important;padding:6px 10px!important}
+body.dockpad .toast,body.pbon .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))!important}
+.spacer{height:80px!important}
+
+.db{font-size:.64rem!important}.mic{font-size:.74rem!important}.mst{font-size:.62rem!important}
+/* practice: calm, one colour family (white cards, green outline and accents) */
+.kopts .opt{background:var(--surface)!important;color:var(--ink)!important;border:1.5px solid var(--line)!important;box-shadow:none!important}
+.kopts .opt .ob{background:var(--acc-soft)!important;color:var(--acc)!important}
+.kopts .opt:hover{border-color:var(--acc)!important}
+.kopts .opt.right{background:var(--ok-soft)!important;border-color:var(--ok)!important;color:var(--ink)!important;box-shadow:none!important}
+.kopts .opt.wrong{background:var(--bad-soft)!important;border-color:var(--bad)!important;color:var(--ink)!important}
+.tiles2 button{background:var(--surface)!important;color:var(--ink)!important;border:1.5px solid var(--acc)!important;box-shadow:none!important}
+.tiles2 button.wrong{background:var(--bad-soft)!important;border-color:var(--bad)!important}
+.mm .h1.down{background:var(--acc-soft)!important;border-color:var(--acc)!important}
+.mm .h2.down{background:var(--surface-2)!important;border-color:#9aa0a6!important}
+.mm .h1.up{background:var(--surface)!important;border-color:var(--acc)!important}.mm .h2.up{background:var(--surface)!important;border-color:#9aa0a6!important}
+.mm .tag{background:var(--surface)!important;color:var(--ink)!important;border:1px solid var(--line)}
+.gbig.yes{background:var(--acc)!important;color:#fff!important}.gbig.no{background:var(--surface)!important;color:var(--ink)!important;border:1.5px solid var(--line)!important;box-shadow:none!important}
+.gbig{box-shadow:none!important}
+.fc>div{border-color:var(--line)!important}.fc .back{background:var(--acc-soft)!important}
+.lvmap{background:var(--surface-2)!important}
+.lvn{border-color:var(--line)!important;box-shadow:none!important}
+.lv.next .lvn{border-color:var(--acc)!important}
+.timer i{background:var(--acc)!important}
+.fx{color:var(--acc)!important}.fx.combo{color:var(--ink)!important}
+.mult.pop{color:var(--acc)!important}
+
 :root{--lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'%3E%3Cg fill='none' stroke='%232b2f33' stroke-opacity='0.16' stroke-width='1.2'%3E%3Cpath d='M0 0C0 16 24 16 24 32C24 48 0 48 0 64M48 0C48 16 24 16 24 32C24 48 48 48 48 64'/%3E%3Cpath d='M24 -32C24 -16 48 -16 48 0M24 -32C24 -16 0 -16 0 0' transform='translate(0 64)'/%3E%3C/g%3E%3Cg fill='%232b2f33' fill-opacity='0.21'%3E%3Ccircle cx='24' cy='10' r='2.2'/%3E%3Ccircle cx='0' cy='42' r='2.2'/%3E%3Ccircle cx='48' cy='42' r='2.2'/%3E%3C/g%3E%3C/svg%3E");--ablaq:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Crect width='10' height='10' fill='%232a2f36'/%3E%3Crect x='10' width='10' height='10' fill='%23f4efe4'/%3E%3C/svg%3E")}@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'%3E%3Cg fill='none' stroke='%23d6d9dc' stroke-opacity='0.12' stroke-width='1.2'%3E%3Cpath d='M0 0C0 16 24 16 24 32C24 48 0 48 0 64M48 0C48 16 24 16 24 32C24 48 48 48 48 64'/%3E%3Cpath d='M24 -32C24 -16 48 -16 48 0M24 -32C24 -16 0 -16 0 0' transform='translate(0 64)'/%3E%3C/g%3E%3Cg fill='%23d6d9dc' fill-opacity='0.16'%3E%3Ccircle cx='24' cy='10' r='2.2'/%3E%3Ccircle cx='0' cy='42' r='2.2'/%3E%3Ccircle cx='48' cy='42' r='2.2'/%3E%3C/g%3E%3C/svg%3E");--ablaq:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Crect width='10' height='10' fill='%230f1216'/%3E%3Crect x='10' width='10' height='10' fill='%23cfc6b4'/%3E%3C/svg%3E")}}:root[data-theme="dark"]{--lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'%3E%3Cg fill='none' stroke='%23d6d9dc' stroke-opacity='0.12' stroke-width='1.2'%3E%3Cpath d='M0 0C0 16 24 16 24 32C24 48 0 48 0 64M48 0C48 16 24 16 24 32C24 48 48 48 48 64'/%3E%3Cpath d='M24 -32C24 -16 48 -16 48 0M24 -32C24 -16 0 -16 0 0' transform='translate(0 64)'/%3E%3C/g%3E%3Cg fill='%23d6d9dc' fill-opacity='0.16'%3E%3Ccircle cx='24' cy='10' r='2.2'/%3E%3Ccircle cx='0' cy='42' r='2.2'/%3E%3Ccircle cx='48' cy='42' r='2.2'/%3E%3C/g%3E%3C/svg%3E");--ablaq:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Crect width='10' height='10' fill='%230f1216'/%3E%3Crect x='10' width='10' height='10' fill='%23cfc6b4'/%3E%3C/svg%3E")}</style>
 </head>
 <body>
@@ -967,10 +1053,10 @@ html[lang="en"] .facts b{font-size:.68rem!important}html[lang="en"] .facts li>sp
    <span class="sizer" role="group" aria-label="Text size"><button type="button" data-fs="-1">A−</button><button type="button" data-fs="1">A+</button></span>
    <select id="jump" aria-label="Chapter"><option value="">Chapter · الباب</option><option value="c1">١ · المقدمة</option><option value="c2">٦ · النون الساكنة والتنوين</option><option value="c3">١٧ · الميم والنون المشددتان</option><option value="c4">١٨ · الميم الساكنة</option><option value="c5">٢٤ · لام أل ولام الفعل</option><option value="c6">٣٠ · المثلان والمتقاربان والمتجانسان</option><option value="c7">٣٥ · أقسام المد</option><option value="c8">٤٢ · أحكام المد</option><option value="c9">٤٨ · أقسام المد اللازم</option><option value="c10">٥٨ · الخاتمة</option></select>
    <button class="btn sm pri" type="button" id="bookPdf"><span class="l-en" lang="en">Save as PDF</span><span class="l-ar" lang="ar" dir="rtl">حفظ PDF</span></button>
-   <span class="seg vmode" role="group"><button type="button" data-vm="book"><span class="l-en" lang="en">Pages</span><span class="l-ar" lang="ar" dir="rtl">صفحات</span></button><button type="button" data-vm="scroll"><span class="l-en" lang="en">Scroll</span><span class="l-ar" lang="ar" dir="rtl">تمرير</span></button></span>
    <button class="btn sm out" type="button" id="reciteAlong"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="width:18px;height:18px"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg><span class="l-en" lang="en">Recite along</span><span class="l-ar" lang="ar" dir="rtl">اقرأ مع المتابعة</span></button>
    <button class="btn sm pri" type="button" id="listenAll"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg><span class="l-en" lang="en">Listen</span><span class="l-ar" lang="ar" dir="rtl">استمع</span></button>
   </div>
+  <div class="vmrow"><span class="note"><span class="l-en" lang="en">Reading</span><span class="l-ar" lang="ar" dir="rtl">طريقة القراءة</span></span><span class="seg vmode" role="group"><button type="button" data-vm="book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" width="18" height="18"><path d="M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5zM12 6.5V19"/></svg><span class="l-en" lang="en">Flip pages</span><span class="l-ar" lang="ar" dir="rtl">تقليب الصفحات</span></button><button type="button" data-vm="scroll"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M12 4v16M7 9l5-5 5 5M7 15l5 5 5-5"/></svg><span class="l-en" lang="en">Scroll</span><span class="l-ar" lang="ar" dir="rtl">تمرير</span></button></span></div>
   <nav aria-label="Contents" id="toc"><p class="toc-h"><span class="l-en" lang="en">Contents</span><span class="l-ar" lang="ar" dir="rtl">الفهرس</span></p><ol class="toc"><li><a href="#poem/c1"><span><span class="l-en" lang="en">1–5</span><span class="l-ar" lang="ar" dir="rtl">١–٥</span></span><b lang="ar">المقدمة</b></a></li><li><a href="#poem/c2"><span><span class="l-en" lang="en">6–16</span><span class="l-ar" lang="ar" dir="rtl">٦–١٦</span></span><b lang="ar">النون الساكنة والتنوين</b></a></li><li><a href="#poem/c3"><span><span class="l-en" lang="en">17</span><span class="l-ar" lang="ar" dir="rtl">١٧</span></span><b lang="ar">الميم والنون المشددتان</b></a></li><li><a href="#poem/c4"><span><span class="l-en" lang="en">18–23</span><span class="l-ar" lang="ar" dir="rtl">١٨–٢٣</span></span><b lang="ar">الميم الساكنة</b></a></li><li><a href="#poem/c5"><span><span class="l-en" lang="en">24–29</span><span class="l-ar" lang="ar" dir="rtl">٢٤–٢٩</span></span><b lang="ar">لام أل ولام الفعل</b></a></li><li><a href="#poem/c6"><span><span class="l-en" lang="en">30–34</span><span class="l-ar" lang="ar" dir="rtl">٣٠–٣٤</span></span><b lang="ar">المثلان والمتقاربان والمتجانسان</b></a></li><li><a href="#poem/c7"><span><span class="l-en" lang="en">35–41</span><span class="l-ar" lang="ar" dir="rtl">٣٥–٤١</span></span><b lang="ar">أقسام المد</b></a></li><li><a href="#poem/c8"><span><span class="l-en" lang="en">42–47</span><span class="l-ar" lang="ar" dir="rtl">٤٢–٤٧</span></span><b lang="ar">أحكام المد</b></a></li><li><a href="#poem/c9"><span><span class="l-en" lang="en">48–57</span><span class="l-ar" lang="ar" dir="rtl">٤٨–٥٧</span></span><b lang="ar">أقسام المد اللازم</b></a></li><li><a href="#poem/c10"><span><span class="l-en" lang="en">58–61</span><span class="l-ar" lang="ar" dir="rtl">٥٨–٦١</span></span><b lang="ar">الخاتمة</b></a></li></ol></nav>
   <div class="poem" id="poemText">
    <p class="bism" lang="ar">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</p>
@@ -1049,7 +1135,7 @@ const IN_FRAME=(()=>{try{return window.self!==window.top}catch(e){return true}})
 
 /* ================= strings ================= */
 const T={
-en:{repeat:"repeat",chooseHere:"Choose the verses here, then tap Start.",chooseGame:"Choose an exercise below.",chooseLevel:"Tap a level to start.",pickType:"Choose at least one question type.",tapWordHint:"Tap any word to see its meaning.",byChapter:"By chapter",byVerse:"Choose verses",selected:"Selected:",iWasRight:"I said it right",redoHere:"Recite again from here",undoDone:"Mistake removed",checkHint:"Not accurate? Tap “I said it right” to remove the mistake. Tap a red or orange word during practice to do the same.",vHidden:"Memory mode on: words are hidden",vHint:"Hint on: words are faded",vShown:"Text shown: read along",wentBack:"It sounds like you went back to verse {v}.",wentAhead:"It sounds like you moved ahead to verse {v}.",farBack:"You went back more than a page, so the microphone is paused.",waitTap:"I will wait until you choose.",startHere:"Yes, start from verse {v}",stayHere:"No, take me back to verse {v}",jumpQ:"Start again from verse {v}?",backL:"Back",prevCh:"Previous page",nextCh:"Next page",pickVerses:"Choose exact verses",tapFirst:"Tap the first verse, then the last one.",tapLast:"Now tap the last verse.",howTo:"How to play",flashHow:"You see the first half of a line. Say the second half in your head, then tap the card to check. Tap “I knew it” or “Again”.",speedHow:"Pick the right answer before the bar runs out. Answer fast for more points, and get answers right in a row for a combo.",buildHow:"The words of the second half are mixed up. Tap them in the right order to build the line.",matchHow:"Every line has two halves. Dark tiles are first halves and light brown tiles are second halves. Flip one dark and one light brown tile from the same line to make a pair.",customLv:"Or choose your own verses",play:"Play",nextLv:"Next level",playAgain:"Play again",levels:"Levels",half1:"First half",half2:"Second half",combo:"Combo",level:"Level",
+en:{repeat:"repeat",pdfTitle:"Save the matn as PDF",pdfEd:"Edition",pdfInc:"Add under each line (optional)",pdfMn:"Meaning (Arabic)",pdfTr:"English translation",pdfTl:"Transliteration",pdfNone:"Nothing selected: the matn only, like the printed book.",pdfGo:"Make PDF",pdfHow:"On iPhone or iPad: after it opens, tap the share icon, then Save to Files.",readMode:"Reading",chooseHere:"Choose the verses here, then tap Start.",chooseGame:"Choose an exercise below.",chooseLevel:"Tap a level to start.",pickType:"Choose at least one question type.",tapWordHint:"Tap any word to see its meaning.",byChapter:"By chapter",byVerse:"Choose verses",selected:"Selected:",iWasRight:"I said it right",redoHere:"Recite again from here",undoDone:"Mistake removed",checkHint:"Not accurate? Tap “I said it right” to remove the mistake. Tap a red or orange word during practice to do the same.",vHidden:"Memory mode on: words are hidden",vHint:"Hint on: words are faded",vShown:"Text shown: read along",wentBack:"It sounds like you went back to verse {v}.",wentAhead:"It sounds like you moved ahead to verse {v}.",farBack:"You went back more than a page, so the microphone is paused.",waitTap:"I will wait until you choose.",startHere:"Yes, start from verse {v}",stayHere:"No, take me back to verse {v}",jumpQ:"Start again from verse {v}?",backL:"Back",prevCh:"Previous page",nextCh:"Next page",pickVerses:"Choose exact verses",tapFirst:"Tap the first verse, then the last one.",tapLast:"Now tap the last verse.",howTo:"How to play",flashHow:"You see the first half of a line. Say the second half in your head, then tap the card to check. Tap “I knew it” or “Again”.",speedHow:"Pick the right answer before the bar runs out. Answer fast for more points, and get answers right in a row for a combo.",buildHow:"The words of the second half are mixed up. Tap them in the right order to build the line.",matchHow:"Every line has two halves. Green tiles are first halves and grey tiles are second halves. Flip one green and one grey tile from the same line to make a pair.",customLv:"Or choose your own verses",play:"Play",nextLv:"Next level",playAgain:"Play again",levels:"Levels",half1:"First half",half2:"Second half",combo:"Combo",level:"Level",
  silent:"Paused after 30 seconds of silence. Tap the microphone when you are ready.",readAlong:"Read along",readAlongD:"Text shown. I listen and follow you word by word.",fromMem:"From memory",fromMemD:"Text hidden. Recite and get corrected.",pauseL:"Pause",resumeL:"Resume",startL:"Start",endL:"End",endConfirm:"Tap again to end",reciteAlong:"Recite along",goOn:"Keep reciting from the next word, or turn on a hint.",contents:"Contents",toTop:"Contents",certTitle:"Certificate of Practice",certNotice:"This certificate records practice on this website. It is not an ijāzah and not an official qualification.",certLine:"has completed memorization practice of",certName:"Name for the certificate",certNeed:"Please write a name for the certificate.",makeCert:"Show certificate",scanMe:"Scan to visit",shareLink:"Share link",keepGoing:"Keep going",listenAll:"Listen",reciter:"Reciter",moreSoon:"More reciters and explanations will be added.",tapPlay:"Play the word when tapped",speed:"Speed",verse:"Verse",verses:"Verses",of:"of",all:"All 61",from:"From",to:"To",start:"Start",range:"Choose verses",
  cont:"Continue where you stopped",contSub:"Verse {v} · {p}% done",discard:"Discard",
  hidden:"Hidden",hint:"Hint",shown:"Shown",mistake:"Mistake",correct:"Correct",more:"More",mic:"Microphone",
@@ -1094,7 +1180,7 @@ en:{repeat:"repeat",chooseHere:"Choose the verses here, then tap Start.",chooseG
  tapFlip:"Tap the card to flip",knewIt:"I knew it",againC:"Again",left:"left",pts:"points",moves:"moves",round:"Round",cards:"cards",
  progress:"My progress",chapters:"Chapters",printReport:"Print progress report",legendB:"Started",legendS:"Good",legendG:"Perfect",
  visits:"visits",report:"Progress report",certOf:"has memorized",copied:"Copied",yourProg:"Your progress"},
-ar:{repeat:"تكرار",chooseHere:"اختر الأبيات من هنا، ثم اضغط ابدأ.",chooseGame:"اختر تمرينًا من الأسفل.",chooseLevel:"اضغط على مرحلة لتبدأ.",pickType:"اختر نوع سؤال واحدًا على الأقل.",tapWordHint:"اضغط على أي كلمة لترى معناها.",byChapter:"حسب الباب",byVerse:"اختيار الأبيات",selected:"المختار:",iWasRight:"قرأتها صحيحة",redoHere:"أعد من هنا",undoDone:"أُزيل الخطأ",checkHint:"إن كان التصحيح غير دقيق فاضغط «قرأتها صحيحة» لإزالة الخطأ. ويمكنك أثناء الحفظ الضغط على أي كلمة حمراء أو برتقالية لفعل ذلك.",vHidden:"وضع الحفظ: الكلمات مخفية",vHint:"التلميح مفعّل: الكلمات باهتة",vShown:"النص ظاهر: القراءة مع المتابعة",wentBack:"يبدو أنك رجعت إلى البيت {v}.",wentAhead:"يبدو أنك تقدّمت إلى البيت {v}.",farBack:"رجعت أكثر من صفحة، فأوقفت الميكروفون مؤقتًا.",waitTap:"سأنتظر حتى تختار.",startHere:"نعم، ابدأ من البيت {v}",stayHere:"لا، أرجعني إلى البيت {v}",jumpQ:"هل تريد البدء من البيت {v}؟",backL:"رجوع",prevCh:"الصفحة السابقة",nextCh:"الصفحة التالية",pickVerses:"اختر أبياتًا محددة",tapFirst:"اضغط على أول بيت، ثم على آخر بيت.",tapLast:"الآن اضغط على آخر بيت.",howTo:"طريقة اللعب",flashHow:"ترى صدر البيت، فتذكّر عجزه في نفسك، ثم اضغط على البطاقة لتتحقق. اضغط «عرفتُه» أو «مرة أخرى».",speedHow:"اختر الإجابة الصحيحة قبل أن ينتهي الشريط. كلما أسرعت زادت النقاط، والإجابات الصحيحة المتتالية تضاعفها.",buildHow:"كلمات عجز البيت مخلوطة. اضغط عليها بالترتيب الصحيح لتركّب البيت.",matchHow:"لكل بيت شطران. البلاطات الداكنة صدور، والبنية الفاتحة أعجاز. اقلب بلاطة داكنة وبلاطة بنية فاتحة من البيت نفسه لتكوّن زوجًا.",customLv:"أو اختر أبياتك بنفسك",play:"العب",nextLv:"المرحلة التالية",playAgain:"العب مرة أخرى",levels:"المراحل",half1:"الصدر",half2:"العجز",combo:"سلسلة",level:"المرحلة",
+ar:{repeat:"تكرار",pdfTitle:"حفظ المتن PDF",pdfEd:"النسخة",pdfInc:"أضف تحت كل بيت (اختياري)",pdfMn:"المعنى",pdfTr:"الترجمة الإنجليزية",pdfTl:"النطق اللاتيني",pdfNone:"لم تختر شيئًا: المتن وحده كالكتاب المطبوع.",pdfGo:"أنشئ PDF",pdfHow:"على iPhone أو iPad: بعد فتحه اضغط أيقونة المشاركة ثم «حفظ في الملفات».",readMode:"طريقة القراءة",chooseHere:"اختر الأبيات من هنا، ثم اضغط ابدأ.",chooseGame:"اختر تمرينًا من الأسفل.",chooseLevel:"اضغط على مرحلة لتبدأ.",pickType:"اختر نوع سؤال واحدًا على الأقل.",tapWordHint:"اضغط على أي كلمة لترى معناها.",byChapter:"حسب الباب",byVerse:"اختيار الأبيات",selected:"المختار:",iWasRight:"قرأتها صحيحة",redoHere:"أعد من هنا",undoDone:"أُزيل الخطأ",checkHint:"إن كان التصحيح غير دقيق فاضغط «قرأتها صحيحة» لإزالة الخطأ. ويمكنك أثناء الحفظ الضغط على أي كلمة حمراء أو برتقالية لفعل ذلك.",vHidden:"وضع الحفظ: الكلمات مخفية",vHint:"التلميح مفعّل: الكلمات باهتة",vShown:"النص ظاهر: القراءة مع المتابعة",wentBack:"يبدو أنك رجعت إلى البيت {v}.",wentAhead:"يبدو أنك تقدّمت إلى البيت {v}.",farBack:"رجعت أكثر من صفحة، فأوقفت الميكروفون مؤقتًا.",waitTap:"سأنتظر حتى تختار.",startHere:"نعم، ابدأ من البيت {v}",stayHere:"لا، أرجعني إلى البيت {v}",jumpQ:"هل تريد البدء من البيت {v}؟",backL:"رجوع",prevCh:"الصفحة السابقة",nextCh:"الصفحة التالية",pickVerses:"اختر أبياتًا محددة",tapFirst:"اضغط على أول بيت، ثم على آخر بيت.",tapLast:"الآن اضغط على آخر بيت.",howTo:"طريقة اللعب",flashHow:"ترى صدر البيت، فتذكّر عجزه في نفسك، ثم اضغط على البطاقة لتتحقق. اضغط «عرفتُه» أو «مرة أخرى».",speedHow:"اختر الإجابة الصحيحة قبل أن ينتهي الشريط. كلما أسرعت زادت النقاط، والإجابات الصحيحة المتتالية تضاعفها.",buildHow:"كلمات عجز البيت مخلوطة. اضغط عليها بالترتيب الصحيح لتركّب البيت.",matchHow:"لكل بيت شطران. البلاطات الخضراء صدور، والرمادية أعجاز. اقلب بلاطة خضراء وبلاطة رمادية من البيت نفسه لتكوّن زوجًا.",customLv:"أو اختر أبياتك بنفسك",play:"العب",nextLv:"المرحلة التالية",playAgain:"العب مرة أخرى",levels:"المراحل",half1:"الصدر",half2:"العجز",combo:"سلسلة",level:"المرحلة",
  silent:"توقّف التسجيل بعد ٣٠ ثانية من الصمت. اضغط على الميكروفون عندما تكون مستعدًا.",readAlong:"اقرأ مع المتابعة",readAlongD:"النص ظاهر، وأستمع إليك وأتابعك كلمةً كلمة.",fromMem:"من الحفظ",fromMemD:"النص مخفي، سمّع ويُصحَّح لك.",pauseL:"إيقاف",resumeL:"متابعة",startL:"ابدأ",endL:"إنهاء",endConfirm:"اضغط مرة أخرى للإنهاء",reciteAlong:"اقرأ مع المتابعة",goOn:"تابع التسميع من الكلمة التالية، أو شغّل التلميح.",contents:"الفهرس",toTop:"الفهرس",certTitle:"شهادة تدريب",certNotice:"هذه الشهادة توثّق التدريب على هذا الموقع، وليست إجازةً ولا شهادةً رسمية.",certLine:"أتمّ التدريب على حفظ",certName:"الاسم على الشهادة",certNeed:"اكتب اسمًا للشهادة من فضلك.",makeCert:"اعرض الشهادة",scanMe:"امسح للزيارة",shareLink:"شارك الرابط",keepGoing:"تابع تلقائيًا",listenAll:"استمع",reciter:"القارئ",moreSoon:"سيُضاف قرّاء آخرون وشروح قريبًا.",tapPlay:"تشغيل الكلمة عند الضغط عليها",speed:"السرعة",verse:"البيت",verses:"الأبيات",of:"من",all:"الكل ٦١",from:"من",to:"إلى",start:"ابدأ",range:"اختر الأبيات",
  cont:"أكمل من حيث توقفت",contSub:"البيت {v} · أُنجز {p}٪",discard:"حذف",
  hidden:"مخفي",hint:"تلميح",shown:"ظاهر",mistake:"خطأ",correct:"صحيح",more:"المزيد",mic:"الميكروفون",
@@ -1386,9 +1472,36 @@ function applyPoemOpts(){poemEl.classList.toggle("no-tr",!ST.tr);poemEl.classLis
 $("#pbar").addEventListener("click",e=>{const o=e.target.closest("[data-opt]");if(o){ST[o.dataset.opt]=!ST[o.dataset.opt];saveSet();applyPoemOpts();return}
  const f=e.target.closest("[data-fs]");if(f){ST.fs=Math.min(1.5,Math.max(.8,Math.round((ST.fs+(+f.dataset.fs)*.1)*10)/10));saveSet();applyPoemOpts()}});
 $("#jump").onchange=e=>{const el=document.getElementById(e.target.value);if(el)el.scrollIntoView({behavior:"smooth",block:"start"});e.target.value=""};
-/* The matn as book pages (PDF): running header, chapter title, staggered lines, QR code and site link on every page */
-function printBook(){printPages(()=>{const pages=[];CH.forEach((c,i)=>{const vs=range(c[0],c[1]);for(let k=0;k<vs.length;k+=7){const part=vs.slice(k,k+7);
-  pages.push(`${k===0?`${i===0?`<div class="pbism">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>`:""}<h2 class="pch">${CHH[i]}</h2>`:""}${part.map(v=>`<div class="pv"><div class="ps"><span class="pn">${AD(v)} ـ</span>${qh(V[v-1][0])}</div><div class="pa">${qh(V[v-1][1])}</div></div>`).join("")}${i===CH.length-1&&k+7>=vs.length?`<div class="pbism">تَمَّتْ بِحَمْدِ اللَّهِ</div>`:""}`)}});return pages})}
+/* The matn as book pages (PDF), modelled on the printed edition: cover page, running header with page number, chapter titles,
+   staggered half-lines; the reader chooses Arabic or English edition and whether to add meaning, translation or transliteration.
+   Every page carries the book name, the website link and a QR code. */
+function bookCover(o,name){const en=o.ed==="en";
+ return `<section class="bp cover" dir="rtl" lang="ar"><div class="cv">
+  <div class="cvt">تُحْفَةُ الأَطْفَالِ وَالغِلْمَانِ فِي تَجْوِيدِ القُرْآنِ</div>
+  <div class="cva">لِلشَّيْخِ سُلَيْمَانَ بْنِ حُسَيْنٍ الجَمْزُورِيِّ</div>
+  ${en?`<div class="cve" dir="ltr" lang="en"><b>Tuḥfat al-Aṭfāl wa-l-Ghilmān fī Tajwīd al-Qur’ān</b><br>The Gift for Children and Young Students on the Tajwīd of the Qur’an<br><span>by Shaykh Sulaymān ibn Ḥusayn al-Jamzūrī</span></div>`:""}
+  <div class="cvf">${en?`<span dir="ltr">[ 61 lines ]</span><span dir="ltr">[ Rajaz meter ]</span>`:`<span>[ عدد الأبيات: ٦١ ]</span><span>[ البحر: الرَّجَز ]</span>`}</div>
+  ${(o.mn||o.tr||o.tl)?`<div class="cvx">${en?"With ":"مع "}${[o.mn&&(en?"Arabic meaning":"المعنى"),o.tr&&(en?"English translation":"الترجمة الإنجليزية"),o.tl&&(en?"transliteration":"النطق بالحروف اللاتينية")].filter(Boolean).join(en?", ":"، ")}</div>`:""}
+  ${name?`<div class="cvn">${en?"Copy of":"نسخة"}: <b>${esc(name)}</b></div>`:""}</div>
+  <div class="bpf"><div>${BOOK_AR} · <span dir="ltr">${SITE}</span><br>${fmtD(Date.now())}</div><div class="qr">${qrSvg()}</div></div></section>`}
+function bookPages(o,name){const en=o.ed==="en";const per=Math.max(2,6-(o.mn?2:0)-(o.tr?2:0)-(o.tl?1:0));const head=en?"Matn Tuḥfat al-Aṭfāl · مَتْنُ تُحْفَةِ الأَطْفَالِ":"مَتْنُ تُحْفَةِ الأَطْفَالِ";
+ const bodies=[];CH.forEach((c,i)=>{const vs=range(c[0],c[1]);for(let k=0;k<vs.length;k+=per){const part=vs.slice(k,k+per);
+  bodies.push(`${k===0?`${i===0?`<div class="pbism">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>`:""}<h2 class="pch">${CHH[i]}${en?`<small dir="ltr">${esc(c[3])}</small>`:""}</h2>`:""}${part.map(v=>`<div class="pv"><div class="ps"><span class="pn">${AD(v)} ـ</span>${qh(V[v-1][0])}</div><div class="pa">${qh(V[v-1][1])}</div>
+   ${o.tl?`<div class="ptl" dir="ltr" lang="en">${esc(TL[v-1][0])} / ${esc(TL[v-1][1])}</div>`:""}${o.tr?`<div class="ptr" dir="ltr" lang="en">${esc(G[v].en)}</div>`:""}${o.mn?`<div class="pmn">${G[v].ar}</div>`:""}</div>`).join("")}${i===CH.length-1&&k+per>=vs.length?`<div class="pbism">تَمَّتْ بِحَمْدِ اللَّهِ</div>`:""}`)}});
+ return bookCover(o,name)+bodies.map((body,n)=>`<section class="bp ${n%2?"even":"odd"}" dir="rtl" lang="ar"><div class="bph"><span>${head}</span><span class="bpn">${en?n+1:AD(n+1)}</span></div>
+  <div class="bpb">${body}</div><div class="bpf"><div>${BOOK_AR}${name?` · ${esc(name)}`:""}<br><span dir="ltr">${SITE}</span></div><div class="qr">${qrSvg()}</div></div></section>`).join("")}
+function printBook(){if(IN_FRAME){toast(t("printFrame"),"",3500);return}const o=ps.get("pdfOpt",{ed:LANG==="en"?"en":"ar",mn:false,tr:LANG==="en",tl:LANG==="en"});
+ const draw=()=>{$("#modal").innerHTML=`<div class="modal"><div class="in pdfdlg"><h3>${t("pdfTitle")}</h3>
+  <div class="note">${t("pdfEd")}</div><div class="seg" id="pe"><button type="button" data-e="ar" class="${o.ed==="ar"?"on":""}">العربية</button><button type="button" data-e="en" class="${o.ed==="en"?"on":""}">English</button></div>
+  <div class="note">${t("pdfInc")}</div><div class="chips" id="pi">${[["mn",t("pdfMn")],["tr",t("pdfTr")],["tl",t("pdfTl")]].map(([k,l])=>`<button type="button" class="chip ${o[k]?"on":""}" data-k="${k}">${o[k]?"✓ ":""}${l}</button>`).join("")}</div>
+  <p class="note" style="margin:0">${(o.mn||o.tr||o.tl)?"":t("pdfNone")}</p>
+  <label class="note" for="pName">${t("nameAsk")}</label><input id="pName" type="text" value="${esc(o.name||P().name||"")}" placeholder="${t("namePh")}" style="border:1px solid var(--line);border-radius:12px;padding:10px;font-size:1rem;text-align:center;background:var(--surface)">
+  <div class="row" style="justify-content:center"><button class="btn soft" type="button" id="pCancel">${t("cancel")}</button><button class="btn pri" type="button" id="pGo">${IC.print}${t("pdfGo")}</button></div><p class="note" style="margin:0">${t("pdfHow")}</p></div></div>`;
+  const keep=()=>{o.name=$("#pName").value.trim()};
+  $$("#pe [data-e]").forEach(b=>b.onclick=()=>{keep();o.ed=b.dataset.e;draw()});$$("#pi [data-k]").forEach(b=>b.onclick=()=>{keep();o[b.dataset.k]=!o[b.dataset.k];draw()});
+  $("#pCancel").onclick=()=>$("#modal").innerHTML="";
+  $("#pGo").onclick=()=>{keep();ps.set("pdfOpt",o);$("#modal").innerHTML="";$("#print").innerHTML=bookPages(o,o.name);setTimeout(()=>window.print(),120)}};
+ draw()}
 $("#bookPdf").onclick=printBook;$("#bookPdf2").onclick=printBook;
 $("#reciteAlong").onclick=()=>{const v=PBar.v||1;const c=CH[chOf(v)];Mem.setup={from:c[0],to:c[1]};ps.set("memRange",Mem.setup);Mem.newRun(range(c[0],c[1]));Mem.run.view=2;Mem.save();location.hash="#memorize"};
 $("#listenAll").onclick=()=>{unlockAudio();Player.playVerses(range(PBar.v||1,61))};
