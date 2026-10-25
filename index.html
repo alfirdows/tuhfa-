@@ -721,6 +721,39 @@ html[dir="rtl"] .poem.book .chap.turn{--dirx:-1}
 .flipbar .btn{min-height:52px;font-size:1rem}
 .mtext{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:6px 14px}
 
+/* English title under the Arabic one */
+.entitle{margin:14px auto 0;max-width:520px;font-family:"Site",sans-serif;font-size:1rem;line-height:1.7;color:var(--muted);text-align:center}
+.entitle i{font-style:normal;font-weight:600;color:var(--ink)}
+.entitle small{font-size:.86rem}
+/* more breathing room */
+body{line-height:1.85}
+.sec{padding-block:64px!important}
+.hero{padding-block:40px 16px!important}
+.hero .frame{padding:56px 26px 44px!important}
+.hero h1{margin:0 0 14px!important;line-height:1.6!important}
+.hero .lead{margin-top:26px!important}
+.cta{margin-top:30px!important;gap:14px!important}
+.facts{margin-top:30px!important}
+.head{margin-bottom:30px!important;gap:10px!important}
+.stack{gap:24px!important}
+.panel{padding:22px!important;gap:18px!important}
+.tiles,.games,.gcards{gap:18px!important}
+.tile{padding:24px!important;gap:12px!important}
+.chapters a{padding:18px 4px!important}
+.bayt{padding:28px 4px!important;gap:12px!important}
+.hm{gap:.8em .6em!important}
+.aux{gap:8px!important;margin-top:6px}
+.chh{padding:22px 12px 20px!important;margin-bottom:10px!important}
+.chap{margin-bottom:56px!important}
+.tools{margin-bottom:30px!important}
+.toc{padding:18px 20px!important;gap:10px 22px!important;margin-bottom:34px!important}
+.set .it{padding:18px 0!important}
+.list .it{padding:16px 0!important}
+.mhead{gap:12px!important;padding-block:12px!important}
+footer .wrap{padding-block:44px!important;gap:14px!important}
+@media (max-width:520px){.sec{padding-block:48px!important}.hero .frame{padding:44px 20px 36px!important}}
+.entitle i{font-family:"Plex Arabic",sans-serif!important;font-weight:600!important;font-size:1.02rem}
+
 :root{--lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'%3E%3Cg fill='none' stroke='%23234a73' stroke-opacity='0.16' stroke-width='1.2'%3E%3Cpath d='M0 0C0 16 24 16 24 32C24 48 0 48 0 64M48 0C48 16 24 16 24 32C24 48 48 48 48 64'/%3E%3Cpath d='M24 -32C24 -16 48 -16 48 0M24 -32C24 -16 0 -16 0 0' transform='translate(0 64)'/%3E%3C/g%3E%3Cg fill='%23234a73' fill-opacity='0.21'%3E%3Ccircle cx='24' cy='10' r='2.2'/%3E%3Ccircle cx='0' cy='42' r='2.2'/%3E%3Ccircle cx='48' cy='42' r='2.2'/%3E%3C/g%3E%3C/svg%3E");--ablaq:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Crect width='10' height='10' fill='%232a2f36'/%3E%3Crect x='10' width='10' height='10' fill='%23f4efe4'/%3E%3C/svg%3E")}@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'%3E%3Cg fill='none' stroke='%239cc0e6' stroke-opacity='0.12' stroke-width='1.2'%3E%3Cpath d='M0 0C0 16 24 16 24 32C24 48 0 48 0 64M48 0C48 16 24 16 24 32C24 48 48 48 48 64'/%3E%3Cpath d='M24 -32C24 -16 48 -16 48 0M24 -32C24 -16 0 -16 0 0' transform='translate(0 64)'/%3E%3C/g%3E%3Cg fill='%239cc0e6' fill-opacity='0.16'%3E%3Ccircle cx='24' cy='10' r='2.2'/%3E%3Ccircle cx='0' cy='42' r='2.2'/%3E%3Ccircle cx='48' cy='42' r='2.2'/%3E%3C/g%3E%3C/svg%3E");--ablaq:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Crect width='10' height='10' fill='%230f1216'/%3E%3Crect x='10' width='10' height='10' fill='%23cfc6b4'/%3E%3C/svg%3E")}}:root[data-theme="dark"]{--lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'%3E%3Cg fill='none' stroke='%239cc0e6' stroke-opacity='0.12' stroke-width='1.2'%3E%3Cpath d='M0 0C0 16 24 16 24 32C24 48 0 48 0 64M48 0C48 16 24 16 24 32C24 48 48 48 48 64'/%3E%3Cpath d='M24 -32C24 -16 48 -16 48 0M24 -32C24 -16 0 -16 0 0' transform='translate(0 64)'/%3E%3C/g%3E%3Cg fill='%239cc0e6' fill-opacity='0.16'%3E%3Ccircle cx='24' cy='10' r='2.2'/%3E%3Ccircle cx='0' cy='42' r='2.2'/%3E%3Ccircle cx='48' cy='42' r='2.2'/%3E%3C/g%3E%3C/svg%3E");--ablaq:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Crect width='10' height='10' fill='%230f1216'/%3E%3Crect x='10' width='10' height='10' fill='%23cfc6b4'/%3E%3C/svg%3E")}</style>
 </head>
 <body>
@@ -747,6 +780,7 @@ html[dir="rtl"] .poem.book .chap.turn{--dirx:-1}
   <div class="frame">
    <h1 lang="ar">تُحْفَةُ الأَطْفَالِ وَالغِلْمَانِ<br>فِي تَجْوِيدِ القُرْآنِ</h1>
    <p class="full" lang="ar" dir="rtl">نَظْمُ الشَّيْخِ سُلَيْمَانَ بْنِ حُسَيْنٍ الجَمْزُورِيِّ</p>
+   <p class="entitle" lang="en" dir="ltr"><i>Tuḥfat al-Aṭfāl wa-l-Ghilmān fī Tajwīd <span style="white-space:nowrap">al-Qur’ān</span></i><br>The Gift for Children and Young Students on the Tajwīd of the Qur’an<br><small>by Shaykh Sulaymān ibn Ḥusayn al-Jamzūrī</small></p>
    <p class="lead"><span class="l-en" lang="en">Read it with meanings, memorize it, practise and test yourself. Free for everyone.</span><span class="l-ar" lang="ar" dir="rtl">اقرأه بمعانيه، واحفظه، وتدرّب عليه، واختبر نفسك. مجاني للجميع.</span></p>
    <div class="cta"><a class="btn pri" href="#memorize"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg><span class="l-en" lang="en">Start memorizing</span><span class="l-ar" lang="ar" dir="rtl">ابدأ الحفظ</span></a><a class="btn out" href="#poem"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5zM12 6.5V19"/></svg><span class="l-en" lang="en">Read the poem</span><span class="l-ar" lang="ar" dir="rtl">اقرأ المتن</span></a></div>
    <ul class="facts">
@@ -779,7 +813,7 @@ html[dir="rtl"] .poem.book .chap.turn{--dirx:-1}
   <div>
    <div class="head"><h2><span class="l-en" lang="en">About the text</span><span class="l-ar" lang="ar" dir="rtl">عن المتن</span></h2></div>
    <div class="prose">
-    <p class="l-en" lang="en"><i>Tuḥfat al-Aṭfāl wa-l-Ghilmān fī Tajwīd al-Qur’ān</i> is a short teaching poem of sixty-one lines in the rajaz meter. It covers nūn sākinah and tanwīn, mīm sākinah, the doubled letters, the lām of the definite article, and the types and rulings of madd. Students of the Qur’ān have memorized it for more than two centuries, usually before longer works such as the <i>Muqaddimah</i> of Ibn al-Jazarī.</p>
+    <p class="l-en" lang="en"><i>Tuḥfat al-Aṭfāl wa-l-Ghilmān fī Tajwīd <span style="white-space:nowrap">al-Qur’ān</span></i> is a short teaching poem of sixty-one lines in the rajaz meter. It covers nūn sākinah and tanwīn, mīm sākinah, the doubled letters, the lām of the definite article, and the types and rulings of madd. Students of the Qur’ān have memorized it for more than two centuries, usually before longer works such as the <i>Muqaddimah</i> of Ibn al-Jazarī.</p>
     <p class="l-en" lang="en">Its author, Sulaymān ibn Ḥusayn al-Jamzūrī, known as al-Afandī, was a Shāfiʿī scholar from Ṭanṭā in Egypt. He learned tajwīd from Shaykh Nūr al-Dīn ʿAlī al-Mīhī, completed the poem in 1198 AH, and explained it himself in <i>Fatḥ al-Aqfāl</i>.</p>
     <p class="l-ar" lang="ar">«تحفة الأطفال والغلمان في تجويد القرآن» منظومة تعليمية في واحد وستين بيتًا من بحر الرجز، في أحكام النون الساكنة والتنوين، والميم الساكنة، والحروف المشددة، ولام التعريف، وأقسام المد وأحكامه. حفظها طلاب القرآن أكثر من قرنين، وتُحفظ غالبًا قبل المقدمة الجزرية.</p>
     <p class="l-ar" lang="ar">ناظمها الشيخ سليمان بن حسين الجمزوري، الشهير بالأفندي، شافعي المذهب، من طنطا بمصر. أخذ التجويد عن الشيخ نور الدين علي الميهي، وأتمّ النظم سنة ١١٩٨هـ، وشرحه بنفسه في «فتح الأقفال».</p>
