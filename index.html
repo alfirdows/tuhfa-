@@ -1051,6 +1051,8 @@ html[lang="en"] .facts b{font-size:.6rem!important}html[lang="en"] .facts li>spa
 .char{display:block;font-family:var(--text);font-size:.78em;font-weight:400;color:var(--muted);line-height:1.4}
 .rpc .nm .chen{font-size:.95rem}
 #view-memorize .toast,body:has(.startbar) .toast{bottom:calc(70px + env(safe-area-inset-bottom,0px))!important}
+.poem.book{overflow-x:hidden;touch-action:pan-y}
+.poem.book .chap.on{will-change:transform}
 
 :root{--lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'%3E%3Cg fill='none' stroke='%232b2f33' stroke-opacity='0.16' stroke-width='1.2'%3E%3Cpath d='M0 0C0 16 24 16 24 32C24 48 0 48 0 64M48 0C48 16 24 16 24 32C24 48 48 48 48 64'/%3E%3Cpath d='M24 -32C24 -16 48 -16 48 0M24 -32C24 -16 0 -16 0 0' transform='translate(0 64)'/%3E%3C/g%3E%3Cg fill='%232b2f33' fill-opacity='0.21'%3E%3Ccircle cx='24' cy='10' r='2.2'/%3E%3Ccircle cx='0' cy='42' r='2.2'/%3E%3Ccircle cx='48' cy='42' r='2.2'/%3E%3C/g%3E%3C/svg%3E");--ablaq:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Crect width='10' height='10' fill='%232a2f36'/%3E%3Crect x='10' width='10' height='10' fill='%23f4efe4'/%3E%3C/svg%3E")}@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'%3E%3Cg fill='none' stroke='%23d6d9dc' stroke-opacity='0.12' stroke-width='1.2'%3E%3Cpath d='M0 0C0 16 24 16 24 32C24 48 0 48 0 64M48 0C48 16 24 16 24 32C24 48 48 48 48 64'/%3E%3Cpath d='M24 -32C24 -16 48 -16 48 0M24 -32C24 -16 0 -16 0 0' transform='translate(0 64)'/%3E%3C/g%3E%3Cg fill='%23d6d9dc' fill-opacity='0.16'%3E%3Ccircle cx='24' cy='10' r='2.2'/%3E%3Ccircle cx='0' cy='42' r='2.2'/%3E%3Ccircle cx='48' cy='42' r='2.2'/%3E%3C/g%3E%3C/svg%3E");--ablaq:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Crect width='10' height='10' fill='%230f1216'/%3E%3Crect x='10' width='10' height='10' fill='%23cfc6b4'/%3E%3C/svg%3E")}}:root[data-theme="dark"]{--lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'%3E%3Cg fill='none' stroke='%23d6d9dc' stroke-opacity='0.12' stroke-width='1.2'%3E%3Cpath d='M0 0C0 16 24 16 24 32C24 48 0 48 0 64M48 0C48 16 24 16 24 32C24 48 48 48 48 64'/%3E%3Cpath d='M24 -32C24 -16 48 -16 48 0M24 -32C24 -16 0 -16 0 0' transform='translate(0 64)'/%3E%3C/g%3E%3Cg fill='%23d6d9dc' fill-opacity='0.16'%3E%3Ccircle cx='24' cy='10' r='2.2'/%3E%3Ccircle cx='0' cy='42' r='2.2'/%3E%3Ccircle cx='48' cy='42' r='2.2'/%3E%3C/g%3E%3C/svg%3E");--ablaq:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Crect width='10' height='10' fill='%230f1216'/%3E%3Crect x='10' width='10' height='10' fill='%23cfc6b4'/%3E%3C/svg%3E")}</style>
 </head>
@@ -1611,13 +1613,20 @@ const Book={i:0,
  show(i,quiet){refit();i=Math.max(0,Math.min(CH.length-1,i));const changed=i!==this.i;this.i=i;$$("#poemText .chap").forEach((s,k)=>s.classList.toggle("on",k===i));
   poemEl.classList.toggle("first",i===0);poemEl.classList.toggle("last",i===CH.length-1);$("#pgNum").textContent=`${num(i+1)} / ${num(CH.length)}`;
   $("#pgPrev").disabled=i===0;$("#pgNext").disabled=i===CH.length-1;if(changed&&!quiet){const s=$$("#poemText .chap")[i];s.classList.remove("turn");void s.offsetWidth;s.classList.add("turn")}},
- go(d){this.show(this.i+d);history.pushState(null,"","#poem/c"+(this.i+1));window.scrollTo(0,$("#poemText").getBoundingClientRect().top+scrollY-170)}};
+ go(d,swiped){this.show(this.i+d,!!swiped);history.pushState(null,"","#poem/c"+(this.i+1));if(swiped){const s=$$("#poemText .chap")[this.i];s.style.transition="none";s.style.transform=`translateX(${d>0?100:-100}%)`;s.style.opacity="0";requestAnimationFrame(()=>requestAnimationFrame(()=>{s.style.transition="transform .22s ease-out,opacity .22s";s.style.transform="";s.style.opacity="";setTimeout(()=>{s.style.transition=""},240)}))}window.scrollTo(0,$("#poemText").getBoundingClientRect().top+scrollY-170)}};
 ST.vm=ST.vm||"book";
 $$("[data-vm]").forEach(b=>b.onclick=()=>{ST.vm=b.dataset.vm;saveSet();Book.apply()});
 $("#pgPrev").onclick=()=>Book.go(-1);$("#pgNext").onclick=()=>Book.go(1);
-(()=>{let x0=null,y0=null;poemEl.addEventListener("touchstart",e=>{const t=e.touches[0];x0=t.clientX;y0=t.clientY},{passive:true});
- poemEl.addEventListener("touchend",e=>{if(x0==null||!Book.on())return;const t=e.changedTouches[0];const dx=t.clientX-x0,dy=t.clientY-y0;x0=null;
-  if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.5){Book.go(dx<0?1:-1)}},{passive:true})})();
+/* Instagram-style swipe: the page follows your finger, then slides away; the next page slides in */
+(()=>{let x0=0,y0=0,dx=0,lock=null,cur=null;const has=d=>Book.i+d>=0&&Book.i+d<CH.length;
+ poemEl.addEventListener("touchstart",e=>{if(!Book.on()||e.touches.length>1)return;const t=e.touches[0];x0=t.clientX;y0=t.clientY;dx=0;lock=null;cur=$$("#poemText .chap")[Book.i];if(cur)cur.style.transition="none"},{passive:true});
+ poemEl.addEventListener("touchmove",e=>{if(!cur)return;const t=e.touches[0];const mx=t.clientX-x0,my=t.clientY-y0;
+  if(!lock&&(Math.abs(mx)>8||Math.abs(my)>8))lock=Math.abs(mx)>Math.abs(my)?"x":"y";if(lock!=="x")return;e.preventDefault();
+  dx=mx;const d=dx<0?1:-1;const k=has(d)?1:.25;cur.style.transform=`translateX(${dx*k}px)`;cur.style.opacity=String(1-Math.min(.35,Math.abs(dx)/900))},{passive:false});
+ poemEl.addEventListener("touchend",()=>{if(!cur)return;const s=cur;cur=null;if(lock!=="x")return;const d=dx<0?1:-1;
+  if(Math.abs(dx)>60&&has(d)){s.style.transition="transform .18s ease-in,opacity .18s";s.style.transform=`translateX(${dx<0?-110:110}%)`;s.style.opacity="0";
+   setTimeout(()=>{s.style.transition="";s.style.transform="";s.style.opacity="";Book.go(d,true)},180)}
+  else{s.style.transition="transform .2s ease-out,opacity .2s";s.style.transform="";s.style.opacity="";setTimeout(()=>{s.style.transition=""},220)}},{passive:true})})();
 
 /* ================= sheet ================= */
 const Sheet={
