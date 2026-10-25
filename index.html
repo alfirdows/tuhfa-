@@ -32,12 +32,12 @@
 @font-face{font-family:"Site";src:url(fonts/ScheherazadeNew-Bold.woff) format("woff");font-weight:600 900;font-display:swap;size-adjust:118%;unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+0660-0669}
 :root{
   --bg:#fbf8f1; --surface:#ffffff; --surface-2:#f4efe4; --band:#f1ebdf; --ink:#1d2126; --muted:#56595e; --line:#e4dccb;
-  --acc:#234a73; --acc-ink:#ffffff; --acc-soft:#e8eef5; --acc2:#2a7a80;
+  --acc:#2b2f33; --acc-ink:#ffffff; --acc-soft:#efefef; --acc2:#6b6259;
   --ok:#2e7a4f; --ok-soft:#e5f2ea; --orange:#b35a00; --bad:#b42318; --bad-soft:#fbeceb; --warn:#8a5a00; --warn-soft:#f8efda;
-  --gold:#a8812f; --silver:#8b929b; --bronze:#a2683f; --empty:#e7e0d2;
-  --mask:#e9e2d4; --mask-cur:#d7e2ee;
-  --stone-l:#f4efe4; --stone-d:#cdbf9f; --ink-arch:#2a2f36; --marble:#e9e6df; --tile:#d7e3ee; --shade:#e6dcc8; --dome:#c9a24f;
-  --leaf:#7d8f7a; --leaf2:#97a58f; --trunk:#8b7558; --qt:#2a7a80;
+  --gold:#8a7a68; --silver:#8b929b; --bronze:#a2683f; --empty:#e7e0d2;
+  --mask:#e9e2d4; --mask-cur:#e5e6e8;
+  --stone-l:#f4efe4; --stone-d:#cdbf9f; --ink-arch:#2a2f36; --marble:#e9e6df; --tile:#eceae6; --shade:#e6dcc8; --dome:#8a7a68;
+  --leaf:#7d8f7a; --leaf2:#97a58f; --trunk:#8b7558; --qt:#6b6259;
   --font:"Site","Plex Arabic","IBM Plex Sans Arabic","Geeza Pro","Segoe UI",Tahoma,system-ui,sans-serif;
   --text:"Book Naskh","Traditional Arabic","Geeza Pro",serif;
   --fs:1; --radius:14px;
@@ -45,21 +45,21 @@
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#14171b; --surface:#1b1f24; --surface-2:#22272d; --band:#181c21; --ink:#ede8de; --muted:#b3ada2; --line:#2f353c;
-  --acc:#9cc0e6; --acc-ink:#0e1620; --acc-soft:#1f2c3a; --acc2:#6cc3c8;
+  --acc:#d6d9dc; --acc-ink:#0e1620; --acc-soft:#272a2e; --acc2:#b9b2a8;
   --ok:#6fcf98; --ok-soft:#16301f; --orange:#f0a050; --bad:#ff8a7e; --bad-soft:#3a1714; --warn:#f2b65a; --warn-soft:#33270f;
-  --gold:#d9b46a; --silver:#b4bcc6; --bronze:#d08d5a; --empty:#2c3238;
-  --mask:#2c3238; --mask-cur:#2b3c50;
-  --stone-l:#cfc6b4; --stone-d:#5d564a; --ink-arch:#0f1216; --marble:#a9a59d; --tile:#2b3c50; --shade:#23282e; --dome:#b8954a;
-  --leaf:#56685a; --leaf2:#6a7b68; --trunk:#5d4f3d; --qt:#6cc3c8;
+  --gold:#b9ab98; --silver:#b4bcc6; --bronze:#d08d5a; --empty:#2c3238;
+  --mask:#2c3238; --mask-cur:#30343a;
+  --stone-l:#cfc6b4; --stone-d:#5d564a; --ink-arch:#0f1216; --marble:#a9a59d; --tile:#30343a; --shade:#23282e; --dome:#b8954a;
+  --leaf:#56685a; --leaf2:#6a7b68; --trunk:#5d4f3d; --qt:#b9b2a8;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25); color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#14171b; --surface:#1b1f24; --surface-2:#22272d; --band:#181c21; --ink:#ede8de; --muted:#b3ada2; --line:#2f353c;
-  --acc:#9cc0e6; --acc-ink:#0e1620; --acc-soft:#1f2c3a; --acc2:#6cc3c8;
+  --acc:#d6d9dc; --acc-ink:#0e1620; --acc-soft:#272a2e; --acc2:#b9b2a8;
   --ok:#6fcf98; --ok-soft:#16301f; --orange:#f0a050; --bad:#ff8a7e; --bad-soft:#3a1714; --warn:#f2b65a; --warn-soft:#33270f;
-  --gold:#d9b46a; --silver:#b4bcc6; --bronze:#d08d5a; --empty:#2c3238;
-  --mask:#2c3238; --mask-cur:#2b3c50;
-  --stone-l:#cfc6b4; --stone-d:#5d564a; --ink-arch:#0f1216; --marble:#a9a59d; --tile:#2b3c50; --shade:#23282e; --dome:#b8954a;
-  --leaf:#56685a; --leaf2:#6a7b68; --trunk:#5d4f3d; --qt:#6cc3c8;
+  --gold:#b9ab98; --silver:#b4bcc6; --bronze:#d08d5a; --empty:#2c3238;
+  --mask:#2c3238; --mask-cur:#30343a;
+  --stone-l:#cfc6b4; --stone-d:#5d564a; --ink-arch:#0f1216; --marble:#a9a59d; --tile:#30343a; --shade:#23282e; --dome:#b8954a;
+  --leaf:#56685a; --leaf2:#6a7b68; --trunk:#5d4f3d; --qt:#b9b2a8;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25); color-scheme:dark}
 
 *{box-sizing:border-box}
@@ -462,14 +462,14 @@ body:not(.pbon) .pbar{display:none!important}
   @page{size:A4;margin:14mm}
   body>*:not(#print){display:none!important}
   #print{display:block;color:#000;background:#fff}
-  .pg{page-break-after:always;min-height:260mm;display:flex;flex-direction:column;border:2px solid #234a73;outline:1px solid #234a73;outline-offset:4px;padding:12mm}
+  .pg{page-break-after:always;min-height:260mm;display:flex;flex-direction:column;border:2px solid #2b2f33;outline:1px solid #2b2f33;outline-offset:4px;padding:12mm}
   .pg:last-child{page-break-after:auto}
-  .pg .ph{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #234a73;padding-bottom:4mm;margin-bottom:6mm;font-weight:800;color:#234a73}
+  .pg .ph{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #2b2f33;padding-bottom:4mm;margin-bottom:6mm;font-weight:800;color:#2b2f33}
   .pg .pb{flex:1}
-  .pg .pf2{display:flex;justify-content:space-between;align-items:flex-end;border-top:1px solid #234a73;padding-top:4mm;margin-top:6mm;font-size:10pt;color:#333}
+  .pg .pf2{display:flex;justify-content:space-between;align-items:flex-end;border-top:1px solid #2b2f33;padding-top:4mm;margin-top:6mm;font-size:10pt;color:#333}
   .pg .qr svg{width:28mm;height:28mm}
   .pg .ln{font-size:18pt;line-height:2}
-  .pg h1{color:#234a73;text-align:center;font-size:30pt;margin:8mm 0 2mm}
+  .pg h1{color:#2b2f33;text-align:center;font-size:30pt;margin:8mm 0 2mm}
   .pg .big{text-align:center;font-size:16pt}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -504,16 +504,16 @@ html[dir="rtl"] .pbb:not(.main) svg{transform:scaleX(-1)}
 /* andalusian arch emblem */
 .arch-em{display:block;width:min(78%,300px);height:auto;margin:-6px auto 6px;color:var(--acc)}
 /* certificate */
-.cert{position:relative;background:#fffdf8;color:#14202e;border:2px solid #234a73;outline:1px solid #234a73;outline-offset:6px;margin:10px;padding:26px 22px 18px;text-align:center;display:grid;gap:10px;font-family:var(--font)}
-.cert>i.c{position:absolute;width:12px;height:12px;background:#2a7a80;transform:rotate(45deg)}
+.cert{position:relative;background:#fffdf8;color:#14202e;border:2px solid #2b2f33;outline:1px solid #2b2f33;outline-offset:6px;margin:10px;padding:26px 22px 18px;text-align:center;display:grid;gap:10px;font-family:var(--font)}
+.cert>i.c{position:absolute;width:12px;height:12px;background:#6b6259;transform:rotate(45deg)}
 .cert>i.c:nth-of-type(1){top:-9px;left:-9px}.cert>i.c:nth-of-type(2){top:-9px;right:-9px}.cert>i.c:nth-of-type(3){bottom:-9px;left:-9px}.cert>i.c:nth-of-type(4){bottom:-9px;right:-9px}
-.cert-top{font-weight:800;color:#234a73;font-size:1.05rem}
+.cert-top{font-weight:800;color:#2b2f33;font-size:1.05rem}
 .cert-top small,.cert-h small{display:block;font-weight:500;font-size:.75rem;color:#4b5768}
-.cert-h{font-size:1.5rem;font-weight:800;color:#2a7a80;border-block:1px solid #dfe5ee;padding:8px 0}
+.cert-h{font-size:1.5rem;font-weight:800;color:#6b6259;border-block:1px solid #dfe5ee;padding:8px 0}
 .cert-name{font-size:2rem;font-weight:800;color:#14202e;line-height:1.4}
 .cert-line{font-size:1rem;line-height:1.9}
-.cert-line b{font-size:1.15rem;color:#234a73}
-.cert-dua{font-family:var(--text);font-size:1.8rem;color:#234a73;font-weight:700}
+.cert-line b{font-size:1.15rem;color:#2b2f33}
+.cert-dua{font-family:var(--text);font-size:1.8rem;color:#2b2f33;font-weight:700}
 .cert-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;border-top:1px solid #dfe5ee;padding-top:10px;font-size:.78rem;color:#4b5768;text-align:start}
 .cert .qr{display:grid;justify-items:center;gap:2px}
 .cert .qr svg{width:84px;height:84px}
@@ -566,9 +566,9 @@ html[dir="ltr"] .flipx2 svg{transform:scaleX(-1)} .flipx2{display:inline-flex}
 .gcard .ic{grid-row:span 3;width:60px;height:60px;border-radius:18px;display:grid;place-items:center;background:rgba(255,255,255,.2)}
 .gcard .ic svg{width:34px;height:34px}
 .gcard b{font-size:1.25rem}.gcard .d{font-size:.9rem;opacity:.92;line-height:1.55}
-.gcard .gst{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:.85rem}.gcard .gst svg{width:18px;height:18px;color:#ffe3a3}
-.g1{background:linear-gradient(135deg,#2a7a80,#1f5f64)}.g2{background:linear-gradient(135deg,#b36b2c,#94521b)}
-.g3{background:linear-gradient(135deg,#234a73,#1a3756)}.g4{background:linear-gradient(135deg,#8a6a2a,#6e521c)}
+.gcard .gst{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:.85rem}.gcard .gst svg{width:18px;height:18px;color:#ffffff}
+.g1{background:linear-gradient(135deg,#6b6259,#4f4842)}.g2{background:linear-gradient(135deg,#a2553a,#7f4230)}
+.g3{background:linear-gradient(135deg,#2b2f33,#1d2023)}.g4{background:linear-gradient(135deg,#8a7a68,#6b5d4e)}
 .howto{display:flex;gap:14px;align-items:flex-start;border-radius:16px;padding:14px 16px;color:#fff}
 .howto .ic{flex:none;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,.2)}
 .howto p{margin:2px 0 0;line-height:1.7}
@@ -590,14 +590,14 @@ html[dir="ltr"] .flipx2 svg{transform:scaleX(-1)} .flipx2{display:inline-flex}
 .tagv{font-size:.82rem;font-weight:700;color:var(--acc2)}.q3{color:var(--muted)}
 .kopts .opt{display:flex;align-items:center;gap:10px;text-align:start;color:#fff;border:0;box-shadow:0 5px 0 rgba(0,0,0,.2)}
 .kopts .opt span:last-child{flex:1;text-align:center}
-.kopts .k0{background:#234a73}.kopts .k1{background:#2a7a80}.kopts .k2{background:#a2553a}.kopts .k3{background:#8a6a2a}
+.kopts .k0{background:#2b2f33}.kopts .k1{background:#6b6259}.kopts .k2{background:#a2553a}.kopts .k3{background:#8a7a68}
 .kopts .opt:active{transform:translateY(3px)}
 .kopts .opt.right{background:#2e7a4f;box-shadow:0 0 0 4px var(--ok-soft),0 5px 0 rgba(0,0,0,.2)}
 .kopts .opt.wrong{background:#b42318}.kopts .opt.dim{opacity:.35}
 .ob{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:rgba(255,255,255,.2)}.ob svg{width:18px;height:18px}
 .mult.pop{display:inline-block;animation:bloom .4s both;font-size:1.2rem;color:var(--gold)}
 .tiles2 button{color:#fff;border:0!important;box-shadow:0 4px 0 rgba(0,0,0,.2)}
-.tiles2 .k0{background:#234a73}.tiles2 .k1{background:#2a7a80}.tiles2 .k2{background:#a2553a}.tiles2 .k3{background:#8a6a2a}
+.tiles2 .k0{background:#2b2f33}.tiles2 .k1{background:#6b6259}.tiles2 .k2{background:#a2553a}.tiles2 .k3{background:#8a7a68}
 .tiles2 button.wrong{background:#b42318!important;animation:none}
 .build .ph{display:inline-flex;gap:8px;flex-wrap:wrap;justify-content:center}.build .ph i{display:inline-block;width:46px;height:6px;border-radius:4px;background:var(--empty);vertical-align:middle}
 .build .bw{display:inline-block;animation:bloom .3s both}
@@ -607,9 +607,9 @@ html[dir="ltr"] .flipx2 svg{transform:scaleX(-1)} .flipx2{display:inline-flex}
 .mm button.mt{display:grid;align-content:center;justify-items:center;gap:4px;min-height:110px;border-width:2px;font-family:var(--font)}
 .mm .tag{font-size:.78rem;font-weight:700;border-radius:99px;padding:1px 10px;background:rgba(255,255,255,.85);color:#1d2126}
 .mm .tx{font-family:var(--text);font-size:calc(1.1rem*var(--fs));line-height:1.8;direction:rtl}
-.mm .h1.down{background:#234a73;border-color:#234a73}.mm .h2.down{background:#a8812f;border-color:#a8812f}
+.mm .h1.down{background:#2b2f33;border-color:#2b2f33}.mm .h2.down{background:#8a7a68;border-color:#8a7a68}
 .mm .h1.down,.mm .h2.down{background-image:var(--lattice);background-size:32px 43px}
-.mm .h1.up{border-color:#234a73;background:var(--acc-soft)}.mm .h2.up{border-color:#a8812f;background:var(--warn-soft)}
+.mm .h1.up{border-color:#2b2f33;background:var(--acc-soft)}.mm .h2.up{border-color:#8a7a68;background:var(--warn-soft)}
 .mm .up .tag{background:var(--surface-2)}
 .mm button.match{border-color:var(--ok)!important;background:var(--ok-soft)!important;opacity:1}
 /* bigger, high-contrast memorize controls */
@@ -682,8 +682,8 @@ footer{border-top:1px solid var(--line)!important}
 .hm{font-size:calc(2rem*var(--fs));line-height:2.15}
 @media (max-width:680px){.hm{font-size:calc(1.75rem*var(--fs))}}
 /* meaning under each line: smaller, plain font, its own colour */
-.mn{font-family:var(--font)!important;font-size:.98rem!important;line-height:1.95!important;color:#41627e!important;background:var(--surface-2);border-radius:10px;padding:8px 12px;margin-top:4px!important}
-.tr{font-size:.95rem!important;color:#41627e}
+.mn{font-family:var(--font)!important;font-size:.98rem!important;line-height:1.95!important;color:#4a4f55!important;background:var(--surface-2);border-radius:10px;padding:8px 12px;margin-top:4px!important}
+.tr{font-size:.95rem!important;color:#4a4f55}
 .tl{font-size:.88rem!important}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .mn,:root:not([data-theme="light"]) .tr{color:#a9c4dc!important}}
 /* small facts line on the home page */
@@ -699,12 +699,12 @@ footer{border-top:1px solid var(--line)!important}
 .toast{width:max-content;white-space:nowrap}
 /* cleaner, calmer colours: white pages, black text, one navy accent */
 :root{--bg:#ffffff;--surface:#ffffff;--surface-2:#f4f5f7;--band:#f7f8fa;--ink:#111418;--muted:#5a616b;--line:#e4e7eb;
- --acc:#1f4e79;--acc-soft:#ebf1f7;--acc2:#2b6a8a;--mask:#e8ebef;--mask-cur:#d9e5f1;--empty:#e6e9ed;--stone-d:#d5dae0}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#121417;--surface:#181b1f;--surface-2:#20242a;--band:#16191d;--ink:#eef0f2;--muted:#a7adb5;--line:#2c3138;--acc:#9cc0e6;--acc-soft:#1d2a38;--acc2:#7fb3cf;--mask:#2a2f36;--mask-cur:#29394b;--empty:#2a2f36}}
+ --acc:#2b2f33;--acc-soft:#eff0f1;--acc2:#2b6a8a;--mask:#e8ebef;--mask-cur:#e5e6e8;--empty:#e6e9ed;--stone-d:#d5dae0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#121417;--surface:#181b1f;--surface-2:#20242a;--band:#16191d;--ink:#eef0f2;--muted:#a7adb5;--line:#2c3138;--acc:#d6d9dc;--acc-soft:#272a2e;--acc2:#b9b2a8;--mask:#2a2f36;--mask-cur:#30343a;--empty:#2a2f36}}
 .pat{background:var(--band)!important;background-image:none!important}
 .vn{color:var(--ink)!important;font-weight:400!important}
 .chh h3,.rh{color:var(--ink)!important}
-.mn{color:#3a4a5c!important;background:var(--surface-2)!important}
+.mn{color:#4a4f55!important;background:var(--surface-2)!important}
 a.chl{color:inherit;text-decoration:none}
 a.chl:hover,a.chl:active{color:var(--acc);text-decoration:underline;text-underline-offset:5px}
 /* book view */
@@ -755,12 +755,22 @@ footer .wrap{padding-block:44px!important;gap:14px!important}
 .entitle i{font-family:"Plex Arabic",sans-serif!important;font-weight:600!important;font-size:1.02rem}
 /* zoom keeps every half-line intact: words never move to another line; a very large size scrolls sideways instead */
 .hm p{white-space:nowrap}
-.poem .bayt .hm,.mtext .hm{overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding-bottom:2px}
+.poem .bayt .hm,.mtext .hm{overflow:hidden}
 .hm::-webkit-scrollbar{display:none}
 @media (max-width:680px){.hm{font-size:calc(min(1.75rem,6.4vw)*var(--fs))!important}}
 @media (max-width:680px){.hm{font-size:calc(min(1.75rem,5.9vw)*var(--fs))!important}.hm p.a{padding-right:5%!important}}
 
-:root{--lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'%3E%3Cg fill='none' stroke='%23234a73' stroke-opacity='0.16' stroke-width='1.2'%3E%3Cpath d='M0 0C0 16 24 16 24 32C24 48 0 48 0 64M48 0C48 16 24 16 24 32C24 48 48 48 48 64'/%3E%3Cpath d='M24 -32C24 -16 48 -16 48 0M24 -32C24 -16 0 -16 0 0' transform='translate(0 64)'/%3E%3C/g%3E%3Cg fill='%23234a73' fill-opacity='0.21'%3E%3Ccircle cx='24' cy='10' r='2.2'/%3E%3Ccircle cx='0' cy='42' r='2.2'/%3E%3Ccircle cx='48' cy='42' r='2.2'/%3E%3C/g%3E%3C/svg%3E");--ablaq:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Crect width='10' height='10' fill='%232a2f36'/%3E%3Crect x='10' width='10' height='10' fill='%23f4efe4'/%3E%3C/svg%3E")}@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'%3E%3Cg fill='none' stroke='%239cc0e6' stroke-opacity='0.12' stroke-width='1.2'%3E%3Cpath d='M0 0C0 16 24 16 24 32C24 48 0 48 0 64M48 0C48 16 24 16 24 32C24 48 48 48 48 64'/%3E%3Cpath d='M24 -32C24 -16 48 -16 48 0M24 -32C24 -16 0 -16 0 0' transform='translate(0 64)'/%3E%3C/g%3E%3Cg fill='%239cc0e6' fill-opacity='0.16'%3E%3Ccircle cx='24' cy='10' r='2.2'/%3E%3Ccircle cx='0' cy='42' r='2.2'/%3E%3Ccircle cx='48' cy='42' r='2.2'/%3E%3C/g%3E%3C/svg%3E");--ablaq:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Crect width='10' height='10' fill='%230f1216'/%3E%3Crect x='10' width='10' height='10' fill='%23cfc6b4'/%3E%3C/svg%3E")}}:root[data-theme="dark"]{--lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'%3E%3Cg fill='none' stroke='%239cc0e6' stroke-opacity='0.12' stroke-width='1.2'%3E%3Cpath d='M0 0C0 16 24 16 24 32C24 48 0 48 0 64M48 0C48 16 24 16 24 32C24 48 48 48 48 64'/%3E%3Cpath d='M24 -32C24 -16 48 -16 48 0M24 -32C24 -16 0 -16 0 0' transform='translate(0 64)'/%3E%3C/g%3E%3Cg fill='%239cc0e6' fill-opacity='0.16'%3E%3Ccircle cx='24' cy='10' r='2.2'/%3E%3Ccircle cx='0' cy='42' r='2.2'/%3E%3Ccircle cx='48' cy='42' r='2.2'/%3E%3C/g%3E%3C/svg%3E");--ablaq:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Crect width='10' height='10' fill='%230f1216'/%3E%3Crect x='10' width='10' height='10' fill='%23cfc6b4'/%3E%3C/svg%3E")}</style>
+/* neutral colours only: black, greys, warm browns (no blue, pink, purple or yellow) */
+:root{--acc:#2b2f33;--acc-ink:#ffffff;--acc-soft:#eff0f1;--acc2:#6b6259;--gold:#8a7a68;--silver:#9a9a9a;--bronze:#c4b8a8;--qt:inherit;--mask-cur:#e5e6e8;--leaf:#8a8f84;--leaf2:#a3a79d}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--acc:#d6d9dc;--acc-ink:#111418;--acc-soft:#272a2e;--acc2:#b9b2a8;--gold:#b9ab98;--silver:#9a9a9a;--bronze:#6b6259}}
+.mn,.tr{color:#4a4f55!important}
+.lv.done .lvn{background:#2b2f33;border-color:#2b2f33}
+.facts{opacity:.75}.facts b{font-size:.74rem!important}.facts li>span{font-size:.7rem!important}.facts li{padding:0 7px!important}
+
+.hm{font-size:calc(2rem*var(--fs)*var(--fit,1))!important}
+@media (max-width:680px){.hm{font-size:calc(min(1.75rem,5.9vw)*var(--fs)*var(--fit,1))!important}}
+
+:root{--lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'%3E%3Cg fill='none' stroke='%232b2f33' stroke-opacity='0.16' stroke-width='1.2'%3E%3Cpath d='M0 0C0 16 24 16 24 32C24 48 0 48 0 64M48 0C48 16 24 16 24 32C24 48 48 48 48 64'/%3E%3Cpath d='M24 -32C24 -16 48 -16 48 0M24 -32C24 -16 0 -16 0 0' transform='translate(0 64)'/%3E%3C/g%3E%3Cg fill='%232b2f33' fill-opacity='0.21'%3E%3Ccircle cx='24' cy='10' r='2.2'/%3E%3Ccircle cx='0' cy='42' r='2.2'/%3E%3Ccircle cx='48' cy='42' r='2.2'/%3E%3C/g%3E%3C/svg%3E");--ablaq:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Crect width='10' height='10' fill='%232a2f36'/%3E%3Crect x='10' width='10' height='10' fill='%23f4efe4'/%3E%3C/svg%3E")}@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'%3E%3Cg fill='none' stroke='%23d6d9dc' stroke-opacity='0.12' stroke-width='1.2'%3E%3Cpath d='M0 0C0 16 24 16 24 32C24 48 0 48 0 64M48 0C48 16 24 16 24 32C24 48 48 48 48 64'/%3E%3Cpath d='M24 -32C24 -16 48 -16 48 0M24 -32C24 -16 0 -16 0 0' transform='translate(0 64)'/%3E%3C/g%3E%3Cg fill='%23d6d9dc' fill-opacity='0.16'%3E%3Ccircle cx='24' cy='10' r='2.2'/%3E%3Ccircle cx='0' cy='42' r='2.2'/%3E%3Ccircle cx='48' cy='42' r='2.2'/%3E%3C/g%3E%3C/svg%3E");--ablaq:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Crect width='10' height='10' fill='%230f1216'/%3E%3Crect x='10' width='10' height='10' fill='%23cfc6b4'/%3E%3C/svg%3E")}}:root[data-theme="dark"]{--lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'%3E%3Cg fill='none' stroke='%23d6d9dc' stroke-opacity='0.12' stroke-width='1.2'%3E%3Cpath d='M0 0C0 16 24 16 24 32C24 48 0 48 0 64M48 0C48 16 24 16 24 32C24 48 48 48 48 64'/%3E%3Cpath d='M24 -32C24 -16 48 -16 48 0M24 -32C24 -16 0 -16 0 0' transform='translate(0 64)'/%3E%3C/g%3E%3Cg fill='%23d6d9dc' fill-opacity='0.16'%3E%3Ccircle cx='24' cy='10' r='2.2'/%3E%3Ccircle cx='0' cy='42' r='2.2'/%3E%3Ccircle cx='48' cy='42' r='2.2'/%3E%3C/g%3E%3C/svg%3E");--ablaq:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Crect width='10' height='10' fill='%230f1216'/%3E%3Crect x='10' width='10' height='10' fill='%23cfc6b4'/%3E%3C/svg%3E")}</style>
 </head>
 <body>
 <header class="top"><div class="wrap">
@@ -786,7 +796,7 @@ footer .wrap{padding-block:44px!important;gap:14px!important}
   <div class="frame">
    <h1 lang="ar">تُحْفَةُ الأَطْفَالِ وَالغِلْمَانِ<br>فِي تَجْوِيدِ القُرْآنِ</h1>
    <p class="full" lang="ar" dir="rtl">نَظْمُ الشَّيْخِ سُلَيْمَانَ بْنِ حُسَيْنٍ الجَمْزُورِيِّ</p>
-   <p class="entitle" lang="en" dir="ltr"><i>Tuḥfat al-Aṭfāl wa-l-Ghilmān fī Tajwīd <span style="white-space:nowrap">al-Qur’ān</span></i><br>The Gift for Children and Young Students on the Tajwīd of the Qur’an<br><small>by Shaykh Sulaymān ibn Ḥusayn al-Jamzūrī</small></p>
+   <p class="entitle l-en" lang="en" dir="ltr"><i>Tuḥfat al-Aṭfāl wa-l-Ghilmān fī Tajwīd <span style="white-space:nowrap">al-Qur’ān</span></i><br>The Gift for Children and Young Students on the Tajwīd of the Qur’an<br><small>by Shaykh Sulaymān ibn Ḥusayn al-Jamzūrī</small></p>
    <p class="lead"><span class="l-en" lang="en">Read it with meanings, memorize it, practise and test yourself. Free for everyone.</span><span class="l-ar" lang="ar" dir="rtl">اقرأه بمعانيه، واحفظه، وتدرّب عليه، واختبر نفسك. مجاني للجميع.</span></p>
    <div class="cta"><a class="btn pri" href="#memorize"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg><span class="l-en" lang="en">Start memorizing</span><span class="l-ar" lang="ar" dir="rtl">ابدأ الحفظ</span></a><a class="btn out" href="#poem"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5zM12 6.5V19"/></svg><span class="l-en" lang="en">Read the poem</span><span class="l-ar" lang="ar" dir="rtl">اقرأ المتن</span></a></div>
    <ul class="facts">
@@ -928,7 +938,7 @@ const IN_FRAME=(()=>{try{return window.self!==window.top}catch(e){return true}})
 
 /* ================= strings ================= */
 const T={
-en:{repeat:"repeat",iWasRight:"I said it right",redoHere:"Recite again from here",undoDone:"Mistake removed",checkHint:"Not accurate? Tap “I said it right” to remove the mistake. Tap a red or orange word during practice to do the same.",vHidden:"Memory mode on: words are hidden",vHint:"Hint on: words are faded",vShown:"Text shown: read along",wentBack:"It sounds like you went back to verse {v}.",wentAhead:"It sounds like you moved ahead to verse {v}.",farBack:"You went back more than a page, so the microphone is paused.",waitTap:"I will wait until you choose.",startHere:"Yes, start from verse {v}",stayHere:"No, take me back to verse {v}",jumpQ:"Start again from verse {v}?",backL:"Back",prevCh:"Previous page",nextCh:"Next page",pickVerses:"Choose exact verses",tapFirst:"Tap the first verse, then the last one.",tapLast:"Now tap the last verse.",howTo:"How to play",flashHow:"You see the first half of a line. Say the second half in your head, then tap the card to check. Tap “I knew it” or “Again”.",speedHow:"Pick the right answer before the bar runs out. Answer fast for more points, and get answers right in a row for a combo.",buildHow:"The words of the second half are mixed up. Tap them in the right order to build the line.",matchHow:"Every line has two halves. Blue tiles are first halves and gold tiles are second halves. Flip one blue and one gold tile from the same line to make a pair.",customLv:"Or choose your own verses",play:"Play",nextLv:"Next level",playAgain:"Play again",levels:"Levels",half1:"First half",half2:"Second half",combo:"Combo",level:"Level",
+en:{repeat:"repeat",iWasRight:"I said it right",redoHere:"Recite again from here",undoDone:"Mistake removed",checkHint:"Not accurate? Tap “I said it right” to remove the mistake. Tap a red or orange word during practice to do the same.",vHidden:"Memory mode on: words are hidden",vHint:"Hint on: words are faded",vShown:"Text shown: read along",wentBack:"It sounds like you went back to verse {v}.",wentAhead:"It sounds like you moved ahead to verse {v}.",farBack:"You went back more than a page, so the microphone is paused.",waitTap:"I will wait until you choose.",startHere:"Yes, start from verse {v}",stayHere:"No, take me back to verse {v}",jumpQ:"Start again from verse {v}?",backL:"Back",prevCh:"Previous page",nextCh:"Next page",pickVerses:"Choose exact verses",tapFirst:"Tap the first verse, then the last one.",tapLast:"Now tap the last verse.",howTo:"How to play",flashHow:"You see the first half of a line. Say the second half in your head, then tap the card to check. Tap “I knew it” or “Again”.",speedHow:"Pick the right answer before the bar runs out. Answer fast for more points, and get answers right in a row for a combo.",buildHow:"The words of the second half are mixed up. Tap them in the right order to build the line.",matchHow:"Every line has two halves. Dark tiles are first halves and light brown tiles are second halves. Flip one dark and one light brown tile from the same line to make a pair.",customLv:"Or choose your own verses",play:"Play",nextLv:"Next level",playAgain:"Play again",levels:"Levels",half1:"First half",half2:"Second half",combo:"Combo",level:"Level",
  silent:"Paused after 30 seconds of silence. Tap the microphone when you are ready.",readAlong:"Read along",readAlongD:"Text shown. I listen and follow you word by word.",fromMem:"From memory",fromMemD:"Text hidden. Recite and get corrected.",pauseL:"Pause",resumeL:"Resume",startL:"Start",endL:"End",endConfirm:"Tap again to end",reciteAlong:"Recite along",goOn:"Keep reciting from the next word, or turn on a hint.",contents:"Contents",toTop:"Contents",certTitle:"Certificate of Practice",certNotice:"This certificate records practice on this website. It is not an ijāzah and not an official qualification.",certLine:"has completed memorization practice of",certName:"Name for the certificate",certNeed:"Please write a name for the certificate.",makeCert:"Show certificate",scanMe:"Scan to visit",shareLink:"Share link",keepGoing:"Keep going",listenAll:"Listen",reciter:"Reciter",moreSoon:"More reciters and explanations will be added.",tapPlay:"Play the word when tapped",speed:"Speed",verse:"Verse",verses:"Verses",of:"of",all:"All 61",from:"From",to:"To",start:"Start",range:"Choose verses",
  cont:"Continue where you stopped",contSub:"Verse {v} · {p}% done",discard:"Discard",
  hidden:"Hidden",hint:"Hint",shown:"Shown",mistake:"Mistake",correct:"Correct",more:"More",mic:"Microphone",
@@ -969,11 +979,11 @@ en:{repeat:"repeat",iWasRight:"I said it right",redoHere:"Recite again from here
  resetMe:"Reset this learner",resetAll:"Reset everything",resetSub:"Deletes progress, streaks and history. Recordings are kept.",confirm:"Tap again to confirm",resetDone:"Done. Starting fresh.",
  games:"Practice",gamesSub:"Choose an exercise, then a level. Each level is one page of the matn. Earn up to three flowers.",best:"Best",
  gFlash:"Flash cards",gFlashD:"See the first half, remember the second, then flip.",gSpeed:"Quick choice",gSpeedD:"Answer fast for more points. Build a streak.",
- gBuild:"Build the line",gBuildD:"Put the words of the second half in order.",gMatch:"Find the pair",gMatchD:"Flip a blue first half and its gold second half.",
+ gBuild:"Build the line",gBuildD:"Put the words of the second half in order.",gMatch:"Find the pair",gMatchD:"Flip a first half and its second half.",
  tapFlip:"Tap the card to flip",knewIt:"I knew it",againC:"Again",left:"left",pts:"points",moves:"moves",round:"Round",cards:"cards",
  progress:"My progress",chapters:"Chapters",printReport:"Print progress report",legendB:"Started",legendS:"Good",legendG:"Perfect",
  visits:"visits",report:"Progress report",certOf:"has memorized",copied:"Copied",yourProg:"Your progress"},
-ar:{repeat:"تكرار",iWasRight:"قرأتها صحيحة",redoHere:"أعد من هنا",undoDone:"أُزيل الخطأ",checkHint:"إن كان التصحيح غير دقيق فاضغط «قرأتها صحيحة» لإزالة الخطأ. ويمكنك أثناء الحفظ الضغط على أي كلمة حمراء أو برتقالية لفعل ذلك.",vHidden:"وضع الحفظ: الكلمات مخفية",vHint:"التلميح مفعّل: الكلمات باهتة",vShown:"النص ظاهر: القراءة مع المتابعة",wentBack:"يبدو أنك رجعت إلى البيت {v}.",wentAhead:"يبدو أنك تقدّمت إلى البيت {v}.",farBack:"رجعت أكثر من صفحة، فأوقفت الميكروفون مؤقتًا.",waitTap:"سأنتظر حتى تختار.",startHere:"نعم، ابدأ من البيت {v}",stayHere:"لا، أرجعني إلى البيت {v}",jumpQ:"هل تريد البدء من البيت {v}؟",backL:"رجوع",prevCh:"الصفحة السابقة",nextCh:"الصفحة التالية",pickVerses:"اختر أبياتًا محددة",tapFirst:"اضغط على أول بيت، ثم على آخر بيت.",tapLast:"الآن اضغط على آخر بيت.",howTo:"طريقة اللعب",flashHow:"ترى صدر البيت، فتذكّر عجزه في نفسك، ثم اضغط على البطاقة لتتحقق. اضغط «عرفتُه» أو «مرة أخرى».",speedHow:"اختر الإجابة الصحيحة قبل أن ينتهي الشريط. كلما أسرعت زادت النقاط، والإجابات الصحيحة المتتالية تضاعفها.",buildHow:"كلمات عجز البيت مخلوطة. اضغط عليها بالترتيب الصحيح لتركّب البيت.",matchHow:"لكل بيت شطران. البلاطات الزرقاء صدور، والذهبية أعجاز. اقلب بلاطة زرقاء وبلاطة ذهبية من البيت نفسه لتكوّن زوجًا.",customLv:"أو اختر أبياتك بنفسك",play:"العب",nextLv:"المرحلة التالية",playAgain:"العب مرة أخرى",levels:"المراحل",half1:"الصدر",half2:"العجز",combo:"سلسلة",level:"المرحلة",
+ar:{repeat:"تكرار",iWasRight:"قرأتها صحيحة",redoHere:"أعد من هنا",undoDone:"أُزيل الخطأ",checkHint:"إن كان التصحيح غير دقيق فاضغط «قرأتها صحيحة» لإزالة الخطأ. ويمكنك أثناء الحفظ الضغط على أي كلمة حمراء أو برتقالية لفعل ذلك.",vHidden:"وضع الحفظ: الكلمات مخفية",vHint:"التلميح مفعّل: الكلمات باهتة",vShown:"النص ظاهر: القراءة مع المتابعة",wentBack:"يبدو أنك رجعت إلى البيت {v}.",wentAhead:"يبدو أنك تقدّمت إلى البيت {v}.",farBack:"رجعت أكثر من صفحة، فأوقفت الميكروفون مؤقتًا.",waitTap:"سأنتظر حتى تختار.",startHere:"نعم، ابدأ من البيت {v}",stayHere:"لا، أرجعني إلى البيت {v}",jumpQ:"هل تريد البدء من البيت {v}؟",backL:"رجوع",prevCh:"الصفحة السابقة",nextCh:"الصفحة التالية",pickVerses:"اختر أبياتًا محددة",tapFirst:"اضغط على أول بيت، ثم على آخر بيت.",tapLast:"الآن اضغط على آخر بيت.",howTo:"طريقة اللعب",flashHow:"ترى صدر البيت، فتذكّر عجزه في نفسك، ثم اضغط على البطاقة لتتحقق. اضغط «عرفتُه» أو «مرة أخرى».",speedHow:"اختر الإجابة الصحيحة قبل أن ينتهي الشريط. كلما أسرعت زادت النقاط، والإجابات الصحيحة المتتالية تضاعفها.",buildHow:"كلمات عجز البيت مخلوطة. اضغط عليها بالترتيب الصحيح لتركّب البيت.",matchHow:"لكل بيت شطران. البلاطات الداكنة صدور، والبنية الفاتحة أعجاز. اقلب بلاطة داكنة وبلاطة بنية فاتحة من البيت نفسه لتكوّن زوجًا.",customLv:"أو اختر أبياتك بنفسك",play:"العب",nextLv:"المرحلة التالية",playAgain:"العب مرة أخرى",levels:"المراحل",half1:"الصدر",half2:"العجز",combo:"سلسلة",level:"المرحلة",
  silent:"توقّف التسجيل بعد ٣٠ ثانية من الصمت. اضغط على الميكروفون عندما تكون مستعدًا.",readAlong:"اقرأ مع المتابعة",readAlongD:"النص ظاهر، وأستمع إليك وأتابعك كلمةً كلمة.",fromMem:"من الحفظ",fromMemD:"النص مخفي، سمّع ويُصحَّح لك.",pauseL:"إيقاف",resumeL:"متابعة",startL:"ابدأ",endL:"إنهاء",endConfirm:"اضغط مرة أخرى للإنهاء",reciteAlong:"اقرأ مع المتابعة",goOn:"تابع التسميع من الكلمة التالية، أو شغّل التلميح.",contents:"الفهرس",toTop:"الفهرس",certTitle:"شهادة تدريب",certNotice:"هذه الشهادة توثّق التدريب على هذا الموقع، وليست إجازةً ولا شهادةً رسمية.",certLine:"أتمّ التدريب على حفظ",certName:"الاسم على الشهادة",certNeed:"اكتب اسمًا للشهادة من فضلك.",makeCert:"اعرض الشهادة",scanMe:"امسح للزيارة",shareLink:"شارك الرابط",keepGoing:"تابع تلقائيًا",listenAll:"استمع",reciter:"القارئ",moreSoon:"سيُضاف قرّاء آخرون وشروح قريبًا.",tapPlay:"تشغيل الكلمة عند الضغط عليها",speed:"السرعة",verse:"البيت",verses:"الأبيات",of:"من",all:"الكل ٦١",from:"من",to:"إلى",start:"ابدأ",range:"اختر الأبيات",
  cont:"أكمل من حيث توقفت",contSub:"البيت {v} · أُنجز {p}٪",discard:"حذف",
  hidden:"مخفي",hint:"تلميح",shown:"ظاهر",mistake:"خطأ",correct:"صحيح",more:"المزيد",mic:"الميكروفون",
@@ -1013,7 +1023,7 @@ ar:{repeat:"تكرار",iWasRight:"قرأتها صحيحة",redoHere:"أعد م�
  resetMe:"إعادة تعيين هذا المتعلّم",resetAll:"إعادة تعيين الكل",resetSub:"يحذف التقدّم والسلاسل والسجل، وتبقى التسجيلات.",confirm:"اضغط مرة أخرى للتأكيد",resetDone:"تم. بداية جديدة.",
  games:"التدريب",gamesSub:"اختر تمرينًا ثم مرحلة. كل مرحلة صفحة من المتن، واجمع حتى ثلاث زهرات.",best:"الأفضل",
  gFlash:"البطاقات",gFlashD:"ترى الصدر، فتتذكر العجز، ثم تقلب البطاقة.",gSpeed:"الاختيار السريع",gSpeedD:"أجب بسرعة لنقاط أكثر، واصنع سلسلة.",
- gBuild:"ركّب البيت",gBuildD:"رتّب كلمات العجز بالترتيب الصحيح.",gMatch:"جِد الزوج",gMatchD:"اقلب صدرًا أزرق وعجزه الذهبي.",
+ gBuild:"ركّب البيت",gBuildD:"رتّب كلمات العجز بالترتيب الصحيح.",gMatch:"جِد الزوج",gMatchD:"اقلب صدرًا وعجزه.",
  tapFlip:"اضغط على البطاقة لقلبها",knewIt:"عرفتُه",againC:"مرة أخرى",left:"متبقية",pts:"نقطة",moves:"حركة",round:"الجولة",cards:"بطاقة",
  progress:"تقدّمي",chapters:"الأبواب",printReport:"اطبع تقرير التقدّم",legendB:"بدأت",legendS:"جيد",legendG:"متقن",
  visits:"زيارة",report:"تقرير التقدّم",certOf:"أتمّ حفظ",copied:"نُسخ النص",yourProg:"تقدّمك"}
@@ -1063,7 +1073,7 @@ const SHAPES={flower:'<circle cx="12" cy="6.5" r="4.2"/><circle cx="17.2" cy="10
  key:'<path d="M8 5a5 5 0 1 0 4.6 7H15v3h3v-3h3V9h-8.4A5 5 0 0 0 8 5zm0 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/>',
  lamp:'<path d="M9 3h6l2 9H7zM11 12h2v6h3v3H8v-3h3z"/>',
  oval:'<rect x="4" y="7" width="16" height="10" rx="5"/>'};
-const COLORS=["#234a73","#2a7a80","#a8812f","#a2553a","#5a6470","#6b7d4f","#7a4f7a","#c0564f","#3f7fbf","#d08a2e"];
+const COLORS=["#2b2f33","#6b6b6b","#8a7a68","#6d4c3d","#5f6b4e","#a2553a","#4f5d52","#9a8f80","#b0805c","#3d3a36"];
 /* One list of ready icons (shape and colour together): tap one to choose it. */
 const PRESETS=Object.keys(SHAPES).flatMap((s,i)=>[[s,i%COLORS.length],[s,(i+4)%COLORS.length],[s,(i+7)%COLORS.length]]);
 const shapeSvg=p=>`<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="${COLORS[p.color]||COLORS[0]}">${SHAPES[p.shape]||SHAPES.flower}</g></svg>`;
@@ -1096,11 +1106,11 @@ function toast(html,cls="",ms=2400){if(cls==="msg")cls="";const old=$("#toastEl"
 const bismillah=()=>toast(`<span lang="ar">بِسْمِ اللَّهِ</span>${LANG==="en"?` <small>· Bismillāh</small>`:""}`,"",2000);
 const istain=()=>toast(`<span lang="ar">اسْتَعِنْ بِاللَّهِ</span>${LANG==="en"?` <small>· Seek Allah’s help</small>`:""}`,"",2400);
 function popFx(txt,el,cls=""){try{const r=el.getBoundingClientRect();const s=document.createElement("span");s.className="fx "+cls;s.textContent=txt;s.style.left=(r.left+r.width/2)+"px";s.style.top=(r.top+r.height/2)+"px";document.body.appendChild(s);setTimeout(()=>s.remove(),1000)}catch(e){}}
-function burst(el){return;try{const r=el.getBoundingClientRect();const cols=["#a8812f","#234a73","#2a7a80","#2e7a4f"];for(let k=0;k<10;k++){const s=document.createElement("i");s.className="spark";const a=k/10*Math.PI*2,d=40+Math.random()*30;s.style.left=(r.left+r.width/2)+"px";s.style.top=(r.top+r.height/2)+"px";s.style.background=cols[k%4];s.style.setProperty("--dx",Math.cos(a)*d+"px");s.style.setProperty("--dy",Math.sin(a)*d+"px");document.body.appendChild(s);setTimeout(()=>s.remove(),700)}}catch(e){}}
+function burst(el){return;try{const r=el.getBoundingClientRect();const cols=["#8a7a68","#2b2f33","#6b6259","#2e7a4f"];for(let k=0;k<10;k++){const s=document.createElement("i");s.className="spark";const a=k/10*Math.PI*2,d=40+Math.random()*30;s.style.left=(r.left+r.width/2)+"px";s.style.top=(r.top+r.height/2)+"px";s.style.background=cols[k%4];s.style.setProperty("--dx",Math.cos(a)*d+"px");s.style.setProperty("--dy",Math.sin(a)*d+"px");document.body.appendChild(s);setTimeout(()=>s.remove(),700)}}catch(e){}}
 let wrongRun=0;
 function onWrong(){beep();wrongRun++;if(wrongRun>=3){wrongRun=0;istain()}}
 function onRight(){wrongRun=0}
-function confetti(){const c=document.createElement("div");c.className="confetti";const cols=["#a8812f","#234a73","#2a7a80","#a2553a"];
+function confetti(){const c=document.createElement("div");c.className="confetti";const cols=["#8a7a68","#2b2f33","#6b6259","#a2553a"];
  for(let i=0;i<34;i++){const s=document.createElement("i");s.style.left=Math.random()*100+"%";s.style.background=cols[i%4];s.style.animationDelay=(Math.random()*.6)+"s";const z=(8+Math.random()*8)+"px";s.style.width=z;s.style.height=z;c.appendChild(s)}
  document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}
 function celebrate({title,stats="",extra="",onCert=null,next=null,again=null}){const d=pick(DUAS);
@@ -1121,7 +1131,7 @@ function printPages(make){if(IN_FRAME){toast(t("printFrame"),"msg",3500);return}
   <div class="row" style="justify-content:center"><button class="btn soft" type="button" id="pCancel">${t("cancel")}</button><button class="btn pri" type="button" id="pGo">${IC.print}${t("printNow")}</button></div></div></div>`;
  $("#pCancel").onclick=()=>$("#modal").innerHTML="";
  $("#pGo").onclick=()=>{const name=$("#pName").value.trim();$("#modal").innerHTML="";$("#print").innerHTML=make(name).map(b=>pageWrap(b,name)).join("");setTimeout(()=>window.print(),80)}}
-const verseHTMLPrint=v=>`<div style="padding:4mm 0;border-bottom:1px solid #ccd"><div class="ln"><b style="color:#234a73">${AD(v)} ـ</b> ${V[v-1][0]}</div><div class="ln" style="padding-right:12mm">${V[v-1][1]}</div>
+const verseHTMLPrint=v=>`<div style="padding:4mm 0;border-bottom:1px solid #ccd"><div class="ln"><b style="color:#2b2f33">${AD(v)} ـ</b> ${V[v-1][0]}</div><div class="ln" style="padding-right:12mm">${V[v-1][1]}</div>
  <div style="font-size:11pt;color:#333">${G[v].ar}</div><div dir="ltr" style="font-size:10pt;color:#444;text-align:left"><i>${esc(TL[v-1][0])} / ${esc(TL[v-1][1])}</i><br>${esc(G[v].en)}</div></div>`;
 function printVerses(vs){printPages(()=>{const pages=[];for(let i=0;i<vs.length;i+=5)pages.push(vs.slice(i,i+5).map(verseHTMLPrint).join(""));return pages})}
 function certHTML(name,title,detail){return `<div class="cert" dir="rtl" lang="ar">
@@ -1142,7 +1152,7 @@ function printCert(title,detail){const draw=(name,err)=>{$("#modal").innerHTML=`
  draw(P().name||"",false)}
 function printReport(){const best=bestMap();printPages(name=>[`<h1>${t("report")}</h1>${name?`<div class="big" style="font-weight:800">${esc(name)}</div>`:""}
  <div class="big" style="margin:6mm 0">${t("streak")}: ${num(streak())} · ${t("weekGoal")}: ${num(weekVerses().length)}/${num(goalN())} · ${t("stars")}: ${num(Object.values(best).filter(a=>a>=80).length)}/${num(61)}</div>
- <table style="width:100%;border-collapse:collapse;font-size:12pt">${CH.map(c=>`<tr><td style="padding:2mm;border-bottom:1px solid #ccd;font-weight:700">${c[2]}</td><td style="padding:2mm;border-bottom:1px solid #ccd">${range(c[0],c[1]).map(v=>{const l=level(best[v]||0);return `<span style="display:inline-block;width:9mm;text-align:center;color:${l==="g"?"#a8812f":l==="s"?"#8a96a8":l==="b"?"#a8683a":"#ccd"}">✿<br><small style="color:#555">${AD(v)}</small></span>`}).join("")}</td></tr>`).join("")}</table>`])}
+ <table style="width:100%;border-collapse:collapse;font-size:12pt">${CH.map(c=>`<tr><td style="padding:2mm;border-bottom:1px solid #ccd;font-weight:700">${c[2]}</td><td style="padding:2mm;border-bottom:1px solid #ccd">${range(c[0],c[1]).map(v=>{const l=level(best[v]||0);return `<span style="display:inline-block;width:9mm;text-align:center;color:${l==="g"?"#8a7a68":l==="s"?"#8a96a8":l==="b"?"#a8683a":"#ccd"}">✿<br><small style="color:#555">${AD(v)}</small></span>`}).join("")}</td></tr>`).join("")}</table>`])}
 async function shareVerse(v){const text=`${V[v-1][0]}\n${V[v-1][1]}\n\n${LANG==="en"?G[v].en:G[v].ar}\n\n${BOOK_AR} · ${t("verse")} ${num(v)}\n${SITE}#poem/v${v}`;
  try{if(navigator.share){await navigator.share({title:BOOK_AR,text});return}}catch(e){return}
  try{await navigator.clipboard.writeText(text);toast(t("copied"),"msg")}catch(e){}}
@@ -1237,7 +1247,7 @@ function renderRoute(){({home:()=>Home.render(),memorize:()=>Mem.render(),quiz:(
 function route(){const h=(location.hash||"#home").slice(1);const [r,sub]=h.split("/");const R=["home","poem","memorize","games","quiz","progress","settings"].includes(r)?r:"home";
  if(ROUTE&&ROUTE!==R){if(ROUTE==="memorize")Mem.leave();if(ROUTE==="quiz")Quiz.leave();if(ROUTE==="games"){Games.leave();Games.game=null}}
  ROUTE=R;$$(".view").forEach(v=>v.hidden=v.id!=="view-"+R);$$(".menu a").forEach(a=>{if(a.dataset.nav===R)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
- Sheet.close();if(R!=="poem")Player.stop();document.body.classList.remove("dockpad");document.body.classList.toggle("pbon",R==="poem");renderRoute();
+ Sheet.close();refit();if(R!=="poem")Player.stop();document.body.classList.remove("dockpad");document.body.classList.toggle("pbon",R==="poem");renderRoute();
  if(R==="poem"&&!readGreeted){readGreeted=true;bismillah()}
  if(R==="poem"&&Book.on()){let ci=Book.i;if(sub&&/^c\d+$/.test(sub))ci=+sub.slice(1)-1;else if(sub&&/^v\d+$/.test(sub))ci=chOf(+sub.slice(1));Book.show(ci,true)}
  const target=sub&&document.getElementById(sub);if(target)setTimeout(()=>target.scrollIntoView({block:"start"}),40);else window.scrollTo(0,0)}
@@ -1254,7 +1264,7 @@ const Home={render(){const saved=ps.get("session",null);
 /* ================= poem view ================= */
 const poemEl=$("#poemText");
 function applyPoemOpts(){poemEl.classList.toggle("no-tr",!ST.tr);poemEl.classList.toggle("no-tl",!ST.tl);poemEl.classList.toggle("no-mn",!ST.mn);
- $$("#pbar [data-opt]").forEach(b=>b.setAttribute("aria-pressed",!!ST[b.dataset.opt]));document.documentElement.style.setProperty("--fs",ST.fs)}
+ $$("#pbar [data-opt]").forEach(b=>b.setAttribute("aria-pressed",!!ST[b.dataset.opt]));document.documentElement.style.setProperty("--fs",ST.fs);refit()}
 $("#pbar").addEventListener("click",e=>{const o=e.target.closest("[data-opt]");if(o){ST[o.dataset.opt]=!ST[o.dataset.opt];saveSet();applyPoemOpts();return}
  const f=e.target.closest("[data-fs]");if(f){ST.fs=Math.min(1.5,Math.max(.8,Math.round((ST.fs+(+f.dataset.fs)*.1)*10)/10));saveSet();applyPoemOpts()}});
 $("#jump").onchange=e=>{const el=document.getElementById(e.target.value);if(el)el.scrollIntoView({behavior:"smooth",block:"start"});e.target.value=""};
@@ -1264,11 +1274,17 @@ $("#listenAll").onclick=()=>{unlockAudio();Player.playVerses(range(PBar.v||1,61)
 poemEl.addEventListener("click",e=>{const w=e.target.closest(".w");if(w){const [v,h,i]=w.dataset.k.split(":").map(Number);Sheet.word(v,h,i,w.dataset.g);return}
  const n=e.target.closest("[data-verse]");if(n){Sheet.word(+n.dataset.verse,-1,-1,null);return}const tr=e.target.closest(".tr");if(tr)sayEn(tr.dataset.say)});
 
+/* ================= zoom fits the screen: all lines grow together and shrink just enough to fit, words never move ================= */
+function fitLines(){const roots=[$("#poemText"),$("#mz")].filter(x=>x&&x.offsetParent);for(const root of roots){root.style.setProperty("--fit",1);
+  let k=1;root.querySelectorAll(".hm").forEach(h=>{if(!h.offsetParent)return;const w=h.clientWidth,sw=h.scrollWidth;if(sw>w+1)k=Math.min(k,w/sw)});
+  if(k<1)root.style.setProperty("--fit",Math.max(.4,k*.97).toFixed(3))}}
+let fitT=0;const refit=()=>{cancelAnimationFrame(fitT);fitT=requestAnimationFrame(()=>requestAnimationFrame(fitLines))};
+window.addEventListener("resize",refit);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(refit);
 /* ================= book view: one page (chapter) at a time; swipe or tap to turn ================= */
 const Book={i:0,
  on(){return ST.vm!=="scroll"},
  apply(){poemEl.classList.toggle("book",this.on());$$("[data-vm]").forEach(b=>b.classList.toggle("on",(b.dataset.vm==="scroll")!==this.on()));$("#flipbar").hidden=!this.on();if(this.on())this.show(this.i,true)},
- show(i,quiet){i=Math.max(0,Math.min(CH.length-1,i));const changed=i!==this.i;this.i=i;$$("#poemText .chap").forEach((s,k)=>s.classList.toggle("on",k===i));
+ show(i,quiet){refit();i=Math.max(0,Math.min(CH.length-1,i));const changed=i!==this.i;this.i=i;$$("#poemText .chap").forEach((s,k)=>s.classList.toggle("on",k===i));
   poemEl.classList.toggle("first",i===0);poemEl.classList.toggle("last",i===CH.length-1);$("#pgNum").textContent=`${num(i+1)} / ${num(CH.length)}`;
   $("#pgPrev").disabled=i===0;$("#pgNext").disabled=i===CH.length-1;if(changed&&!quiet){const s=$$("#poemText .chap")[i];s.classList.remove("turn");void s.offsetWidth;s.classList.add("turn")}},
  go(d){this.show(this.i+d);history.replaceState(null,"","#poem/c"+(this.i+1));window.scrollTo(0,$("#poemText").getBoundingClientRect().top+scrollY-170)}};
@@ -1385,7 +1401,7 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
    <div class="dock"><div class="in"><button class="db" type="button" id="dview">${this.viewBtn()}</button>
     <button class="db bad" type="button" id="dbad">${IC.x}<span>${t("mistake")}</span></button><div class="micw"><button class="mic" type="button" id="dmic" aria-label="${t("mic")}">${IC.mic}</button><span id="micl">${t("startL")}</span></div>
     <button class="db ok" type="button" id="dok">${IC.ok}<span>${t("correct")}</span></button><button class="db endb" type="button" id="dend"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg><span>${t("endL")}</span></button></div></div>`;
-  this.applyView();this.prog();this.note();this.curVerse();this.bindQuick();this.micUI();
+  this.applyView();this.prog();this.note();this.curVerse();this.bindQuick();this.micUI();refit();
   const cp=$("#chPrev"),cn=$("#chNext");if(cp)cp.onclick=()=>this.goChapter(chOf(r.verses[0])-1);if(cn)cn.onclick=()=>this.goChapter(chOf(r.verses[r.verses.length-1])+1);
   if(!IN_FRAME&&!micGranted&&micState!=="denied"&&(ST.rec||ST.mode==="voice"))askMic().then(()=>this.note());
   $("#dview").onclick=()=>{r.view=((r.view||0)+1)%3;if(r.view)r.peeks++;this.applyView();this.save();toast([t("vHidden"),t("vHint"),t("vShown")][r.view],"",5000)};
