@@ -1026,7 +1026,7 @@ html[lang="en"] .facts b{font-size:.6rem!important}html[lang="en"] .facts li>spa
    <div class="l-ar" lang="ar"><h1 lang="ar">تُحْفَةُ الأَطْفَالِ وَالغِلْمَانِ<br>فِي تَجْوِيدِ القُرْآنِ</h1>
    <p class="full" dir="rtl">نَظْمُ الشَّيْخِ سُلَيْمَانَ بْنِ حُسَيْنٍ الجَمْزُورِيِّ</p></div>
    <div class="l-en" lang="en" dir="ltr"><h1 class="enh1">Tuḥfat al-Aṭfāl</h1><p class="ensub">The Gift for Children and Young Students on the Tajwīd of the Qur’an</p>
-   <p class="enby">by Shaykh Sulaymān ibn Ḥusayn al-Jamzūrī</p><p class="arsmall" lang="ar" dir="rtl">تُحْفَةُ الأَطْفَالِ وَالغِلْمَانِ فِي تَجْوِيدِ القُرْآنِ</p></div>
+   <p class="enby">by Shaykh Sulaymān ibn Ḥusayn al-Jamzūrī</p></div>
    <p class="lead"><span class="l-en" lang="en">Read it with meanings, memorize it, practise and test yourself. Free for everyone.</span><span class="l-ar" lang="ar" dir="rtl">اقرأه بمعانيه، واحفظه، وتدرّب عليه، واختبر نفسك. مجاني للجميع.</span></p>
    <div class="cta"><a class="btn pri" href="#memorize"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg><span class="l-en" lang="en">Memorize</span><span class="l-ar" lang="ar" dir="rtl">ابدأ الحفظ</span></a><a class="btn out" href="#poem"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5zM12 6.5V19"/></svg><span class="l-en" lang="en">Read</span><span class="l-ar" lang="ar" dir="rtl">اقرأ المتن</span></a></div>
    <ul class="facts">
@@ -1517,7 +1517,7 @@ function bookCover(o,name){const en=o.ed==="en";
   ${(o.mn||o.tr||o.tl)?`<div class="cvx">${en?"With ":"مع "}${[o.mn&&(en?"Arabic meaning":"المعنى"),o.tr&&(en?"English translation":"الترجمة الإنجليزية"),o.tl&&(en?"transliteration":"النطق بالحروف اللاتينية")].filter(Boolean).join(en?", ":"، ")}</div>`:""}
   ${name?`<div class="cvn">${en?"Copy of":"نسخة"}: <b>${esc(name)}</b></div>`:""}</div>
   <div class="bpf"><div>${BOOK_AR} · <span dir="ltr">${SITE}</span><br>${fmtD(Date.now())}</div><div class="qr">${qrSvg()}</div></div></section>`}
-function bookPages(o,name){const en=o.ed==="en";const per=Math.max(2,6-(o.mn?2:0)-(o.tr?2:0)-(o.tl?1:0));const head=en?"Matn Tuḥfat al-Aṭfāl · مَتْنُ تُحْفَةِ الأَطْفَالِ":"مَتْنُ تُحْفَةِ الأَطْفَالِ";
+function bookPages(o,name){const en=o.ed==="en";const per=Math.max(2,6-(o.mn?2:0)-(o.tr?2:0)-(o.tl?1:0));const head=en?"Matn Tuḥfat al-Aṭfāl":"مَتْنُ تُحْفَةِ الأَطْفَالِ";
  const bodies=[];CH.forEach((c,i)=>{const vs=range(c[0],c[1]);for(let k=0;k<vs.length;k+=per){const part=vs.slice(k,k+per);
   bodies.push(`${k===0?`${i===0?`<div class="pbism">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>`:""}<h2 class="pch">${CHH[i]}${en?`<small dir="ltr">${esc(c[3])}</small>`:""}</h2>`:""}${part.map(v=>`<div class="pv"><div class="ps"><span class="pn">${AD(v)}<span class="dsh">–</span></span>${qh(V[v-1][0])}</div><div class="pa">${qh(V[v-1][1])}</div>
    ${o.tl?`<div class="ptl" dir="ltr" lang="en">${esc(TL[v-1][0])} / ${esc(TL[v-1][1])}</div>`:""}${o.tr?`<div class="ptr" dir="ltr" lang="en">${esc(G[v].en)}</div>`:""}${o.mn?`<div class="pmn">${G[v].ar}</div>`:""}</div>`).join("")}${i===CH.length-1&&k+per>=vs.length?`<div class="pbism">تَمَّتْ بِحَمْدِ اللَّهِ</div>`:""}`)}});
