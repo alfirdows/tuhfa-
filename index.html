@@ -28,8 +28,8 @@
 @font-face{font-family:"Site";src:url(fonts/IBMPlexSansArabic-Regular.woff) format("woff");font-weight:400;font-display:swap;unicode-range:U+0000-024F,U+1E00-1EFF,U+2000-206F,U+2190-21FF,U+20AC,U+2122}
 @font-face{font-family:"Site";src:url(fonts/IBMPlexSansArabic-SemiBold.woff) format("woff");font-weight:500 600;font-display:swap;unicode-range:U+0000-024F,U+1E00-1EFF,U+2000-206F,U+2190-21FF,U+20AC,U+2122}
 @font-face{font-family:"Site";src:url(fonts/IBMPlexSansArabic-Bold.woff) format("woff");font-weight:700 900;font-display:swap;unicode-range:U+0000-024F,U+1E00-1EFF,U+2000-206F,U+2190-21FF,U+20AC,U+2122}
-@font-face{font-family:"Site";src:url(fonts/ScheherazadeNew-Regular.woff) format("woff");font-weight:400 500;font-display:swap;size-adjust:118%;unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+0660-0669}
-@font-face{font-family:"Site";src:url(fonts/ScheherazadeNew-Bold.woff) format("woff");font-weight:600 900;font-display:swap;size-adjust:118%;unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+0660-0669}
+@font-face{font-family:"Site";src:url(fonts/ScheherazadeNew-Regular.woff) format("woff");font-weight:400 500;font-display:swap;size-adjust:106%;unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+0660-0669}
+@font-face{font-family:"Site";src:url(fonts/ScheherazadeNew-Bold.woff) format("woff");font-weight:600 900;font-display:swap;size-adjust:106%;unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+0660-0669}
 :root{
   --bg:#fbf8f1; --surface:#ffffff; --surface-2:#f4efe4; --band:#f1ebdf; --ink:#1d2126; --muted:#56595e; --line:#e4dccb;
   --acc:#2b2f33; --acc-ink:#ffffff; --acc-soft:#efefef; --acc2:#6b6259;
@@ -967,12 +967,39 @@ body.dockpad .toast,body.pbon .toast{bottom:calc(84px + env(safe-area-inset-bott
 .fx{color:var(--acc)!important}.fx.combo{color:var(--ink)!important}
 .mult.pop{color:var(--acc)!important}
 
+/* English home title */
+.enh1{font-family:"Site",sans-serif!important;font-size:clamp(2rem,8vw,3rem)!important;font-weight:700;letter-spacing:-.01em;line-height:1.2!important;margin:0 0 12px!important;color:var(--ink)}
+.ensub{margin:0 auto;max-width:460px;font-size:1.05rem;color:var(--ink);line-height:1.6}
+.enby{margin:8px 0 0;font-size:.9rem;color:var(--muted)}
+.arsmall{margin:16px 0 0;font-family:var(--text);font-size:1.05rem;color:var(--muted)}
+.brand .ebrand{font-family:"Site",sans-serif!important;font-size:1.05rem!important;font-weight:700;letter-spacing:-.01em}
+/* Tarteel-like compact controls with small labels */
+.btn{min-height:32px!important;padding:5px 12px!important;font-size:.8rem!important;font-weight:600!important}
+.btn.sm{min-height:28px!important;padding:3px 10px!important;font-size:.75rem!important}
+.btn svg{width:15px!important;height:15px!important}
+.chip{min-height:28px!important;padding:3px 10px!important;font-size:.76rem!important}
+.seg button{min-height:30px!important;padding:4px 10px!important;font-size:.78rem!important}
+.qk{font-size:.72rem!important;min-height:28px!important}
+.hbtn{height:32px!important;font-size:.76rem!important;padding:0 10px!important}.hbtn.icon{width:32px!important}
+.menu a{font-size:.8rem!important;padding:5px 9px!important}.menu a svg{width:16px!important;height:16px!important}
+.tog{font-size:.74rem!important;min-height:28px!important}
+.vmode button{font-size:.76rem!important;padding:4px 10px!important}
+.rp-tabs button{min-height:34px!important;font-size:.84rem!important}
+.flipbar .btn{min-height:32px!important;font-size:.78rem!important}
+.pgnav small{font-size:.7rem!important}.pgnav b{font-size:1rem!important}
+.gbig{font-size:.8rem!important;padding:6px!important}
+.db{font-size:.6rem!important;min-height:44px!important}.db svg{width:18px!important;height:18px!important}
+.mic{font-size:.7rem!important;height:40px!important;min-width:78px!important}
+.games.stick .game b{font-size:.78rem!important}
+.pill{font-size:.72rem!important;padding:2px 8px!important}
+.tile b,.game b,.gcard b{font-size:.98rem!important}
+
 :root{--lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'%3E%3Cg fill='none' stroke='%232b2f33' stroke-opacity='0.16' stroke-width='1.2'%3E%3Cpath d='M0 0C0 16 24 16 24 32C24 48 0 48 0 64M48 0C48 16 24 16 24 32C24 48 48 48 48 64'/%3E%3Cpath d='M24 -32C24 -16 48 -16 48 0M24 -32C24 -16 0 -16 0 0' transform='translate(0 64)'/%3E%3C/g%3E%3Cg fill='%232b2f33' fill-opacity='0.21'%3E%3Ccircle cx='24' cy='10' r='2.2'/%3E%3Ccircle cx='0' cy='42' r='2.2'/%3E%3Ccircle cx='48' cy='42' r='2.2'/%3E%3C/g%3E%3C/svg%3E");--ablaq:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Crect width='10' height='10' fill='%232a2f36'/%3E%3Crect x='10' width='10' height='10' fill='%23f4efe4'/%3E%3C/svg%3E")}@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'%3E%3Cg fill='none' stroke='%23d6d9dc' stroke-opacity='0.12' stroke-width='1.2'%3E%3Cpath d='M0 0C0 16 24 16 24 32C24 48 0 48 0 64M48 0C48 16 24 16 24 32C24 48 48 48 48 64'/%3E%3Cpath d='M24 -32C24 -16 48 -16 48 0M24 -32C24 -16 0 -16 0 0' transform='translate(0 64)'/%3E%3C/g%3E%3Cg fill='%23d6d9dc' fill-opacity='0.16'%3E%3Ccircle cx='24' cy='10' r='2.2'/%3E%3Ccircle cx='0' cy='42' r='2.2'/%3E%3Ccircle cx='48' cy='42' r='2.2'/%3E%3C/g%3E%3C/svg%3E");--ablaq:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Crect width='10' height='10' fill='%230f1216'/%3E%3Crect x='10' width='10' height='10' fill='%23cfc6b4'/%3E%3C/svg%3E")}}:root[data-theme="dark"]{--lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'%3E%3Cg fill='none' stroke='%23d6d9dc' stroke-opacity='0.12' stroke-width='1.2'%3E%3Cpath d='M0 0C0 16 24 16 24 32C24 48 0 48 0 64M48 0C48 16 24 16 24 32C24 48 48 48 48 64'/%3E%3Cpath d='M24 -32C24 -16 48 -16 48 0M24 -32C24 -16 0 -16 0 0' transform='translate(0 64)'/%3E%3C/g%3E%3Cg fill='%23d6d9dc' fill-opacity='0.16'%3E%3Ccircle cx='24' cy='10' r='2.2'/%3E%3Ccircle cx='0' cy='42' r='2.2'/%3E%3Ccircle cx='48' cy='42' r='2.2'/%3E%3C/g%3E%3C/svg%3E");--ablaq:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Crect width='10' height='10' fill='%230f1216'/%3E%3Crect x='10' width='10' height='10' fill='%23cfc6b4'/%3E%3C/svg%3E")}</style>
 </head>
 <body>
 <header class="top"><div class="wrap">
  <div class="bar1">
-  <a class="brand" href="#home"><b lang="ar">متن تحفة الأطفال</b></a>
+  <a class="brand" href="#home"><b class="l-ar" lang="ar">متن تحفة الأطفال</b><b class="l-en ebrand" lang="en">Matn Tuḥfat al-Aṭfāl</b></a>
   <button class="hbtn pfchip" id="pfBtn" type="button" aria-label="Learner"></button>
   <button class="hbtn" id="lang" type="button"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:18px;height:18px"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18"/></svg><span class="l-ar" lang="en">English</span><span class="l-en" lang="ar">العربية</span></button>
   <a class="hbtn icon" href="#settings" aria-label="Settings"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></a>
@@ -991,9 +1018,10 @@ body.dockpad .toast,body.pbon .toast{bottom:calc(84px + env(safe-area-inset-bott
 <div class="view" id="view-home">
  <section class="hero pat"><div class="wrap">
   <div class="frame">
-   <h1 lang="ar">تُحْفَةُ الأَطْفَالِ وَالغِلْمَانِ<br>فِي تَجْوِيدِ القُرْآنِ</h1>
-   <p class="full" lang="ar" dir="rtl">نَظْمُ الشَّيْخِ سُلَيْمَانَ بْنِ حُسَيْنٍ الجَمْزُورِيِّ</p>
-   <p class="entitle l-en" lang="en" dir="ltr"><i>Tuḥfat al-Aṭfāl wa-l-Ghilmān fī Tajwīd <span style="white-space:nowrap">al-Qur’ān</span></i><br>The Gift for Children and Young Students on the Tajwīd of the Qur’an<br><small>by Shaykh Sulaymān ibn Ḥusayn al-Jamzūrī</small></p>
+   <div class="l-ar" lang="ar"><h1 lang="ar">تُحْفَةُ الأَطْفَالِ وَالغِلْمَانِ<br>فِي تَجْوِيدِ القُرْآنِ</h1>
+   <p class="full" dir="rtl">نَظْمُ الشَّيْخِ سُلَيْمَانَ بْنِ حُسَيْنٍ الجَمْزُورِيِّ</p></div>
+   <div class="l-en" lang="en" dir="ltr"><h1 class="enh1">Tuḥfat al-Aṭfāl</h1><p class="ensub">The Gift for Children and Young Students on the Tajwīd of the Qur’an</p>
+   <p class="enby">by Shaykh Sulaymān ibn Ḥusayn al-Jamzūrī</p><p class="arsmall" lang="ar" dir="rtl">تُحْفَةُ الأَطْفَالِ وَالغِلْمَانِ فِي تَجْوِيدِ القُرْآنِ</p></div>
    <p class="lead"><span class="l-en" lang="en">Read it with meanings, memorize it, practise and test yourself. Free for everyone.</span><span class="l-ar" lang="ar" dir="rtl">اقرأه بمعانيه، واحفظه، وتدرّب عليه، واختبر نفسك. مجاني للجميع.</span></p>
    <div class="cta"><a class="btn pri" href="#memorize"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg><span class="l-en" lang="en">Memorize</span><span class="l-ar" lang="ar" dir="rtl">ابدأ الحفظ</span></a><a class="btn out" href="#poem"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5zM12 6.5V19"/></svg><span class="l-en" lang="en">Read</span><span class="l-ar" lang="ar" dir="rtl">اقرأ المتن</span></a></div>
    <ul class="facts">
