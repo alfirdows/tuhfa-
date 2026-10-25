@@ -867,7 +867,7 @@ const PBar={sync(){const bar=$("#pbarAudio");if(!bar)return;const v=Player.cur()
   $("#pbPrev").onclick=()=>{PBar.v=Math.max(1,(Player.cur()||PBar.v||1)-1);Player.playVerses(range(PBar.v,61))};
   $("#pbNext").onclick=()=>{PBar.v=Math.min(61,(Player.cur()||PBar.v||1)+1);Player.playVerses(range(PBar.v,61))};
   $("#pbRep").onclick=()=>{const seq=[1,3,5,10,0];ST.rep=seq[(seq.indexOf(ST.rep)+1)%seq.length];saveSet();Player.left=ST.rep;PBar.sync()};
-  $("#pbSpd").onclick=()=>{const seq=[.75,1,1.25];ST.speed=seq[(seq.indexOf(ST.speed||1)+1)%3];saveSet();if(Player.a)Player.a.playbackRate=ST.speed;PBar.sync()};
+  $("#pbSpd").onclick=()=>{const seq=[.5,.75,1,1.25,1.5,1.75,2];ST.speed=seq[(seq.indexOf(ST.speed||1)+1)%seq.length];saveSet();if(Player.a)Player.a.playbackRate=ST.speed;PBar.sync()};
   $("#pbCont").onclick=()=>{ST.cont=!ST.cont;saveSet();PBar.sync()};this.sync()}};
 
 /* ================= routing + language ================= */
