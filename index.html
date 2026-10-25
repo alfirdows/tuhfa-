@@ -1598,14 +1598,14 @@ function route(){const h=(location.hash||"#home").slice(1);const [r,sub,sub2]=h.
  ROUTE=R;$$(".view").forEach(v=>v.hidden=v.id!=="view-"+R);$$(".menu a").forEach(a=>{if(a.dataset.nav===R)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
  Sheet.close();refit();wrongRun=0;if(R!=="poem")Player.stop();document.body.classList.remove("dockpad");document.body.classList.toggle("pbon",R==="poem");renderRoute();
  if(R==="poem"&&!readGreeted){readGreeted=true;bismillah()}
- if(!sub&&R==="memorize"&&!Mem.run)setTimeout(()=>toast(t("tapToStart"),"",3500),350);if(!sub&&R==="quiz"&&!Quiz.qs)setTimeout(()=>toast(t("chooseHere"),"",3500),350);if(!sub&&R==="games"&&!Games.cur&&!Games.game)setTimeout(()=>toast(t("chooseGame"),"",3000),350);
+ if(!sub&&R==="memorize"&&!Mem.run)setTimeout(()=>toast(t("tapToStart"),"",3500),350);if(!sub&&R==="quiz"&&!Quiz.qs)setTimeout(()=>toast(t("tapToStart"),"",3500),350);if(!sub&&R==="games"&&!Games.cur&&!Games.game)setTimeout(()=>toast(t("chooseGame"),"",3000),350);
  if(R==="poem"&&Book.on()){let ci=Book.i;if(sub&&/^c\d+$/.test(sub))ci=+sub.slice(1)-1;else if(sub&&/^v\d+$/.test(sub))ci=chOf(+sub.slice(1));Book.show(ci,true)}
  const target=sub&&document.getElementById(sub);if(target)setTimeout(()=>target.scrollIntoView({block:"start"}),40);else window.scrollTo(0,0)}
 window.addEventListener("hashchange",route);
 /* Tapping the page you are already on: say what to do next and point to it, instead of doing nothing */
 function pointTo(el,msg){toast(msg,"",3500);if(!el)return;el.scrollIntoView({block:"center",behavior:"smooth"});el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash")}
 function nudge(){if(ROUTE==="memorize"&&!Mem.run)return pointTo($("#memRoot [data-rp]"),t("tapToStart"));
- if(ROUTE==="quiz"&&!Quiz.qs)return pointTo($("#quizRoot [data-rp]"),t("chooseHere"));
+ if(ROUTE==="quiz"&&!Quiz.qs)return pointTo($("#quizRoot [data-rp]"),t("tapToStart"));
  if(ROUTE==="games"&&!Games.cur)return Games.game?pointTo($(".lv.next")||$(".lv"),t("chooseLevel")):pointTo($(".gcards"),t("chooseGame"));
  if(ROUTE==="poem")return toast(t("tapWordHint"),"",3000)}
 document.querySelector(".menu").addEventListener("click",e=>{const a=e.target.closest("a[data-nav]");if(a&&a.dataset.nav===ROUTE){e.preventDefault();nudge()}});
@@ -1975,13 +1975,13 @@ const Quiz={setup:null,qs:null,i:0,score:0,lis:null,
  root(){return $("#quizRoot")},
  leave(){if(this.lis){this.lis.stop();this.lis=null}Rec.stop(ST.rec)},
  render(){const m=this.root();if(!m)return;if(this.qs){this.renderQ();return}this.setup=this.setup||ps.get("quizSetup",{from:1,to:16,n:10,types:["complete","next","write","match","order","recite"]});
-  const s=this.setup;const rp=rangePicker(s,()=>{ps.set("quizSetup",s);this.render()});const hist=ps.get("quizHist",[]);
+  const s=this.setup;const rp=rangePicker(s,()=>{ps.set("quizSetup",s);this.render()},()=>{const b=$("#qs");b&&b.click()});const hist=ps.get("quizHist",[]);
   const types=[["complete","tComplete"],["next","tNext"],["write","tWrite"],["match","tMatch"],["order","tOrder"],["recite","tRecite"]];
   m.innerHTML=`<div class="stack"><div class="head" style="margin-bottom:0"><h2>${LANG==="ar"?"اختبر حفظك":"Test what you memorized"}</h2></div>
    <div class="panel"><h3>${t("range")}</h3>${rp.html}</div>
    <div class="panel"><h3>${t("qTypes")}</h3><div class="chips" id="qt">${types.map(([k,l])=>`<button type="button" class="chip ${s.types.includes(k)?"on":""}" data-k="${k}">${t(l)}</button>`).join("")}</div>
    <h3>${t("qCount")}</h3><div class="seg" id="qn">${[5,10,20].map(n=>`<button type="button" class="${s.n===n?"on":""}" data-n="${n}">${num(n)}</button>`).join("")}</div>
-   <button class="btn pri wide" type="button" id="qs" ${s.types.length?"":"aria-disabled=\"true\""}>${t("qStart")} · ${rangeLabel(range(s.from,s.to))}</button></div>
+   <div class="startbar"><button class="btn pri" type="button" id="qs" ${s.types.length?"":"aria-disabled=\"true\""}>${t("qStart")} · ${rangeLabel(range(s.from,s.to))}</button></div></div>
    <div class="panel"><h3>${t("hist")}</h3>${hist.length?`<div class="list">${hist.slice(0,8).map(h=>`<div class="it"><div class="g"><b>${rangeLabel(range(h.f,h.t))}</b><div class="note">${fmtD(h.date)}</div></div><span class="pill ${h.pct>=90?"ok":h.pct>=70?"warn":"bad"}">${num(h.s)}/${num(h.n)}</span></div>`).join("")}</div>`:`<p class="note">${t("noHist")}</p>`}</div></div>`;
   rp.bind(m);$("#qt").onclick=e=>{const c=e.target.closest(".chip");if(!c)return;const k=c.dataset.k;s.types.includes(k)?s.types.splice(s.types.indexOf(k),1):s.types.push(k);ps.set("quizSetup",s);this.render()};
   $("#qn").onclick=e=>{const b=e.target.closest("[data-n]");if(b){s.n=+b.dataset.n;ps.set("quizSetup",s);this.render()}};
