@@ -1683,20 +1683,20 @@ $("#pgPrev").onclick=()=>Book.go(-1);$("#pgNext").onclick=()=>Book.go(1);
   else{s.style.transition="transform .2s ease-out,opacity .2s";s.style.transform="";s.style.opacity="";setTimeout(()=>{s.style.transition=""},220)}},{passive:true})})();
 
 /* swipe helper: follows the finger, then acts (down = close, sideways = next/previous) */
-function swipeable(el,{down,side}){if(!el)return;let x0=0,y0=0,dx=0,dy=0,lock=null;
+function swipeable(el,{down,back}){if(!el)return;let x0=0,y0=0,dx=0,dy=0,lock=null;
  el.addEventListener("touchstart",e=>{const t=e.touches[0];x0=t.clientX;y0=t.clientY;dx=dy=0;lock=null;el.style.transition="none"},{passive:true});
  el.addEventListener("touchmove",e=>{const t=e.touches[0];dx=t.clientX-x0;dy=t.clientY-y0;if(!lock&&(Math.abs(dx)>10||Math.abs(dy)>10))lock=Math.abs(dx)>Math.abs(dy)?"x":"y";
-  if(lock==="y"&&down&&dy>0&&el.scrollTop<=0){e.preventDefault();el.style.transform=`translateY(${dy}px)`}else if(lock==="x"&&side){e.preventDefault();el.style.transform=`translateX(${dx}px)`;el.style.opacity=String(1-Math.min(.4,Math.abs(dx)/600))}},{passive:false});
+  if(lock==="y"&&down&&dy>0&&el.scrollTop<=0){e.preventDefault();el.style.transform=`translateY(${dy}px)`}else if(lock==="x"&&back&&dx>0){e.preventDefault();el.style.transform=`translateX(${dx}px)`;el.style.opacity=String(1-Math.min(.5,dx/500))}},{passive:false});
  el.addEventListener("touchend",()=>{el.style.transition="transform .2s,opacity .2s";
   if(lock==="y"&&down&&dy>90&&el.scrollTop<=0){el.style.transform="translateY(100%)";setTimeout(down,180);return}
-  if(lock==="x"&&side&&Math.abs(dx)>70){const d=dx<0?1:-1;el.style.transform=`translateX(${dx<0?-60:60}px)`;el.style.opacity="0";setTimeout(()=>{side(d)},150);return}
+  if(lock==="x"&&back&&dx>80){el.style.transform="translateX(100%)";el.style.opacity="0";setTimeout(back,180);return}
   el.style.transform="";el.style.opacity=""},{passive:true})}
-new MutationObserver(()=>{const m=$("#modal .modal .in");if(m&&!m._sw){m._sw=1;swipeable(m,{down:()=>{$("#modal").innerHTML=""}})}}).observe($("#modal"),{childList:true});
+new MutationObserver(()=>{const m=$("#modal .modal .in");if(m&&!m._sw){m._sw=1;swipeable(m,{down:()=>{$("#modal").innerHTML=""},back:()=>{$("#modal").innerHTML=""}})}}).observe($("#modal"),{childList:true});
 /* ================= sheet ================= */
 const Sheet={
- open(html){$("#sheet").innerHTML=`<div class="sheet"><div class="in" role="dialog">${html}</div></div>`;const x=$("#sheet .x");if(x)x.onclick=()=>this.close();swipeable($("#sheet .in"),{down:()=>this.close(),side:this.onSide})},
+ open(html){$("#sheet").innerHTML=`<div class="sheet"><div class="in" role="dialog">${html}</div></div>`;const x=$("#sheet .x");if(x)x.onclick=()=>this.close();swipeable($("#sheet .in"),{down:()=>this.close(),back:()=>this.close()})},
  close(){$("#sheet").innerHTML="";$$(".w.on").forEach(x=>x.classList.remove("on"))},
- word(v,h,i,g){this.onSide=h>=0?d=>{const all=$$("#poemText .w");const k=all.findIndex(x=>x.dataset.k===`${v}:${h}:${i}`);const n=all[k+(d>0?1:-1)];if(n){const [a,b,c]=n.dataset.k.split(":").map(Number);this.word(a,b,c,n.dataset.g)}}:null;$$(".w.on").forEach(x=>x.classList.remove("on"));const hasW=h>=0;if(hasW){const el=$(`.w[data-k="${v}:${h}:${i}"]`);el&&el.classList.add("on")}
+ word(v,h,i,g){$$(".w.on").forEach(x=>x.classList.remove("on"));const hasW=h>=0;if(hasW){const el=$(`.w[data-k="${v}:${h}:${i}"]`);el&&el.classList.add("on")}
   const ent=g!=null&&g!==undefined?G[v].w[+g]:null;const w=hasW?toks(V[v-1][h])[i]:null;const c=CH[chOf(v)];
   const seg=hasW&&AUDIO.words[`${v}:${h}:${i}`];if(hasW&&ST.tapPlay){unlockAudio();Player.playSeg(seg,1,"word")}
   const arB=`<div class="a" lang="ar"><b>${T.ar.verseMeaning}:</b> ${G[v].ar}</div>`,enB=`<div class="e" lang="en"><b>${T.en.translation}:</b> ${esc(G[v].en)}</div>`;
