@@ -621,6 +621,19 @@ html[dir="ltr"] .flipx2 svg{transform:scaleX(-1)} .flipx2{display:inline-flex}
 .mic.on+span{color:#b35a00}
 @media (max-width:400px){.db{font-size:.8rem;min-height:64px}.db svg{width:26px;height:26px}.mic{width:68px;height:68px}}
 
+/* start / pause / resume button with words */
+.dock .in{grid-template-columns:1fr 1fr 1.6fr 1fr 1fr}
+.micw{gap:4px}
+.mic{width:100%;min-width:118px;height:68px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:6px;padding:0 14px;font-size:1.08rem;font-weight:800}
+.mic svg{width:26px;height:26px;flex:none}
+.mic b{white-space:nowrap}
+.mic.paused{background:#2e7a4f;color:#fff}
+.mst{display:inline-flex;align-items:center;gap:5px;font-size:.88rem;font-weight:800;min-height:1.4em}
+.mst svg{width:14px;height:14px}
+.mst.live{color:#b35a00}.mst.live i{width:9px;height:9px;border-radius:50%;background:#b35a00;animation:blink 1s infinite}
+.mst.pz{color:#fff;background:#56595e;border-radius:99px;padding:0 10px}
+@media (max-width:400px){.mic{min-width:104px;font-size:.98rem;padding:0 10px}.dock .in{gap:4px;padding:8px}}
+
 :root{--lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'%3E%3Cg fill='none' stroke='%23234a73' stroke-opacity='0.16' stroke-width='1.2'%3E%3Cpath d='M0 0C0 16 24 16 24 32C24 48 0 48 0 64M48 0C48 16 24 16 24 32C24 48 48 48 48 64'/%3E%3Cpath d='M24 -32C24 -16 48 -16 48 0M24 -32C24 -16 0 -16 0 0' transform='translate(0 64)'/%3E%3C/g%3E%3Cg fill='%23234a73' fill-opacity='0.21'%3E%3Ccircle cx='24' cy='10' r='2.2'/%3E%3Ccircle cx='0' cy='42' r='2.2'/%3E%3Ccircle cx='48' cy='42' r='2.2'/%3E%3C/g%3E%3C/svg%3E");--ablaq:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Crect width='10' height='10' fill='%232a2f36'/%3E%3Crect x='10' width='10' height='10' fill='%23f4efe4'/%3E%3C/svg%3E")}@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'%3E%3Cg fill='none' stroke='%239cc0e6' stroke-opacity='0.12' stroke-width='1.2'%3E%3Cpath d='M0 0C0 16 24 16 24 32C24 48 0 48 0 64M48 0C48 16 24 16 24 32C24 48 48 48 48 64'/%3E%3Cpath d='M24 -32C24 -16 48 -16 48 0M24 -32C24 -16 0 -16 0 0' transform='translate(0 64)'/%3E%3C/g%3E%3Cg fill='%239cc0e6' fill-opacity='0.16'%3E%3Ccircle cx='24' cy='10' r='2.2'/%3E%3Ccircle cx='0' cy='42' r='2.2'/%3E%3Ccircle cx='48' cy='42' r='2.2'/%3E%3C/g%3E%3C/svg%3E");--ablaq:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Crect width='10' height='10' fill='%230f1216'/%3E%3Crect x='10' width='10' height='10' fill='%23cfc6b4'/%3E%3C/svg%3E")}}:root[data-theme="dark"]{--lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'%3E%3Cg fill='none' stroke='%239cc0e6' stroke-opacity='0.12' stroke-width='1.2'%3E%3Cpath d='M0 0C0 16 24 16 24 32C24 48 0 48 0 64M48 0C48 16 24 16 24 32C24 48 48 48 48 64'/%3E%3Cpath d='M24 -32C24 -16 48 -16 48 0M24 -32C24 -16 0 -16 0 0' transform='translate(0 64)'/%3E%3C/g%3E%3Cg fill='%239cc0e6' fill-opacity='0.16'%3E%3Ccircle cx='24' cy='10' r='2.2'/%3E%3Ccircle cx='0' cy='42' r='2.2'/%3E%3Ccircle cx='48' cy='42' r='2.2'/%3E%3C/g%3E%3C/svg%3E");--ablaq:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Crect width='10' height='10' fill='%230f1216'/%3E%3Crect x='10' width='10' height='10' fill='%23cfc6b4'/%3E%3C/svg%3E")}</style>
 </head>
 <body>
@@ -1182,7 +1195,10 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   if(h&&wmatch(h,e.n)){this.hbuf=(this.hbuf||[]).concat([h]).slice(-6);onRight();this.cand=null;r.st[r.idx]=r.tries[r.idx]?4:1;this.advance();return true}return false},
  extra(v){/* chapter-heading words and the basmala: if a student reads them it is fine, and skipping them is fine too */
   const ci=chOf(v);const k="x"+ci;this._x=this._x||{};if(!this._x[k]){const ws=[CHH[ci],ci>0?CHH[ci-1]:"",ci<CH.length-1?CHH[ci+1]:"","بسم الله الرحمن الرحيم باب فصل أحكام"].join(" ");this._x[k]=toks(ws).map(norm).filter(Boolean)}return this._x[k]},
- micUI(){const b=$("#dmic");if(!b)return;b.classList.toggle("on",this.listening);b.innerHTML=this.listening?IC.pause:IC.mic;$("#micl").textContent=this.listening?t("pauseL"):(this.run&&this.run.part?t("resumeL"):t("startL"))},
+ micUI(){const b=$("#dmic");if(!b)return;const paused=!this.listening&&this.run&&this.run.part;
+  b.classList.toggle("on",this.listening);b.classList.toggle("paused",!!paused);
+  b.innerHTML=this.listening?`${IC.pause}<b>${t("pauseL")}</b>`:paused?`${IC.play}<b>${t("resumeL")}</b>`:`${IC.mic}<b>${t("startL")}</b>`;
+  const l=$("#micl");l.className="mst "+(this.listening?"live":paused?"pz":"");l.innerHTML=this.listening?`<i></i>${t("listening")}`:paused?`${IC.pause}${t("paused")}`:""},
  locate(){const b=this.hbuf||[];const cur=this.W[this.run.idx];if(!cur)return null;const cg=gOf(cur);
   for(const L of [3,2]){if(b.length<L)continue;const tail=b.slice(-L);if(L===2&&tail.some(x=>x.length<3))continue;let best=null;
    for(let p=L-1;p<ALLW.length-1;p++){let ok=true;for(let k=0;k<L;k++)if(!wmatch(tail[k],ALLW[p-L+1+k].n)){ok=false;break}
