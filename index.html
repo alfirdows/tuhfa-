@@ -344,7 +344,7 @@ button.pill{border:0}
 html[dir="rtl"] .qk{padding:4px 8px 4px 12px}
 .qk svg{width:18px;height:18px;color:var(--acc)}
 .mtext .bayt.cur{background:var(--acc-soft);border-radius:var(--radius)}
-.m{position:relative;border-radius:6px;transition:color .15s}
+.m{position:relative;border-radius:6px}
 .m.h{color:transparent}
 .m.h::after{content:"";position:absolute;left:1px;right:1px;top:36%;bottom:18%;background:var(--mask);border-radius:99px}
 .m.h.cur::after{background:var(--mask-cur);box-shadow:0 0 0 2.5px var(--acc)}
@@ -1020,9 +1020,14 @@ document.addEventListener("click",async e=>{if(!e.target.closest("[data-askmic]"
 class Listener{constructor(onWords,onState){this.onWords=onWords;this.onState=onState;this.active=false;this.done=0;this.text="";this.finalText=""}
  start(){if(!SR)return false;this.active=true;lastAct=Date.now();this._spin();return true}
  _spin(){const r=new SR();this.r=r;r.lang="ar-SA";r.continuous=true;r.interimResults=true;this.done=0;
-  r.onresult=e=>{lastAct=Date.now();let ws=[],full="";for(let i=0;i<e.results.length;i++){const res=e.results[i];const w=toks(res[0].transcript);full+=" "+res[0].transcript;ws.push(...(res.isFinal?w:w.slice(0,-1)))}this.text=full;if(ws.length>this.done){const nw=ws.slice(this.done);this.done=ws.length;this.onWords(nw)}};
+  /* Words are used as soon as they appear. The newest word (still being heard) is only used if it is the expected word,
+     so a half-heard word never counts as a mistake. */
+  r.onresult=e=>{lastAct=Date.now();let ws=[],full="",tail=null;for(let i=0;i<e.results.length;i++){const res=e.results[i];const w=toks(res[0].transcript);full+=" "+res[0].transcript;
+    if(res.isFinal||i<e.results.length-1)ws.push(...w);else{ws.push(...w.slice(0,-1));tail=w.length?w[w.length-1]:null}}
+   this.text=full;if(ws.length>this.done){const nw=ws.slice(this.done);this.done=ws.length;this.onWords(nw)}
+   if(tail&&this.onPeek&&ws.length===this.done&&this.onPeek(tail)){this.done++}};
   r.onerror=e=>{if(["not-allowed","service-not-allowed","audio-capture"].includes(e.error)){this.active=false;micState="denied";this.onState("denied")}};
-  r.onend=()=>{if(this.active){this.finalText+=" "+this.text;this.text="";setTimeout(()=>{if(this.active)try{this._spin()}catch(e){}},120)}else this.onState("stopped")};
+  r.onend=()=>{if(this.active){this.finalText+=" "+this.text;this.text="";setTimeout(()=>{if(this.active)try{this._spin()}catch(e){}},0)}else this.onState("stopped")};
   try{r.start()}catch(e){this.active=false;micState="denied";this.onState("denied")}}
  stop(){this.active=false;try{this.r&&this.r.stop()}catch(e){}}
  transcript(){return (this.finalText+" "+this.text).trim()}}
@@ -1160,6 +1165,8 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
  chNav(){const r=this.run;const a=chOf(r.verses[0]),b=chOf(r.verses[r.verses.length-1]);
   return `${a>0?`<button class="qk" type="button" id="chPrev">${IC.back}<span>${t("prevCh")}</span></button>`:""}${b<CH.length-1?`<button class="qk" type="button" id="chNext"><span>${t("nextCh")}</span><span class="flipx2">${IC.back.replace('class="flipx" ',"")}</span></button>`:""}`},
  goChapter(i){const view=this.run?this.run.view||0:0;this.stopMic(true);const c=CH[i];this.setup={from:c[0],to:c[1]};ps.set("memRange",this.setup);this.newRun(range(c[0],c[1]));this.run.view=view;this.save();this.render();window.scrollTo(0,0);bismillah()},
+ peek(raw){const r=this.run;if(!r||this.held||r.idx>=this.W.length)return false;const h=norm(raw),e=this.W[r.idx];
+  if(h&&wmatch(h,e.n)){this.hbuf=(this.hbuf||[]).concat([h]).slice(-6);onRight();this.cand=null;r.st[r.idx]=r.tries[r.idx]?4:1;this.advance();return true}return false},
  extra(v){/* chapter-heading words and the basmala: if a student reads them it is fine, and skipping them is fine too */
   const ci=chOf(v);const k="x"+ci;this._x=this._x||{};if(!this._x[k]){const ws=[CHH[ci],ci>0?CHH[ci-1]:"",ci<CH.length-1?CHH[ci+1]:"","بسم الله الرحمن الرحيم باب فصل أحكام"].join(" ");this._x[k]=toks(ws).map(norm).filter(Boolean)}return this._x[k]},
  micUI(){const b=$("#dmic");if(!b)return;b.classList.toggle("on",this.listening);b.innerHTML=this.listening?IC.pause:IC.mic;$("#micl").textContent=this.listening?t("pauseL"):(this.run&&this.run.part?t("resumeL"):t("startL"))},
@@ -1224,14 +1231,16 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
  heard(words){const r=this.run;if(!r||this.held)return;for(const raw of words){if(this.held)return;const h=norm(raw);if(r.idx>=this.W.length)return;const W=this.W,i=r.idx,e=W[i];
    if(h){this.hbuf=(this.hbuf||[]).concat([h]).slice(-6)}
    if(wmatch(h,e.n)){onRight();this.cand=null;r.st[i]=r.tries[i]?4:1;this.advance();continue}
-   if(W[i+1]&&wmatch(h,e.n+W[i+1].n)){onRight();r.st[i]=r.tries[i]?4:1;this.advance();r.st[r.idx]=1;this.advance();continue}
+   if(W[i+1]&&e.n.length<=3&&!r.tries[i]&&wmatch(h,W[i+1].n)){onRight();r.st[i]=1;this.advance();if(this.run&&r.idx<this.W.length){r.st[r.idx]=1;this.advance()}continue}
+   if(W[i+2]&&wmatch(h,e.n+W[i+1].n+W[i+2].n)){onRight();for(let k=0;k<3&&this.run&&r.idx<this.W.length;k++){r.st[r.idx]=1;this.advance()}continue}
+   if(W[i+1]&&wmatch(h,e.n+W[i+1].n)){onRight();r.st[i]=r.tries[i]?4:1;this.advance();if(this.run&&r.idx<this.W.length){r.st[r.idx]=1;this.advance()}continue}
    if(h.length<2)continue;if(this.extra(e.v).some(x=>x===h||(h.length>3&&sim(h,x)>=.8)))continue;let rep=false;for(let b=1;b<=4;b++)if(W[i-b]&&wmatch(h,W[i-b].n)){rep=true;break}if(rep)continue;
    r.tries[i]=(r.tries[i]||0)+1;r.said[i]=raw;r.mist++;$("#mmis").textContent=num(r.mist);onWrong();this.attention(i);
    const c=this.locate();if(c)this.cand=c;
    if(ST.tries&&r.tries[i]>=ST.tries){if(this.cand){const g=this.cand.g;this.cand=null;this.save();this.askJump(g,false);return}r.st[i]=2;this.advance();this.offerHint()}else this.save()}},
  async toggleMic(){unlockAudio();if(this.listening){this.stopMic(true);return}if(IN_FRAME||micState==="denied"){this.note();return}
   const r=this.run;let recOK=false;if(ST.rec){r.part=(r.part||0)+1;recOK=await Rec.start(rangeLabel(r.verses)+(r.part>1?" · "+num(r.part):""))}
-  let srOK=false;if(ST.mode==="voice"&&SR){this.lis=new Listener(w=>this.heard(w),s=>{if(s==="denied"){this.stopMic(true);this.note()}});srOK=this.lis.start()}
+  let srOK=false;if(ST.mode==="voice"&&SR){this.lis=new Listener(w=>this.heard(w),s=>{if(s==="denied"){this.stopMic(true);this.note()}});this.lis.onPeek=w=>this.peek(w);srOK=this.lis.start()}
   if(!recOK&&!srOK){if(ST.rec||(ST.mode==="voice"&&SR))micState="denied";this.note();return}
   this.listening=true;this.held=false;$("#mhint")&&$("#jYes")&&($("#mhint").innerHTML="");this.micUI();$("#mlive").innerHTML=`<span class="pill live">${srOK?t("listening"):t("recording")}</span>`;this.note();bismillah()},
  stopMic(save){if(this.lis){this.lis.stop();this.lis=null}this.listening=false;Rec.stop(save&&ST.rec);this.micUI();const l=$("#mlive");if(l)l.innerHTML=this.run?`<span class="pill">${t("paused")}</span>`:"";this.save()},
