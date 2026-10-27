@@ -666,6 +666,10 @@ html[dir="ltr"] .flipx2 svg{transform:scaleX(-1)} .flipx2{display:inline-flex}
 .sess>summary::-webkit-details-marker{display:none}.sess>summary .tm{display:block;color:var(--muted);font-size:.82rem;font-weight:600}
 .sess>summary .chev{margin-inline-start:auto;transition:transform .2s}.sess[open]>summary .chev{transform:rotate(180deg)}.sess .mlist{margin-top:10px}
 #misSh{max-height:70vh;overflow:auto}
+.plan{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.pc{border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:6px;align-content:start;background:var(--surface);border-top:4px solid var(--hc,var(--ok))}
+.pc.c2{--hc:var(--acc2)}.pc.c3{--hc:var(--warn)}.pc.ok{opacity:.75}.pc .pt{display:flex;justify-content:space-between;align-items:center;gap:6px}.pc .note{margin:0}
+.pc .pl span{font-weight:600}.pc .btn{justify-self:start}
 .mrow{display:grid;gap:8px;border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--surface)}
 .vtag{font-size:.8rem;font-weight:700;color:var(--acc2)}
 .cmp{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -1498,7 +1502,8 @@ const bestMap=()=>ps.get("best",{});
 const level=a=>a>=100?"g":a>=80?"s":a>0?"b":"";
 function chaptersDone(best){return CH.map((c,i)=>range(c[0],c[1]).every(v=>(best[v]||0)>=80)?i:-1).filter(i=>i>=0)}
 function recordVerses(accs){const best=bestMap();const before=chaptersDone(best);let w=ps.get("week",{start:weekStart(),vs:[]});if(w.start!==weekStart())w={start:weekStart(),vs:[]};
- const hadGoal=w.vs.length>=goalN();for(const [v,a] of Object.entries(accs)){best[v]=Math.max(best[v]||0,a);if(a>=80&&!w.vs.includes(+v))w.vs.push(+v)}
+ const hadGoal=w.vs.length>=goalN();const seen=ps.get("seen",{});for(const v of Object.keys(accs))seen[v]=today();ps.set("seen",seen);
+ for(const [v,a] of Object.entries(accs)){best[v]=Math.max(best[v]||0,a);if(a>=80&&!w.vs.includes(+v))w.vs.push(+v)}
  ps.set("best",best);ps.set("week",w);logDay();const after=chaptersDone(best);const ach=[];
  if(!hadGoal&&w.vs.length>=goalN())ach.push(["goal"]);after.filter(i=>!before.includes(i)).forEach(i=>ach.push(["chap",i]));return ach}
 
@@ -1634,8 +1639,7 @@ const MISL={all(){return ps.get("mistakes",[])},save(a){ps.set("mistakes",a.slic
   $$("[data-mplay]",root).forEach(b=>b.onclick=()=>this.play(b.dataset.mplay,b));
   $$("[data-mrec]",root).forEach(b=>b.onclick=()=>this.reciteAll())},
  /* سمّع أخطاءك: a session over only the verses that have mistakes, with the microphone on straight away. */
- reciteAll(){const vs=[...new Set(this.all().map(m=>m.v))].sort((a,b)=>a-b);if(!vs.length)return;Sheet.close();unlockAudio();Player.stop();
-  if(Mem.run&&Mem.listening)Mem.stopMic(true);Mem.newRun(vs);Mem.run.view=2;Mem.save();history.pushState(null,"","#memorize/run");route();window.scrollTo(0,0);if(Mem.run&&!Mem.listening)Mem.toggleMic()},
+ reciteAll(){reciteList([...new Set(this.all().map(m=>m.v))])},
  /* Grouped by recitation session, newest first (like a history): time, verses covered, then each mistake in order. */
  sessionsHTML(){const g=new Map();for(const m of this.all()){if(!g.has(m.t))g.set(m.t,[]);g.get(m.t).push(m)}
   if(!g.size)return`<p class="note">${OW("No mistakes saved yet.","لا توجد أخطاء محفوظة بعد.")}</p>`;let n=0,h=`<button class="btn pri" type="button" data-mrec style="width:100%;justify-content:center">${IC.mic}${OW("Recite your mistakes","سمّع أخطاءك")}</button><p class="note" style="text-align:center;margin:4px 0 8px">${OW("Goes through only the verses you slipped in.","يمرّ على الأبيات التي أخطأت فيها فقط.")}</p>`;
@@ -1735,7 +1739,22 @@ function statsHTML(){const best=bestMap();const mastered=Object.values(best).fil
   <div class="stat goal"><div class="ring" style="--p:${Math.min(100,wv/g*100)}"><div>${num(Math.min(wv,g))}/${num(g)}</div></div><span>${t("goalTitle")} · ${t("weekGoal")}</span></div></div>`}
 const Home={render(){const saved=ps.get("session",null);
  $("#todayBox").innerHTML=`<div class="panel"><div class="row"><span class="pf" style="width:40px;height:40px">${shapeSvg(P())}</span><h3 style="flex:1">${P().name?esc(P().name):t("yourProg")}</h3><a class="btn sm out" href="#progress">${t("progress")}</a></div>
-  ${statsHTML()}<a class="btn pri wide" href="#memorize">${IC.mic}${saved?t("cont"):t("start")}</a></div>`}};
+  ${statsHTML()}<a class="btn pri wide" href="#memorize">${IC.mic}${saved?t("cont"):t("start")}</a></div>${planHTML()}`}};
+/* Today's plan, the classic way of hifz: a new portion, a recent review and an older review. Each starts with the microphone on. */
+function dailyPlan(){const best=bestMap(),seen=ps.get("seen",{}),td=today(),ago=d=>d?Math.round((Date.parse(td)-Date.parse(d))/864e5):999,all=range(1,V.length);
+ const n=Math.max(1,Math.ceil(goalN()/5)),nw=all.filter(v=>(best[v]||0)<80).slice(0,n),done=all.filter(v=>(best[v]||0)>=80);
+ const near=done.filter(v=>ago(seen[v])<=7).sort((a,b)=>b-a).slice(0,10),far=done.filter(v=>!near.includes(v)).sort((a,b)=>ago(seen[b])-ago(seen[a])||a-b).slice(0,10);
+ return{new:nw,near,far}}
+function planHTML(){const pl=dailyPlan(),seen=ps.get("seen",{}),td=today();
+ const card=(k,cls,ttl,d,list)=>{const ok=list.length&&list.every(v=>seen[v]===td);
+  return`<div class="pc ${cls} ${ok?"ok":""}"><div class="pt"><b>${ttl}</b>${ok?`<span class="pill ok">✓ ${OW("Done today","تم اليوم")}</span>`:""}</div><p class="note">${d}</p>
+   <div class="pl">${list.length?`<span>${t("verse")} ${list.slice().sort((a,b)=>a-b).map(num).join("، ")}</span>`:`<span class="note">${k==="new"?OW("All memorized!","حفظت الكل!"):OW("Nothing yet","لا شيء بعد")}</span>`}</div>
+   ${list.length?`<button class="btn ${ok?"out":"pri"} sm" type="button" data-plan="${k}">${IC.mic}${OW("Start","ابدأ")}</button>`:""}</div>`};
+ return`<div class="panel"><h3>${OW("Today's plan","ورد اليوم")}</h3><p class="note">${OW("The classic way of hifz: a new portion, a recent review and an older review. Each one starts with the microphone on.","على طريقة الحفظ المعروفة: درس جديد، ومراجعة قريبة، ومراجعة بعيدة. كل واحد يبدأ بالتسميع مباشرة.")}</p>
+  <div class="plan">${card("new","c1",OW("New verses","الدرس الجديد"),OW("Your next verses","أبياتك التالية"),pl.new)}${card("near","c2",OW("Recent review","المراجعة القريبة"),OW("What you learned this week","ما حفظته هذا الأسبوع"),pl.near)}${card("far","c3",OW("Older review","المراجعة البعيدة"),OW("Older verses, so they stay strong","أبيات قديمة حتى تبقى ثابتة"),pl.far)}</div></div>`}
+function reciteList(vs){if(!vs.length)return;Sheet.close();unlockAudio();Player.stop();if(Mem.run&&Mem.listening)Mem.stopMic(true);
+ Mem.newRun(vs.slice().sort((a,b)=>a-b));Mem.run.view=2;Mem.save();history.pushState(null,"","#memorize/run");route();window.scrollTo(0,0);if(Mem.run&&!Mem.listening)Mem.toggleMic()}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-plan]");if(b)reciteList(dailyPlan()[b.dataset.plan]||[])});
 
 /* ================= poem view ================= */
 const poemEl=$("#poemText");
