@@ -670,6 +670,9 @@ html[dir="ltr"] .flipx2 svg{transform:scaleX(-1)} .flipx2{display:inline-flex}
 .pc{border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:6px;align-content:start;background:var(--surface);border-top:4px solid var(--hc,var(--ok))}
 .pc.c2{--hc:var(--acc2)}.pc.c3{--hc:var(--warn)}.pc.ok{opacity:.75}.pc .pt{display:flex;justify-content:space-between;align-items:center;gap:6px}.pc .note{margin:0}
 .pc .pl span{font-weight:600}.pc .btn{justify-self:start}
+.weak{display:grid;grid-template-columns:repeat(auto-fill,minmax(38px,1fr));gap:5px;margin:6px 0 10px}
+.wk{aspect-ratio:1;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:.8rem;font-weight:700;cursor:pointer;padding:0}
+.wk.l1{background:#fbe9e6;border-color:#f3c9c2}.wk.l2{background:#f5c6be;border-color:#eba497}.wk.l3{background:#e88f80;color:#fff;border-color:#e88f80}.wk.l4{background:#c0392b;color:#fff;border-color:#c0392b}
 .mrow{display:grid;gap:8px;border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--surface)}
 .vtag{font-size:.8rem;font-weight:700;color:var(--acc2)}
 .cmp{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -1752,6 +1755,14 @@ function planHTML(){const pl=dailyPlan(),seen=ps.get("seen",{}),td=today();
    ${list.length?`<button class="btn ${ok?"out":"pri"} sm" type="button" data-plan="${k}">${IC.mic}${OW("Start","ابدأ")}</button>`:""}</div>`};
  return`<div class="panel"><h3>${OW("Today's plan","ورد اليوم")}</h3><p class="note">${OW("The classic way of hifz: a new portion, a recent review and an older review. Each one starts with the microphone on.","على طريقة الحفظ المعروفة: درس جديد، ومراجعة قريبة، ومراجعة بعيدة. كل واحد يبدأ بالتسميع مباشرة.")}</p>
   <div class="plan">${card("new","c1",OW("New verses","الدرس الجديد"),OW("Your next verses","أبياتك التالية"),pl.new)}${card("near","c2",OW("Recent review","المراجعة القريبة"),OW("What you learned this week","ما حفظته هذا الأسبوع"),pl.near)}${card("far","c3",OW("Older review","المراجعة البعيدة"),OW("Older verses, so they stay strong","أبيات قديمة حتى تبقى ثابتة"),pl.far)}</div></div>`}
+/* Weak spots map: each verse shaded by how many slips were recorded there. */
+function weakCounts(){const c={};for(const m of MISL.all())c[m.v]=(c[m.v]||0)+1;return c}
+function weakHTML(){const c=weakCounts(),mx=Math.max(0,...Object.values(c)),lv=n=>!n?0:n<=1?1:n<=3?2:n<=6?3:4;
+ return`<div class="panel"><h3>${OW("Weak spots","مواضع الضعف")}</h3><p class="note">${mx?OW("Darker means more slips. Tap a verse to recite it.","كلما كان اللون أغمق كانت الأخطاء أكثر. اضغط على بيت لتسمّعه."):OW("No slips recorded yet. Recite with the microphone to fill this map.","لا توجد أخطاء مسجّلة بعد. سمّع بالميكروفون ليمتلئ هذا الجدول.")}</p>
+  <div class="weak">${range(1,V.length).map(v=>`<button type="button" class="wk l${lv(c[v]||0)}" data-weak="${v}">${num(v)}</button>`).join("")}</div>
+  ${mx?`<button class="btn pri sm" type="button" data-weakgo>${IC.mic}${OW("Recite the 5 weakest","سمّع أضعف ٥ أبيات")}</button>`:""}</div>`}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-weak]");if(b){reciteList([+b.dataset.weak]);return}
+ if(e.target.closest("[data-weakgo]")){const c=weakCounts();reciteList(Object.keys(c).map(Number).sort((a,b)=>c[b]-c[a]).slice(0,5))}});
 function reciteList(vs){if(!vs.length)return;Sheet.close();unlockAudio();Player.stop();if(Mem.run&&Mem.listening)Mem.stopMic(true);
  Mem.newRun(vs.slice().sort((a,b)=>a-b));Mem.run.view=2;Mem.save();history.pushState(null,"","#memorize/run");route();window.scrollTo(0,0);if(Mem.run&&!Mem.listening)Mem.toggleMic()}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-plan]");if(b)reciteList(dailyPlan()[b.dataset.plan]||[])});
@@ -2234,6 +2245,7 @@ const Prog={render(){const best=bestMap();const done=chaptersDone(best);
    <a class="note" href="#settings">${t("goalTitle")}: ${t(ST.goal)}</a></div>
   <div class="panel"><h3>${t("verses")}</h3><div class="legend"><span style="color:var(--bronze)">${IC.star}${t("legendB")}</span><span style="color:var(--silver)">${IC.star}${t("legendS")}</span><span style="color:var(--gold)">${IC.star}${t("legendG")}</span></div>
    <div class="stars">${range(1,61).map(v=>`<a class="st ${level(best[v]||0)}" href="#poem/v${v}" aria-label="${t("verse")} ${v}">${IC.star}<span>${num(v)}</span></a>`).join("")}</div></div>
+  ${weakHTML()}
   <div class="panel"><h3>${t("chapters")}</h3><div class="list">${CH.map((c,i)=>{const vs=range(c[0],c[1]);const got=vs.filter(v=>(best[v]||0)>=80).length;return `<div class="it"><div class="g"><a class="chl" href="#poem/c${i+1}"><b>${chName(i)}</b></a><div class="prog" style="margin-top:6px"><i style="width:${got/vs.length*100}%"></i></div></div><span class="pill ${done.includes(i)?"ok":""}">${num(got)}/${num(vs.length)}</span>${done.includes(i)?`<button class="btn sm out" type="button" data-cert="${i}">${IC.print}${t("certificate")}</button>`:""}</div>`}).join("")}</div></div></div>`;
  $("#prRep").onclick=()=>printReport();$$("[data-cert]").forEach(b=>b.onclick=()=>{const c=CH[+b.dataset.cert];printCert(`<span lang="ar">${c[2]}</span>`,`${t("verses")} ${num(c[0])}–${num(c[1])}`)})}};
 
