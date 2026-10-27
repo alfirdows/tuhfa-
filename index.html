@@ -281,6 +281,8 @@ html[lang="en"] .mn{display:none}
 .confetti{position:fixed;inset:0;pointer-events:none;z-index:91;overflow:hidden}
 .confetti i{position:absolute;top:-20px;width:12px;height:12px;transform:rotate(45deg);animation:fall 2.2s ease-in forwards}
 @keyframes fall{to{transform:translateY(105vh) rotate(405deg);opacity:.2}}
+.fab{position:fixed;inset-inline-end:max(16px,env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:56;width:58px;height:58px;border-radius:50%;border:0;background:var(--acc);color:var(--acc-ink);display:grid;place-items:center;box-shadow:0 6px 18px rgba(0,0,0,.22);cursor:pointer}
+.fab svg{width:26px;height:26px}.fab[hidden]{display:none}@media print{.fab{display:none}}
 .toast{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:95;background:color-mix(in srgb,var(--surface) 94%,transparent);color:var(--muted);border:1px solid var(--line);padding:5px 14px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.08);text-align:center;font-weight:600;font-size:.88rem;line-height:1.6;max-width:min(92vw,520px);animation:tin .25s ease-out;pointer-events:none}
 .toast [lang="ar"]{font-family:var(--text);font-size:1.08rem;color:var(--ink)}
 .toast small{font-size:.8rem;font-weight:500;color:var(--muted)}
@@ -1261,6 +1263,7 @@ html[lang="ar"] .menu a{font-size:.74rem!important}
  </div></section>
 </div>
 
+<button class="fab" id="fab" type="button" aria-label="Recite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></button>
 <div class="pbar" id="pbarAudio"><div class="in">
  <button class="btn sm pri" type="button" id="pbRecite"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg><span class="l-en" lang="en">Recite</span><span class="l-ar" lang="ar" dir="rtl">سمّع</span></button>
  <button class="pbb" type="button" id="pbPrev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 6h2v12H7zM20 6v12l-9-6z"/></svg></button>
@@ -1683,11 +1686,13 @@ function route(){if(location.hash==="#owner-tasnim"){LS.set("owner",true);locati
  if(ROUTE&&ROUTE!==R){if(ROUTE==="memorize")Mem.leave();if(ROUTE==="quiz")Quiz.leave();if(ROUTE==="games"){Games.leave();Games.game=null}}
  ROUTE=R;$$(".view").forEach(v=>v.hidden=v.id!=="view-"+R);$$(".menu a").forEach(a=>{if(a.dataset.nav===R)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
  Sheet.close();refit();wrongRun=0;if(R!=="poem")Player.stop();document.body.classList.remove("dockpad");document.body.classList.toggle("pbon",R==="poem");renderRoute();
+ {const f=$("#fab");f.hidden=R==="poem"||R==="settings"||(R==="memorize"&&sub==="run");f.setAttribute("aria-label",LANG==="ar"?"سمّع":"Recite")}
  if(R==="poem"&&!readGreeted){readGreeted=true;bismillah()}
  if(!sub&&R==="memorize"&&!Mem.run)setTimeout(()=>toast(t("tapToStart"),"",3500),350);if(!sub&&R==="quiz"&&!Quiz.qs)setTimeout(()=>toast(t("tapToStart"),"",3500),350);if(!sub&&R==="games"&&!Games.cur&&!Games.game)setTimeout(()=>toast(t("chooseGame"),"",3000),350);
  if(R==="poem"&&Book.on()){let ci=Book.i;if(sub&&/^c\d+$/.test(sub))ci=+sub.slice(1)-1;else if(sub&&/^v\d+$/.test(sub))ci=chOf(+sub.slice(1));Book.show(ci,true)}
  const target=sub&&document.getElementById(sub);if(target)setTimeout(()=>target.scrollIntoView({block:"start"}),40);else window.scrollTo(0,0)}
 window.addEventListener("hashchange",route);
+$("#fab").onclick=()=>reciteNow(null);
 /* Tapping the page you are already on: say what to do next and point to it, instead of doing nothing */
 function pointTo(el,msg){toast(msg,"",3500);if(!el)return;el.scrollIntoView({block:"center",behavior:"smooth"});el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash")}
 function nudge(){if(ROUTE==="memorize"&&!Mem.run)return pointTo($("#memRoot [data-rp]"),t("tapToStart"));
@@ -1742,7 +1747,13 @@ function printBook(){if(IN_FRAME){toast(t("printFrame"),"",3500);return}const o=
   $("#pGo").onclick=()=>{keep();ps.set("pdfOpt",o);$("#modal").innerHTML="";$("#print").innerHTML=bookPages(o,o.name);setTimeout(()=>window.print(),120)}};
  draw()}
 $("#bookPdf").onclick=printBook;$("#bookPdf2").onclick=printBook;
-$("#pbRecite").onclick=()=>{unlockAudio();Player.stop();const ci=Book.on()?Book.i:chOf(PBar.v||1);const c=CH[ci];Mem.setup={from:c[0],to:c[1]};ps.set("memRange",Mem.setup);Mem.newRun(range(c[0],c[1]));Mem.run.view=2;Mem.save();location.hash="#memorize/run";setTimeout(bismillah,300)};
+/* Recite from anywhere (like Tarteel): starts from the verse you are looking at, or carries on your last session,
+   and turns the microphone on straight away (it listens and records). */
+function reciteNow(v){unlockAudio();Player.stop();const saved=v==null?ps.get("session",null):null;
+ if(saved){Mem.run=saved}else{if(v==null)v=(ps.get("memRange",{from:1}).from)||1;const c=CH[chOf(v)];Mem.setup={from:v,to:c[1]};ps.set("memRange",Mem.setup);Mem.newRun(range(v,c[1]));Mem.run.view=2}
+ Mem.save();history.pushState(null,"","#memorize/run");route();window.scrollTo(0,0);if(Mem.run&&!Mem.listening)Mem.toggleMic()}
+function verseInView(){const el=$$(".poem [id^='v']").find(e=>e.offsetParent&&e.getBoundingClientRect().bottom>140);return el?+el.id.slice(1):null}
+$("#pbRecite").onclick=()=>reciteNow(verseInView()||(Book.on()?CH[Book.i][0]:PBar.v||1));
 $("#listenAll").onclick=()=>{unlockAudio();Player.playVerses(range(PBar.v||1,61))};
 poemEl.addEventListener("click",e=>{const w=e.target.closest(".w");if(w){const [v,h,i]=w.dataset.k.split(":").map(Number);Sheet.word(v,h,i,w.dataset.g);return}
  const n=e.target.closest("[data-verse]");if(n){Sheet.word(+n.dataset.verse,-1,-1,null);return}const tr=e.target.closest(".tr");if(tr)sayEn(tr.dataset.say)});
