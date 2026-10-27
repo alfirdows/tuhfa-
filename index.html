@@ -1631,10 +1631,14 @@ const MISL={all(){return ps.get("mistakes",[])},save(a){ps.set("mistakes",a.slic
  html(n){const ms=this.all().slice(0,n);let day="",h="";for(const m of ms){const d=fmtD(m.t);if(d!==day){if(day)h+="</div>";day=d;h+=`<p class="mday">${esc(d)}</p><div class="mlist">`}h+=this.card(m)}
   return ms.length?h+"</div>":`<p class="note">${OW("No mistakes saved yet.","لا توجد أخطاء محفوظة بعد.")}</p>`},
  bind(root,redraw){$$("[data-mdel]",root).forEach(b=>b.onclick=()=>{this.del(b.dataset.mdel);toast(OW("Mistake deleted","حُذف الخطأ"));redraw()});
-  $$("[data-mplay]",root).forEach(b=>b.onclick=()=>this.play(b.dataset.mplay,b))},
+  $$("[data-mplay]",root).forEach(b=>b.onclick=()=>this.play(b.dataset.mplay,b));
+  $$("[data-mrec]",root).forEach(b=>b.onclick=()=>this.reciteAll())},
+ /* سمّع أخطاءك: a session over only the verses that have mistakes, with the microphone on straight away. */
+ reciteAll(){const vs=[...new Set(this.all().map(m=>m.v))].sort((a,b)=>a-b);if(!vs.length)return;Sheet.close();unlockAudio();Player.stop();
+  if(Mem.run&&Mem.listening)Mem.stopMic(true);Mem.newRun(vs);Mem.run.view=2;Mem.save();history.pushState(null,"","#memorize/run");route();window.scrollTo(0,0);if(Mem.run&&!Mem.listening)Mem.toggleMic()},
  /* Grouped by recitation session, newest first (like a history): time, verses covered, then each mistake in order. */
  sessionsHTML(){const g=new Map();for(const m of this.all()){if(!g.has(m.t))g.set(m.t,[]);g.get(m.t).push(m)}
-  if(!g.size)return`<p class="note">${OW("No mistakes saved yet.","لا توجد أخطاء محفوظة بعد.")}</p>`;let n=0,h="";
+  if(!g.size)return`<p class="note">${OW("No mistakes saved yet.","لا توجد أخطاء محفوظة بعد.")}</p>`;let n=0,h=`<button class="btn pri" type="button" data-mrec style="width:100%;justify-content:center">${IC.mic}${OW("Recite your mistakes","سمّع أخطاءك")}</button><p class="note" style="text-align:center;margin:4px 0 8px">${OW("Goes through only the verses you slipped in.","يمرّ على الأبيات التي أخطأت فيها فقط.")}</p>`;
   for(const ms of g.values()){ms.sort((a,b)=>a.v-b.v||a.at-b.at);const a=ms[0].v,b=ms[ms.length-1].v,t0=ms[0].t;
    const tm=new Date(t0).toLocaleTimeString(LANG==="ar"?"ar":"en",{hour:"numeric",minute:"2-digit"});
    h+=`<details class="sess" ${n++<2?"open":""}><summary><span>${a!==b?`${OW("Verses","الأبيات")} ${num(a)}–${num(b)}`:`${t("verse")} ${num(a)}`}<span class="tm">${esc(fmtD(t0))} · ${esc(tm)} · ${num(ms.length)} ${OW("to review","للمراجعة")}</span></span><span class="chev">⌄</span></summary><div class="mlist">${ms.map(m=>this.card(m)).join("")}</div></details>`}
