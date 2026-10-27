@@ -650,6 +650,15 @@ html[dir="ltr"] .flipx2 svg{transform:scaleX(-1)} .flipx2{display:inline-flex}
 
 /* mistake review */
 .mlist{display:grid;gap:10px}
+/* mistakes (Tarteel style): expected vs recited */
+.misc{border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--surface);display:grid;gap:8px}
+.misc .mh{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.misc .mt{font-weight:700;flex:1}
+.misc .tag{border:1px solid var(--line);border-radius:8px;padding:1px 8px;font-weight:700}
+.misc .del{border:0;background:transparent;color:var(--muted);cursor:pointer;padding:6px;border-radius:8px;display:inline-flex}.misc .del svg{width:20px;height:20px}
+.mline{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:baseline;border:1px solid var(--line);border-radius:12px;padding:6px 12px}
+.mline.one{grid-template-columns:1fr}.mline small{color:var(--muted);font-size:.8rem;font-weight:700}
+.mline .tx{direction:rtl;text-align:right;line-height:2;font-size:1.08rem}.mline .tx .g{color:var(--ok);font-weight:700}.mline .tx .r{color:var(--bad);font-weight:700}
+.mday{font-weight:700;color:var(--muted);margin:8px 0 0;font-size:.9rem}
 .mrow{display:grid;gap:8px;border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--surface)}
 .vtag{font-size:.8rem;font-weight:700;color:var(--acc2)}
 .cmp{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -1423,6 +1432,7 @@ function rangeLabel(vs){if(!vs||!vs.length)return"";const c=vs.every((v,i)=>!i||
 const DUAS=[["بارك الله فيك","May Allah bless you"],["وفقك الله","May Allah grant you success"],["فتح الله عليك","May Allah open the doors of good for you"],["زادك الله من فضله","May Allah increase you from His bounty"],["نفع الله بك","May Allah make you a source of benefit"],["شرح الله صدرك","May Allah expand your chest"]];
 
 const IC={
+ trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>',
  bulb:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>',
  ok:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
  x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
@@ -1592,15 +1602,35 @@ function micHelp(){const box=(s,c="")=>`<div class="notice ${c}">${s}</div>`;if(
  if(!micGranted)return `<div class="notice info row"><span style="flex:1;min-width:200px">${t("micAsk")}</span><button class="btn sm pri" type="button" data-askmic>${t("micOn")}</button></div>`;
  if(ST.mode==="voice"&&!SR)return box(t("noSR"));return ""}
 document.addEventListener("click",async e=>{if(!e.target.closest("[data-askmic]"))return;unlockAudio();await askMic();Mem.note();const rn=$("#rnote");if(rn)rn.innerHTML=micHelp()});
+/* Mistakes log (Tarteel style), per learner, newest first, kept until deleted. Each entry keeps a few words around
+   the mistake: e = expected word, s = what was heard (null = not said), b = part of the mistake. */
+const MISL={all(){return ps.get("mistakes",[])},save(a){ps.set("mistakes",a.slice(0,300))},del(id){this.save(this.all().filter(m=>m.id!==id))},
+ make(W,ks,said,type,date,v){const a=Math.max(0,ks[0]-3),z=Math.min(W.length-1,ks[ks.length-1]+2),ctx=[];
+  for(let k=a;k<=z;k++){const b=ks.includes(k);ctx.push({e:W[k].w,s:b?(said[k]==null?null:said[k]):W[k].w,b:b?1:0})}return{id:date.toString(36)+"-"+ks[0],t:date,v,type,ctx}},
+ fromRun(r,W,date){const out=[],seen=new Set();W.forEach((w,i)=>{if(seen.has(i))return;const s=r.st[i];
+   if((s===2||s===4)&&r.said[i])out.push(this.make(W,[i],{[i]:r.said[i]},"wrong",date,w.v));
+   else if(s===2||s===4)out.push(this.make(W,[i],{},"missed",date,w.v));
+   else if(s===6){const g=[];for(let j=i;j<W.length&&r.st[j]===6;j++){g.push(j);seen.add(j)}out.push(this.make(W,g,{},"missed",date,w.v))}});return out},
+ title(m){return m.type==="wrong"?OW("Incorrect words","كلمات خاطئة"):OW("Missed words","كلمات فائتة")},
+ line(m,k,cl){return m.ctx.filter(x=>x[k]!=null).map(x=>x.b?`<span class="${cl}">${qh(esc(x[k]))}</span>`:qh(esc(x[k]))).join(" ")},
+ lines(m){return m.type==="wrong"?`<div class="mline"><small>${OW("Expected","المطلوب")}</small><span class="tx" lang="ar">${this.line(m,"e","g")}</span><small>${OW("Recited","ما سُمع")}</small><span class="tx" lang="ar">${this.line(m,"s","r")}</span></div>`
+   :`<div class="mline one"><span class="tx" lang="ar">${this.line(m,"e","r")}</span></div>`},
+ card(m){return`<div class="misc"><div class="mh"><span class="tag">${t("verse")} ${num(m.v)}</span><span class="mt">${this.title(m)}</span><button class="del" type="button" data-mdel="${m.id}" aria-label="${OW("Delete this mistake (misheard)","احذف هذا الخطأ (سماع خاطئ)")}">${IC.trash}</button></div>${this.lines(m)}</div>`},
+ html(n){const ms=this.all().slice(0,n);let day="",h="";for(const m of ms){const d=fmtD(m.t);if(d!==day){if(day)h+="</div>";day=d;h+=`<p class="mday">${esc(d)}</p><div class="mlist">`}h+=this.card(m)}
+  return ms.length?h+"</div>":`<p class="note">${OW("No mistakes saved yet.","لا توجد أخطاء محفوظة بعد.")}</p>`},
+ bind(root,redraw){$$("[data-mdel]",root).forEach(b=>b.onclick=()=>{this.del(b.dataset.mdel);toast(OW("Mistake deleted","حُذف الخطأ"));redraw()})}};
 class Listener{constructor(onWords,onState){this.onWords=onWords;this.onState=onState;this.active=false;this.done=0;this.text="";this.finalText=""}
  start(){if(!SR)return false;this.active=true;lastAct=Date.now();this._spin();return true}
- _spin(){const r=new SR();this.r=r;r.lang="ar-SA";r.continuous=true;r.interimResults=true;this.done=0;
+ _spin(){const r=new SR();this.r=r;r.lang="ar-SA";r.continuous=true;r.interimResults=true;this.prev=[];
   /* Words are used as soon as they appear. The newest word (still being heard) is only used if it is the expected word,
      so a half-heard word never counts as a mistake. */
   r.onresult=e=>{lastAct=Date.now();let ws=[],full="",tail=null;for(let i=0;i<e.results.length;i++){const res=e.results[i];const w=toks(res[0].transcript);full+=" "+res[0].transcript;
     if(res.isFinal||i<e.results.length-1)ws.push(...w);else{ws.push(...w.slice(0,-1));tail=w.length?w[w.length-1]:null}}
-   this.text=full;if(ws.length>this.done){const nw=ws.slice(this.done);this.done=ws.length;this.onWords(nw)}
-   if(tail&&this.onPeek&&ws.length===this.done&&this.onPeek(tail)){this.done++}};
+   /* Phones (iPhone especially) rewrite earlier words and restart the list after a pause, so compare with the words
+      already used instead of counting them: only words that are new or changed are passed on. */
+   this.text=full;const P=this.prev||[];let k=0;while(k<P.length&&k<ws.length&&norm(P[k])===norm(ws[k]))k++;
+   this.prev=ws.slice();if(ws.length>k)this.onWords(ws.slice(k));
+   if(tail&&this.onPeek&&this.onPeek(tail))this.prev.push(tail)};
   r.onerror=e=>{if(["not-allowed","service-not-allowed","audio-capture"].includes(e.error)){this.active=false;micState="denied";this.onState("denied")}};
   r.onend=()=>{if(this.active){this.finalText+=" "+this.text;this.text="";setTimeout(()=>{if(this.active)try{this._spin()}catch(e){}},0)}else this.onState("stopped")};
   try{r.start()}catch(e){this.active=false;micState="denied";this.onState("denied")}}
@@ -1809,7 +1839,9 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   m.innerHTML=`<div class="stack"><div class="head" style="margin-bottom:0"><h2>${LANG==="ar"?"سمّع من حفظك":"Recite from memory"}</h2><p>${t("tipTap")}</p></div>
    <div class="panel"><h3>${t("range")}</h3>${rp.html}<div class="startbar"><button class="btn pri" type="button" id="mstart">${IC.mic}${t("startL")} · ${rangeLabel(range(this.setup.from,this.setup.to))}</button></div><p class="note" style="margin:0">${t("viewLater")}</p></div>${cont}
    <div class="panel"><h3>${t("recs")}</h3><div id="recbox"></div></div>
+   <div class="panel"><h3>${OW("Past mistakes","الأخطاء السابقة")}</h3><p class="note" style="margin:0">${OW("Each mistake shows what was expected and what was heard. If the website misheard you, tap the bin to delete it.","يظهر كل خطأ المطلوبَ وما سُمع. إن أخطأ الموقع في سماعك فاضغط سلة المهملات لحذفه.")}</p><div id="misAll"></div></div>
    <div class="panel"><h3>${t("hist")}</h3>${hist.length?`<div class="list">${hist.slice(0,8).map(h=>`<div class="it"><div class="g"><b>${rangeLabel(h.vs)}</b><div class="note">${fmtD(h.date)} · ${fmtT(h.time)}</div></div><span class="pill ${h.acc>=90?"ok":h.acc>=70?"warn":"bad"}">${num(h.acc)}%</span></div>`).join("")}</div>`:`<p class="note">${t("noHist")}</p>`}</div></div>`;
+  {const box=$("#misAll"),draw=()=>{box.innerHTML=MISL.html(30);MISL.bind(box,draw)};draw()}
   rp.bind(m);const go=view=>{unlockAudio();this.newRun(range(this.setup.from,this.setup.to));this.run.view=view;this.save();history.pushState(null,"","#memorize/run");this.render();window.scrollTo(0,0);bismillah()};
   $("#mstart").onclick=()=>go(ps.get("lastView",0));
   if(saved){$("#mcont").onclick=()=>{unlockAudio();this.run=saved;history.pushState(null,"","#memorize/run");this.render();bismillah()};$("#mdisc").onclick=()=>{ps.del("session");this.render()}}
@@ -1901,6 +1933,10 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
    if(W[i+2]&&wmatch(h,e.n+W[i+1].n+W[i+2].n)){onRight();for(let k=0;k<3&&this.run&&r.idx<this.W.length;k++){r.st[r.idx]=1;this.advance()}continue}
    if(W[i+1]&&wmatch(h,e.n+W[i+1].n)){onRight();r.st[i]=r.tries[i]?4:1;this.advance();if(this.run&&r.idx<this.W.length){r.st[r.idx]=1;this.advance()}continue}
    if(h.length<2)continue;if(this.extra(e.v).some(x=>x===h||(h.length>3&&sim(h,x)>=.8)))continue;let rep=false;for(let b=1;b<=4;b++)if(W[i-b]&&wmatch(h,W[i-b].n)){rep=true;break}if(rep)continue;
+   /* Reading on quickly: the word heard is one of the next few, so the words before it were said wrong or skipped. Mark them and keep going. */
+   {let j=0;for(let d=1;d<=3&&W[i+d];d++)if((d===1||h.length>3)&&wmatch(h,W[i+d].n)){j=d;break}
+    if(j){onRight();this.cand=null;for(let d=0;d<j&&this.run&&r.idx<this.W.length;d++){const k=r.idx;if(!r.tries[k]){r.tries[k]=1;r.mist++}r.st[k]=2;this.advance()}
+     const mm=$("#mmis");if(mm)mm.textContent=num(r.mist);if(this.run&&r.idx<this.W.length){r.st[r.idx]=1;this.advance()}this.save();continue}}
    r.tries[i]=(r.tries[i]||0)+1;r.said[i]=raw;r.mist++;$("#mmis").textContent=num(r.mist);onWrong();this.attention(i);
    const c=this.locate();if(c)this.cand=c;
    if(ST.tries&&r.tries[i]>=ST.tries){triedOut();if(this.cand){const g=this.cand.g;this.cand=null;this.save();this.askJump(g,false);return}r.st[i]=2;this.advance();this.offerHint()}else this.save()}},
@@ -1918,20 +1954,21 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
  showResults(r,W,first){const rows=[];const per={};let bad=0;W.forEach((w,i)=>{per[w.v]=per[w.v]||[0,0];per[w.v][1]++;const s=r.st[i];if(s===2||s===4){bad++;rows.push({w,i})}else if(s===1||s===5)per[w.v][0]++});
   const accs={};for(const v in per)accs[v]=Math.round(per[v][0]/per[v][1]*100);
   const acc=Math.max(0,Math.round((W.length-bad)/W.length*100));const ach=recordVerses(accs);
+  if(first){r.misDate=Date.now();MISL.save([...MISL.fromRun(r,W,r.misDate),...MISL.all()])}
   const hist=ps.get("memHist",[]);if(first){hist.unshift({date:Date.now(),vs:r.verses,acc,time:r.elapsed})}else if(hist[0])hist[0].acc=acc;ps.set("memHist",hist.slice(0,40));
   const mvs=[...new Set(rows.map(x=>x.w.v))].sort((a,b)=>a-b);
   this.root().innerHTML=`<div class="stack"><div class="panel"><h3>${t("done")} · ${rangeLabel(r.verses)}</h3>
    <div class="sum"><div><b>${num(acc)}%</b><span>${t("acc")}</span></div><div><b>${num(r.mist)}</b><span>${t("mistakes")}</span></div><div><b>${fmtT(r.elapsed)}</b><span>${t("time")}</span></div></div></div>
    <div class="panel"><h3>${t("misTitle")}</h3>${rows.length?`<p class="note" style="margin:0">${t("checkHint")}</p><div class="mlist">
    ${rows.map(x=>`<div class="mrow"><span class="vtag">${t("verse")} ${num(x.w.v)}</span>
-     <div class="cmp"><div><small>${t("youSaid")}</small><span class="a said">${r.said[x.i]?esc(r.said[x.i]):`<span class="note">${t("byYou")}</span>`}</span></div><div><small>${t("correctW")}</small><span class="a cor">${qh(x.w.w)}</span></div></div>
+     ${MISL.lines(MISL.make(W,[x.i],r.said[x.i]?{[x.i]:r.said[x.i]}:{},r.said[x.i]?"wrong":"missed",0,x.w.v))}
      <div class="row"><button class="btn sm out" type="button" data-play="${x.i}">${IC.play}${t("listenWord")}</button><button class="btn sm right" type="button" data-ok="${x.i}">${IC.ok}${t("iWasRight")}</button></div></div>`).join("")}</div>`:`<p>${t("none")}</p>`}
    <div class="row">${mvs.length?`<button class="btn pri" type="button" id="fm">${t("retryM")}</button>`:""}<button class="btn out" type="button" id="fa">${IC.retry}${t("again")}</button><button class="btn soft" type="button" id="fn">${t("newS")}</button></div>
    ${(()=>{const a=chOf(r.verses[0]),b=chOf(r.verses[r.verses.length-1]);return `<nav class="pgnav">${a>0?`<button type="button" class="pg-prev" id="fprev"><small>${t("prevCh")}</small><b lang="ar">${CH[a-1][2]}</b></button>`:"<span></span>"}${b<CH.length-1?`<button type="button" class="pg-next" id="fnext"><small>${t("nextCh")}</small><b lang="ar">${CH[b+1][2]}</b></button>`:""}</nav>`})()}</div></div>`;
   {const a=chOf(r.verses[0]),b=chOf(r.verses[r.verses.length-1]);const fp=$("#fprev"),fx=$("#fnext");const go=i=>{$("#modal").innerHTML="";this.run={view:r.view||0};this.goChapter(i)};if(fp)fp.onclick=()=>go(a-1);if(fx)fx.onclick=()=>go(b+1)}
   if(mvs.length)$("#fm").onclick=()=>{this.newRun(mvs);this.render();bismillah()};$("#fa").onclick=()=>{this.newRun(r.verses);this.render();bismillah()};$("#fn").onclick=()=>this.render();
   $$("[data-play]",this.root()).forEach(b=>b.onclick=()=>{unlockAudio();const w=W[+b.dataset.play];Player.playSeg(AUDIO.words[`${w.v}:${w.h}:${w.i}`],1,"word")});
-  $$("[data-ok]",this.root()).forEach(b=>b.onclick=()=>{const i=+b.dataset.ok;r.mist=Math.max(0,r.mist-(r.tries[i]||1));r.st[i]=5;delete r.said[i];delete r.tries[i];toast(t("undoDone"));const y=scrollY;this.showResults(r,W,false);scrollTo(0,y)});
+  $$("[data-ok]",this.root()).forEach(b=>b.onclick=()=>{const i=+b.dataset.ok;if(r.misDate)MISL.del(r.misDate.toString(36)+"-"+i);r.mist=Math.max(0,r.mist-(r.tries[i]||1));r.st[i]=5;delete r.said[i];delete r.tries[i];toast(t("undoDone"));const y=scrollY;this.showResults(r,W,false);scrollTo(0,y)});
   if(!first)return;window.scrollTo(0,0);
   celebrate({title:acc>=90?t("welldone"):t("done"),stats:`<div class="sum"><div><b>${num(acc)}%</b><span>${t("acc")}</span></div><div><b>${num(streak())}</b><span>${t("streak")}</span></div><div><b>${num(weekVerses().length)}/${num(goalN())}</b><span>${t("weekGoal")}</span></div></div>`,
    extra:achieveExtra(ach),onCert:acc>=80?()=>printCert(rangeLabel(r.verses),`${t("acc")}: ${num(acc)}%`):null})},
