@@ -1977,7 +1977,8 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
     if(j){onRight();this.cand=null;for(let d=0;d<j&&this.run&&r.idx<this.W.length;d++){const k=r.idx;if(!r.tries[k]){r.tries[k]=1;r.mist++;(r.mt=r.mt||{})[k]=Date.now()}r.st[k]=2;this.advance()}
      const mm=$("#mmis");if(mm)mm.textContent=num(r.mist);if(this.run&&r.idx<this.W.length){r.st[r.idx]=1;this.advance()}this.save();continue}}
    r.tries[i]=(r.tries[i]||0)+1;r.said[i]=raw;r.mist++;(r.mt=r.mt||{})[i]=Date.now();$("#mmis").textContent=num(r.mist);onWrong();this.attention(i);
-   const c=this.locate();if(c)this.cand=c;
+   /* Like Tarteel: if you carry on from another place, follow you there straight away instead of asking. */
+   const c=this.locate();if(c){r.mist=Math.max(0,r.mist-(r.tries[i]||0));delete r.tries[i];delete r.said[i];this.cand=null;const tg=ALLW[c.g];toast(OW("Following you from verse ","أتابعك من البيت ")+num(tg.v));this.jumpTo(tg);return}
    if(ST.tries&&r.tries[i]>=ST.tries){triedOut();if(this.cand){const g=this.cand.g;this.cand=null;this.save();this.askJump(g,false);return}r.st[i]=2;this.advance();this.offerHint()}else this.save()}},
  async toggleMic(){unlockAudio();if(this.listening){this.stopMic(true);return}if(IN_FRAME||micState==="denied"){this.note();return}
   const r=this.run;let recOK=false;if(ST.rec){r.part=(r.part||0)+1;recOK=await Rec.start(rangeLabel(r.verses)+(r.part>1?" · "+num(r.part):""))}
