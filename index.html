@@ -1213,6 +1213,24 @@ body:not(.dockpad) .mv{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
 .mtile{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .mtile button{position:relative;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:16px;padding:12px 6px;display:grid;justify-items:center;gap:6px;font:inherit;font-weight:700;font-size:.8rem}
 .mtile svg{width:24px;height:24px;color:var(--acc)}.mtile .cnt{position:absolute;top:6px;inset-inline-end:8px;min-width:18px;height:18px;border-radius:9px;background:var(--bad);color:#fff;font-size:.68rem;display:grid;place-items:center;padding:0 5px}
+
+/* recently deleted popup, list, and select-to-delete */
+.binpop{position:fixed;left:50%;transform:translateX(-50%);top:calc(12px + env(safe-area-inset-top,0px));z-index:120;width:min(460px,calc(100vw - 20px));background:var(--ink);color:var(--bg);border-radius:18px;padding:12px 12px 10px;box-shadow:0 14px 34px rgba(0,0,0,.3);display:grid;gap:10px}
+.binpop .bt{display:flex;gap:10px;align-items:flex-start}.binpop .bt svg{width:22px;height:22px;flex:none;margin-top:2px}.binpop .bt b{display:block}.binpop .bt span{font-size:.86rem;opacity:.85}
+.binpop .bb{display:flex;gap:8px;align-items:center}.binpop button{border:0;border-radius:999px;font:inherit;font-weight:700;font-size:.86rem;padding:7px 14px;display:inline-flex;align-items:center;gap:6px}
+.binpop .u{background:var(--bg);color:var(--ink)}.binpop .o{background:transparent;color:var(--bg);border:1px solid color-mix(in srgb,var(--bg) 40%,transparent)!important}.binpop .x{margin-inline-start:auto;background:transparent;color:var(--bg);padding:6px}.binpop .bb svg{width:17px;height:17px}
+.binl{display:grid;gap:8px}.binit{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--surface)}.binit>div{flex:1;min-width:0}
+.binit b{display:flex;align-items:center;gap:6px}.binit b svg{width:17px;height:17px;flex:none}.binit .note{font-size:.82rem}.binit .btn svg{width:16px;height:16px}
+.binlink{margin-top:10px;display:inline-flex;align-items:center;gap:6px}.binlink[hidden]{display:none}.binlink svg{width:16px;height:16px}
+.picking .selbar{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0;box-shadow:0 6px 10px -8px rgba(0,0,0,.25)}
+#misSheet .picking .selbar,.sheet .picking .selbar{top:0}
+.selbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0 10px}.selbar[hidden]{display:none}
+.selbar button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;font:inherit;font-weight:700;font-size:.82rem;padding:6px 12px;display:inline-flex;align-items:center;gap:5px}.selbar svg{width:15px;height:15px}
+.selbar .n{font-weight:700;font-size:.85rem;margin-inline-end:auto}.selbar .del{background:var(--bad);border-color:var(--bad);color:#fff}.selbar .del:disabled{opacity:.4}
+.picking [data-pick]{position:relative;padding-inline-start:46px!important}.picking [data-pick] *{pointer-events:none}
+.picking [data-pick]::before{content:"";position:absolute;inset-inline-start:12px;top:50%;width:22px;height:22px;margin-top:-11px;border-radius:50%;border:2px solid var(--line);background:var(--surface)}
+.picking [data-pick].picked{border-color:var(--bad)}.picking [data-pick].picked::before{border-color:var(--bad);background:var(--bad);box-shadow:inset 0 0 0 4px var(--surface)}
+.btn.armed{background:var(--bad)!important;color:#fff!important;border-color:var(--bad)!important}
 </style>
 </head>
 <body>
@@ -1635,7 +1653,7 @@ async function shareVerse(v){const text=`${V[v-1][0]}\n${V[v-1][1]}\n\n${LANG===
 /* ================= recordings ================= */
 const DB={db:null,open(){if(this.db)return Promise.resolve(this.db);return new Promise((res,rej)=>{try{const r=indexedDB.open("tuhfa-web2",1);r.onupgradeneeded=()=>r.result.createObjectStore("recs",{keyPath:"id"});r.onsuccess=()=>{this.db=r.result;res(this.db)};r.onerror=()=>rej(r.error)}catch(e){rej(e)}})},
  async tx(mode,fn){const db=await this.open();return new Promise((res,rej)=>{const x=db.transaction("recs",mode);const r=fn(x.objectStore("recs"));x.oncomplete=()=>res(r&&r.result);x.onerror=()=>rej(x.error)})},
- put(o){return this.tx("readwrite",s=>s.put(o)).catch(()=>{})},all(){return this.tx("readonly",s=>s.getAll()).catch(()=>[])},del(id){return this.tx("readwrite",s=>s.delete(id)).catch(()=>{})}};
+ put(o){return this.tx("readwrite",s=>s.put(o)).catch(()=>{})},raw(){return this.tx("readonly",s=>s.getAll()).then(a=>a||[]).catch(()=>[])},all(){return this.raw().then(a=>a.filter(r=>!r.gone))},del(id){return this.tx("readwrite",s=>s.delete(id)).catch(()=>{})}};
 const KEEP=14*864e5;
 /* Recordings stay until you delete them (no automatic deletion). */
 async function purge(){}
@@ -1649,17 +1667,74 @@ const Rec={mr:null,stream:null,chunks:[],label:"",t0:0,
  stop(save=true){if(!this.mr)return Promise.resolve(null);const mr=this.mr;this.mr=null;
   return new Promise(res=>{mr.onstop=async()=>{try{this.stream.getTracks().forEach(x=>x.stop())}catch(e){}const dur=(Date.now()-this.t0)/1000;if(!save||!this.chunks.length||dur<1.5)return res(null);
    const o={id:String(Date.now()),pid:PID,date:Date.now(),label:this.label,dur,type:mr.mimeType||"audio/webm",blob:new Blob(this.chunks,{type:mr.mimeType||"audio/webm"})};await DB.put(o);toast(OW("Recording saved","حُفظ التسجيل"),"msg",2500);res(o)};try{mr.stop()}catch(e){res(null)}})}};
-async function recsHTML(){const all=(await DB.all()||[]).filter(r=>!r.pid||r.pid===PID).sort((a,b)=>b.date-a.date);let h=`<div class="notice">${t("recWarn")}</div>`;
+async function recsHTML(){const all=(await DB.all()||[]).filter(r=>!r.pid||r.pid===PID).sort((a,b)=>b.date-a.date);let h=`<div class="notice">${t("recWarn")}</div><div class="selbar"></div>`;
  if(!all.length)return h+`<p class="note">${t("noRecs")}</p>`;
- return h+`<div class="list">${all.map(r=>{const d=Math.max(0,Math.ceil((r.date+KEEP-Date.now())/864e5));return `<div class="it"><div class="g"><b>${esc(r.label)}</b><div class="note">${fmtD(r.date)} · ${fmtT(r.dur||0)}</div></div>
+ return h+`<div class="list">${all.map(r=>{const d=Math.max(0,Math.ceil((r.date+KEEP-Date.now())/864e5));return `<div class="it" data-pick="rec:${r.id}"><div class="g"><b>${esc(r.label)}</b><div class="note">${fmtD(r.date)} · ${fmtT(r.dur||0)}</div></div>
   <button class="btn sm out" type="button" data-save="${r.id}">${IC.share}${t("save")}</button><button class="btn sm soft" type="button" data-del="${r.id}">${t("del")}</button><audio controls preload="none" data-src="${r.id}"></audio></div>`}).join("")}</div>`}
-async function bindRecs(root){const all=await DB.all()||[];const by={};all.forEach(r=>by[r.id]=r);
+async function bindRecs(root,redraw){const all=await DB.all()||[];const by={};all.forEach(r=>by[r.id]=r);
  root.querySelectorAll("audio[data-src]").forEach(a=>{const r=by[a.dataset.src];if(r)try{a.src=URL.createObjectURL(r.blob)}catch(e){}});
  root.querySelectorAll("[data-save]").forEach(b=>b.onclick=async()=>{const r=by[b.dataset.save];if(!r)return;const ext=/mp4|m4a|aac/.test(r.type)?"m4a":"webm";
   const fn=("tuhfa "+r.label+" "+new Date(r.date).toISOString().slice(0,10)).replace(/[\\/:*?"<>|]/g,"-")+"."+ext;
   try{const f=new File([r.blob],fn,{type:r.type});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:BOOK_AR});return}}catch(e){if(e&&e.name==="AbortError")return}
   try{const a=document.createElement("a");a.href=URL.createObjectURL(r.blob);a.download=fn;document.body.appendChild(a);a.click();a.remove()}catch(e){}});
- root.querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{await DB.del(b.dataset.del);b.closest(".it").remove()})}
+ /* Tap Delete twice (the first tap asks to be sure); it then waits in Recently deleted for 24 hours. */
+ root.querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{if(!b.dataset.arm){b.dataset.arm=1;b.classList.add("armed");b.textContent=OW("Tap again to delete","اضغط مرة أخرى للحذف");setTimeout(()=>{if(b.isConnected){delete b.dataset.arm;b.classList.remove("armed");b.textContent=t("del")}},4000);return}
+  const k=await BIN.rec(b.dataset.del);if(redraw)redraw();else b.closest(".it").remove();BIN.pop([k],1,redraw)});
+ if(redraw){pickable(root,redraw);const l=document.createElement("button");l.type="button";l.className="btn sm soft binlink";l.hidden=true;root.appendChild(l);BIN.link(l,redraw)}}
+
+/* ================= recently deleted (24 hours) =================
+   Nothing is gone straight away. A deleted recording stays in the database marked "gone"; other things (mistakes,
+   a learner, reset progress) are kept in a list. Each can be put back for 24 hours, then it is removed for good.
+   Every delete shows a popup with Undo and a way to the Recently deleted list. */
+const BIN={H:864e5,
+ items(){return LS.get("bin",[]).filter(x=>Date.now()-x.t<this.H)},
+ keep(a){LS.set("bin",a.filter(x=>Date.now()-x.t<this.H))},
+ add(kind,data){const x={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),t:Date.now(),kind,data};this.keep([x,...this.items()]);return x.id},
+ async purge(){this.keep(this.items());for(const r of await DB.raw())if(r.gone&&Date.now()-r.gone>=this.H)await DB.del(r.id)},
+ /* Keep a copy of saved data (a learner, progress) before it is removed. */
+ snap(prefix){const ls={};Object.keys(localStorage).filter(k=>k.startsWith(prefix)).forEach(k=>ls[k]=localStorage.getItem(k));return ls},
+ async rec(id){const r=(await DB.raw()).find(x=>x.id===id);if(!r)return null;r.gone=Date.now();await DB.put(r);return"rec:"+id},
+ mis(id){const m=MISL.all().find(x=>x.id===id);if(!m)return null;MISL.save(MISL.all().filter(x=>x.id!==id));return"bin:"+this.add("mis",{pid:PID,m})},
+ async many(keys){const out=[];for(const k of keys){const [kind,id]=k.split(":");const u=kind==="rec"?await this.rec(id):this.mis(id);if(u)out.push(u)}return out},
+ async undo(keys){for(const k of keys){const [kind,id]=k.split(":");
+   if(kind==="rec"){const r=(await DB.raw()).find(x=>x.id===id);if(r){delete r.gone;await DB.put(r)}continue}
+   const x=this.items().find(y=>y.id===id);if(!x)continue;
+   if(x.kind==="mis"){const key="p."+x.data.pid+".mistakes",a=LS.get(key,[]);if(!a.find(m=>m.id===x.data.m.id))a.push(x.data.m);a.sort((p,q)=>q.t-p.t);LS.set(key,a)}
+   else if(x.kind==="ls"){for(const [k,v] of Object.entries(x.data.ls))try{localStorage.setItem(k,v)}catch(e){}
+    if(x.data.profiles){for(const p of x.data.profiles)if(!PROFILES.find(q=>q.id===p.id))PROFILES.push(p);LS.set("profiles",PROFILES);renderPf()}if(x.data.reload)Mem.setup=null}
+   this.keep(this.items().filter(y=>y.id!==id))}},
+ /* The popup after every delete. */
+ pop(keys,n,after){if(!keys||!keys.length)return;let el=$("#binpop");if(el)el.remove();el=document.createElement("div");el.id="binpop";el.className="binpop";el.setAttribute("role","alert");
+  el.innerHTML=`<div class="bt">${IC.trash}<div><b>${n>1?OW(n+" deleted","حُذف "+num(n)):OW("Deleted","تم الحذف")}</b><span>${OW("You can bring it back within 24 hours from Recently deleted.","يمكنك استرجاعه خلال ٢٤ ساعة من «المحذوفات مؤخرًا».")}</span></div></div><div class="bb"><button type="button" class="u">${IC.undo}${OW("Undo","تراجع")}</button><button type="button" class="o">${OW("Recently deleted","المحذوفات")}</button><button type="button" class="x" aria-label="close">${IC.close}</button></div>`;
+  document.body.appendChild(el);const go=()=>{clearTimeout(this.pt);el.remove()};this.pt=setTimeout(go,8000);
+  $(".u",el).onclick=async()=>{go();await this.undo(keys);toast(OW("Brought back","تم الاسترجاع"));after?after():renderRoute()};$(".o",el).onclick=()=>{go();this.sheet(after)};$(".x",el).onclick=go},
+ /* The Recently deleted list. */
+ async sheet(after){await this.purge();const recs=(await DB.raw()).filter(r=>r.gone).sort((a,b)=>b.gone-a.gone),bin=this.items();
+  const left=t0=>{const h=Math.max(1,Math.ceil((t0+this.H-Date.now())/36e5));return OW(h+" h left","باقٍ "+num(h)+" ساعة")};
+  const row=(key,title,sub,t0)=>`<div class="binit"><div><b>${title}</b><div class="note">${sub} · ${left(t0)}</div></div><button class="btn sm out" type="button" data-undo="${key}">${IC.undo}${OW("Bring back","استرجع")}</button></div>`;
+  const rows=[...recs.map(r=>({t:r.gone,h:row("rec:"+r.id,`${IC.mic}${esc(r.label)}`,`${t("recs")} · ${fmtD(r.date)} · ${fmtT(r.dur||0)}`,r.gone)})),
+   ...bin.map(x=>({t:x.t,h:row("bin:"+x.id,x.kind==="mis"?`${IC.rev}${MISL.title(x.data.m)} · ${t("verse")} ${num(x.data.m.v)}`:`${IC.retry}${esc(LANG==="ar"?x.data.ar:x.data.en)}`,
+    x.kind==="mis"?`<span lang="ar">${MISL.line(x.data.m,x.data.m.type==="extra"?"s":"e","r")}</span>`:OW("Saved progress","التقدّم المحفوظ"),x.t)}))].sort((a,b)=>b.t-a.t);
+  Sheet.open(`<div class="shd"><span class="t">${OW("Recently deleted","المحذوفات مؤخرًا")}</span><button class="x" type="button" aria-label="close">${IC.close}</button></div><p class="note" style="margin:0 0 10px">${OW("Deleted things wait here for 24 hours, then they are removed for good.","تبقى المحذوفات هنا ٢٤ ساعة، ثم تُحذف نهائيًا.")}</p>
+   ${rows.length?`<button class="btn pri sm" type="button" id="undoAll" style="margin-bottom:10px">${IC.undo}${OW("Bring back all","استرجع الكل")} (${num(rows.length)})</button><div class="binl">${rows.map(r=>r.h).join("")}</div>`:`<p class="note">${OW("Nothing deleted in the last 24 hours.","لا شيء محذوف في آخر ٢٤ ساعة.")}</p>`}`);
+  const S=$("#sheet"),redo=()=>{(after||renderRoute)();this.sheet(after)};
+  $$("[data-undo]",S).forEach(b=>b.onclick=async()=>{await this.undo([b.dataset.undo]);toast(OW("Brought back","تم الاسترجاع"));redo()});
+  if($("#undoAll"))$("#undoAll").onclick=async()=>{await this.undo($$("[data-undo]",S).map(b=>b.dataset.undo));toast(OW("Brought back","تم الاسترجاع"));redo()}},
+ async count(){return (await DB.raw()).filter(r=>r.gone&&Date.now()-r.gone<this.H).length+this.items().length},
+ async link(el,after){if(!el)return;const n=await this.count();el.hidden=!n;el.innerHTML=`${IC.trash}${OW("Recently deleted","المحذوفات مؤخرًا")} · ${num(n)}`;el.onclick=()=>this.sheet(after)}};
+/* Select several to delete: "Select" adds a tick to each item; one button then deletes them all (they go to Recently deleted). */
+function pickable(wrap,redraw){if(!wrap)return;const bar=$(".selbar",wrap);if(!bar)return;const P=wrap._pk||(wrap._pk={on:false,sel:new Set()});P.sel.clear();P.on=false;
+ const del=n=>`${IC.trash}${OW("Delete","احذف")}${n?" ("+num(n)+")":""}`,cnt=n=>OW(n+" selected","المحدد: "+num(n));
+ const paint=()=>{wrap.classList.toggle("picking",P.on);$$("[data-pick]",wrap).forEach(x=>x.classList.toggle("picked",P.sel.has(x.dataset.pick)));const n=P.sel.size;bar.hidden=!$("[data-pick]",wrap);
+  bar.innerHTML=P.on?`<span class="n">${cnt(n)}</span><button type="button" data-s="all">${OW("All","الكل")}</button><button type="button" data-s="del" class="del" ${n?"":"disabled"}>${del(n)}</button><button type="button" data-s="x">${t("cancel")}</button>`
+   :`<button type="button" data-s="on">${IC.ok}${OW("Select","تحديد")}</button>`};
+ bar.onclick=async e=>{const b=e.target.closest("[data-s]");if(!b)return;const k=b.dataset.s;
+  if(k==="on")P.on=true;else if(k==="x"){P.on=false;P.sel.clear()}else if(k==="all")$$("[data-pick]",wrap).forEach(x=>P.sel.add(x.dataset.pick));
+  else if(k==="del"){const keys=await BIN.many([...P.sel]);P.sel.clear();P.on=false;paint();redraw();BIN.pop(keys,keys.length,redraw);return}paint()};
+ if(!wrap._pkL){wrap._pkL=1;wrap.addEventListener("click",e=>{const P=wrap._pk;if(!P.on||e.target.closest(".selbar"))return;const it=e.target.closest("[data-pick]");if(!it)return;e.preventDefault();e.stopPropagation();
+  const k=it.dataset.pick;P.sel.has(k)?P.sel.delete(k):P.sel.add(k);it.classList.toggle("picked",P.sel.has(k));const n=$(".selbar .n",wrap),d=$(".selbar .del",wrap);if(n)n.textContent=cnt(P.sel.size);if(d){d.disabled=!P.sel.size;d.innerHTML=del(P.sel.size)}},true)}
+ paint()}
+BIN.purge();
 
 /* ================= microphone + speech ================= */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -1687,10 +1762,10 @@ const MISL={all(){return ps.get("mistakes",[])},save(a){ps.set("mistakes",a.slic
  line(m,k,cl){return m.ctx.filter(x=>x[k]!=null).map(x=>x.b?`<span class="${cl}">${qh(esc(x[k]))}</span>`:qh(esc(x[k]))).join(" ")},
  lines(m){return m.type==="wrong"?`<div class="mline"><small>${OW("Correct","الصواب")}</small><span class="tx" lang="ar">${this.line(m,"e","g")}</span><small>${OW("You said","ما قلتَه")}</small><span class="tx" lang="ar">${this.line(m,"s","r")}</span></div>`
    :`<div class="mline one"><span class="tx" lang="ar">${m.type==="extra"?this.line(m,"s","r"):this.line(m,"e","r")}</span></div>`},
- card(m){return`<div class="misc"><div class="mh"><span class="tag">${t("verse")} ${num(m.v)}</span><span class="mt">${this.title(m)}</span><button class="del pl" type="button" data-mplay="${m.id}" aria-label="${OW("Play my recitation here","استمع لتسميعك هنا")}">${IC.play}</button><button class="del" type="button" data-mdel="${m.id}" aria-label="${OW("Delete this mistake (misheard)","احذف هذا الخطأ (سماع خاطئ)")}">${IC.trash}</button></div>${this.lines(m)}</div>`},
+ card(m){return`<div class="misc" data-pick="mis:${m.id}"><div class="mh"><span class="tag">${t("verse")} ${num(m.v)}</span><span class="mt">${this.title(m)}</span><button class="del pl" type="button" data-mplay="${m.id}" aria-label="${OW("Play my recitation here","استمع لتسميعك هنا")}">${IC.play}</button><button class="del" type="button" data-mdel="${m.id}" aria-label="${OW("Delete this mistake (misheard)","احذف هذا الخطأ (سماع خاطئ)")}">${IC.trash}</button></div>${this.lines(m)}</div>`},
  html(n){const ms=this.all().slice(0,n);let day="",h="";for(const m of ms){const d=fmtD(m.t);if(d!==day){if(day)h+="</div>";day=d;h+=`<p class="mday">${esc(d)}</p><div class="mlist">`}h+=this.card(m)}
   return ms.length?h+"</div>":`<p class="note">${OW("No mistakes saved yet.","لا توجد أخطاء محفوظة بعد.")}</p>`},
- bind(root,redraw){$$("[data-mdel]",root).forEach(b=>b.onclick=()=>{this.del(b.dataset.mdel);toast(OW("Mistake deleted","حُذف الخطأ"));redraw()});
+ bind(root,redraw){$$("[data-mdel]",root).forEach(b=>b.onclick=()=>{const k=BIN.mis(b.dataset.mdel);redraw();BIN.pop([k],1,redraw)});
   $$("[data-mplay]",root).forEach(b=>b.onclick=()=>this.play(b.dataset.mplay,b));
   $$("[data-mrec]",root).forEach(b=>b.onclick=()=>this.reciteAll())},
  /* سمّع أخطاءك: a session over only the verses that have mistakes, with the microphone on straight away. */
@@ -1712,7 +1787,7 @@ const MISL={all(){return ps.get("mistakes",[])},save(a){ps.set("mistakes",a.slic
   a.onended=()=>{btn.classList.remove("on");this.audio=null};unlockAudio();a.play().catch(()=>{btn.classList.remove("on");this.audio=null});
   setTimeout(()=>{if(this.audio===a){a.pause();btn.classList.remove("on");this.audio=null}},9000)},
  openSheet(){Sheet.open(`<div class="shd"><span class="t">${OW("Recitation review","مراجعة التسميع")}</span><button class="x" type="button" aria-label="close">${IC.close}</button></div><p class="note" style="margin:0 0 6px">${OW("If the website misheard you, tap the bin to delete it.","إن أخطأ الموقع في سماعك فاضغط سلة المهملات لحذفه.")}</p><div id="misSh"></div>`);
-  const box=$("#misSh"),draw=()=>{box.innerHTML=this.sessionsHTML();this.bind(box,draw)};draw()}};
+  const box=$("#misSh"),draw=()=>{box.innerHTML=`<div class="selbar"></div>${this.sessionsHTML()}<button class="btn sm soft binlink" type="button" id="binM" hidden></button>`;this.bind(box,draw);pickable(box,draw);BIN.link($("#binM"),draw)};draw()}};
 /* Mistakes, one at a time (our own design): a small card above the bottom bar shows one slip with what was expected and
    what was heard. Next / Previous move through them, "Show all" lists them, × hides the card. */
 const MV={list:[],i:0,all:false,h:{},
@@ -1727,7 +1802,7 @@ const MV={list:[],i:0,all:false,h:{},
     ${!this.all&&n>1?`<div class="mvf"><button type="button" data-v="prev" ${this.i?"":"disabled"}>${rtl?IC.chr:IC.chl}${OW("Previous","السابق")}</button><span class="dots">${n<=12?this.list.map((_,k)=>`<i class="${k===this.i?"on":""}"></i>`).join(""):""}</span><button type="button" data-v="next" ${this.i<n-1?"":"disabled"}>${OW("Next","التالي")}${rtl?IC.chl:IC.chr}</button></div>`:""}`;
   if(!this.all&&this.h.focus)this.h.focus(m)},
  click(e){const v=e.target.closest("[data-v]");if(v){const k=v.dataset.v;if(k==="x")this.close();else{if(k==="all")this.all=!this.all;if(k==="next")this.i++;if(k==="prev")this.i--;this.draw()}return}
-  const d=e.target.closest("[data-mdel]");if(d){const m=this.list.find(x=>x.id===d.dataset.mdel);this.list=this.list.filter(x=>x!==m);if(this.h.del)this.h.del(m);else{MISL.del(m.id);toast(OW("Mistake deleted","حُذف الخطأ"))}this.draw();return}
+  const d=e.target.closest("[data-mdel]");if(d){const m=this.list.find(x=>x.id===d.dataset.mdel);this.list=this.list.filter(x=>x!==m);if(this.h.del)this.h.del(m);else{const key=BIN.mis(m.id);BIN.pop([key],1)}this.draw();return}
   const p=e.target.closest("[data-mplay]");if(p){const m=this.list.find(x=>x.id===p.dataset.mplay);if(this.h.play)this.h.play(m,p);else MISL.play(m.id,p);return}
   const x=e.target.closest("[data-mx]");if(x&&this.h.go){this.h.go(this.list.find(y=>y.id===x.dataset.mx))}}};
 class Listener{constructor(onWords,onState){this.onWords=onWords;this.onState=onState;this.active=false;this.done=0;this.text="";this.finalText=""}
@@ -1993,12 +2068,12 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   m.innerHTML=`<div class="stack"><div class="head" style="margin-bottom:0"><h2>${LANG==="ar"?"سمّع من حفظك":"Recite from memory"}</h2><p>${t("tipTap")}</p></div>
    <div class="panel"><h3>${t("range")}</h3>${rp.html}<div class="startbar"><button class="btn pri" type="button" id="mstart">${IC.mic}${t("startL")} · ${rangeLabel(range(this.setup.from,this.setup.to))}</button></div><p class="note" style="margin:0">${t("viewLater")}</p></div>${cont}
    <div class="mtile"><button type="button" id="tRec">${IC.mic}<span>${t("recs")}</span></button><button type="button" id="misOpen">${IC.rev}<span>${OW("Recitation review","مراجعة التسميع")}</span>${MISL.all().length?`<b class="cnt">${num(MISL.all().length)}</b>`:""}</button><button type="button" id="tHist">${IC.cal}<span>${t("hist")}</span></button></div></div>`;
-  $("#tRec").onclick=()=>{Sheet.open(`<div class="shd"><span class="t">${t("recs")}</span><button class="x" type="button" aria-label="close">${IC.close}</button></div><div id="recbox"></div>`);purge().then(recsHTML).then(h=>{const b=$("#recbox");if(b){b.innerHTML=h;bindRecs(b)}})};
+  $("#tRec").onclick=()=>{Sheet.open(`<div class="shd"><span class="t">${t("recs")}</span><button class="x" type="button" aria-label="close">${IC.close}</button></div><div id="recbox"></div>`);const fill=()=>recsHTML().then(h=>{const b=$("#recbox");if(b){b.innerHTML=h;bindRecs(b,fill)}});fill()};
   $("#tHist").onclick=()=>Sheet.open(`<div class="shd"><span class="t">${t("hist")}</span><button class="x" type="button" aria-label="close">${IC.close}</button></div>${hist.length?`<div class="list">${hist.slice(0,20).map(h=>`<div class="it"><div class="g"><b>${rangeLabel(h.vs)}</b><div class="note">${fmtD(h.date)} · ${fmtT(h.time)}</div></div><span class="pill ${h.acc>=90?"ok":h.acc>=70?"warn":"bad"}">${num(h.acc)}%</span></div>`).join("")}</div>`:`<p class="note">${t("noHist")}</p>`}`);
   $("#misOpen").onclick=()=>MISL.openSheet();
   rp.bind(m);const go=view=>{unlockAudio();this.newRun(range(this.setup.from,this.setup.to));this.run.view=view;this.save();history.pushState(null,"","#memorize/run");this.render();window.scrollTo(0,0);bismillah()};
   $("#mstart").onclick=()=>go(ps.get("lastView",0));
-  if(saved){$("#mcont").onclick=()=>{unlockAudio();this.run=saved;history.pushState(null,"","#memorize/run");this.render();bismillah()};$("#mdisc").onclick=()=>{ps.del("session");this.render()}}
+  if(saved){$("#mcont").onclick=()=>{unlockAudio();this.run=saved;history.pushState(null,"","#memorize/run");this.render();bismillah()};$("#mdisc").onclick=()=>{const bid=BIN.add("ls",{en:t("discard"),ar:t("discard"),ls:BIN.snap("tuhfa2.p."+PID+".session")});ps.del("session");this.render();BIN.pop(["bin:"+bid],1)}}
 },
  wordHTML(k){const r=this.run,w=this.W[k],s=r.st[k]||0;const cls=["m"];let inner=qh(w.w);if(w.q)cls.push("qt");
   if(s===0){cls.push("h");if(k===r.idx)cls.push("cur");if(ST.hide==="first"&&w.i===0)cls.push("fl");if(ST.hide==="letters")cls.push("lt")}
@@ -2169,7 +2244,7 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
    ${(()=>{const a=chOf(r.verses[0]),b=chOf(r.verses[r.verses.length-1]);return `<nav class="pgnav">${a>0?`<button type="button" class="pg-prev" id="fprev"><small>${t("prevCh")}</small><b lang="ar">${CH[a-1][2]}</b></button>`:"<span></span>"}${b<CH.length-1?`<button type="button" class="pg-next" id="fnext"><small>${t("nextCh")}</small><b lang="ar">${CH[b+1][2]}</b></button>`:""}</nav>`})()}</div></div>`;
   {const a=chOf(r.verses[0]),b=chOf(r.verses[r.verses.length-1]);const fp=$("#fprev"),fx=$("#fnext");const go=i=>{$("#modal").innerHTML="";this.run={view:r.view||0};this.goChapter(i)};if(fp)fp.onclick=()=>go(a-1);if(fx)fx.onclick=()=>go(b+1)}
   if(mvs.length)$("#fm").onclick=()=>{this.newRun(mvs);this.render();bismillah()};$("#fa").onclick=()=>{this.newRun(r.verses);this.render();bismillah()};$("#fn").onclick=()=>this.render();$("#fmis").onclick=()=>MISL.openSheet();
-  if($("#fmv"))$("#fmv").onclick=()=>MV.open(MISL.all().filter(m=>m.t===r.misDate),0,{del:m=>{MISL.del(m.id);const i=+m.id.split("-")[1];r.mist=Math.max(0,r.mist-(r.tries[i]||1));r.st[i]=5;delete r.said[i];delete r.tries[i];const y=scrollY;this.showResults(r,W,false);scrollTo(0,y)}});
+  if($("#fmv"))$("#fmv").onclick=()=>MV.open(MISL.all().filter(m=>m.t===r.misDate),0,{del:m=>{BIN.pop([BIN.mis(m.id)],1);const i=+m.id.split("-")[1];r.mist=Math.max(0,r.mist-(r.tries[i]||1));r.st[i]=5;delete r.said[i];delete r.tries[i];const y=scrollY;this.showResults(r,W,false);scrollTo(0,y)}});
   $$("[data-play]",this.root()).forEach(b=>b.onclick=()=>{unlockAudio();const w=W[+b.dataset.play];Player.playSeg(AUDIO.words[`${w.v}:${w.h}:${w.i}`],1,"word")});
   $$("[data-ok]",this.root()).forEach(b=>b.onclick=()=>{const i=+b.dataset.ok;if(r.misDate)MISL.del(r.misDate.toString(36)+"-"+i);r.mist=Math.max(0,r.mist-(r.tries[i]||1));r.st[i]=5;delete r.said[i];delete r.tries[i];toast(t("undoDone"));const y=scrollY;this.showResults(r,W,false);scrollTo(0,y)});
   if(!first)return;window.scrollTo(0,0);
@@ -2393,7 +2468,7 @@ const Learners={
    <div class="row"><button class="btn pri" type="button" id="pfSave">${t("save")}</button>${!isNew&&PROFILES.length>1?`<button class="btn soft" type="button" id="pfDel">${t("remove")}</button>`:""}</div>`);
    $$("[data-s]").forEach(b=>b.onclick=()=>{d.name=$("#pfName").value;d.shape=b.dataset.s;d.color=+b.dataset.c;draw()});
    $("#pfSave").onclick=()=>{d.name=$("#pfName").value.trim().slice(0,30);const i=PROFILES.findIndex(x=>x.id===d.id);if(i>=0)PROFILES[i]=d;else PROFILES.push(d);LS.set("profiles",PROFILES);this.switchTo(d.id)};
-   const del=$("#pfDel");if(del)del.onclick=()=>{if(del.dataset.arm){PROFILES=PROFILES.filter(x=>x.id!==d.id);LS.set("profiles",PROFILES);Object.keys(localStorage).filter(k=>k.startsWith("tuhfa2.p."+d.id+".")).forEach(k=>localStorage.removeItem(k));this.switchTo(PID===d.id?PROFILES[0].id:PID)}else{del.dataset.arm=1;del.textContent=t("confirm")}}};
+   const del=$("#pfDel");if(del)del.onclick=()=>{if(del.dataset.arm){const bid=BIN.add("ls",{en:"Learner "+(d.name||""),ar:"المتعلّم "+(d.name||""),ls:BIN.snap("tuhfa2.p."+d.id+"."),profiles:[PROFILES.find(x=>x.id===d.id)]});setTimeout(()=>BIN.pop(["bin:"+bid],1),300);PROFILES=PROFILES.filter(x=>x.id!==d.id);LS.set("profiles",PROFILES);Object.keys(localStorage).filter(k=>k.startsWith("tuhfa2.p."+d.id+".")).forEach(k=>localStorage.removeItem(k));this.switchTo(PID===d.id?PROFILES[0].id:PID)}else{del.dataset.arm=1;del.textContent=t("confirm")}}};
   draw()}
 };
 
@@ -2415,7 +2490,7 @@ const Settings={render(){const seg=(k,arr)=>`<div class="seg" data-k="${k}">${ar
    <div class="it"><div class="t">${t("tapPlay")}</div>${sw("tapPlay")}</div><div class="it"><div class="t">${t("keepGoing")}</div>${sw("cont")}</div></div>
   <div class="panel"><h3>${t("learners")}</h3><p class="note" style="margin:0">${t("learnerSub")}</p><button class="btn out" type="button" id="sLearn"><span class="pf">${shapeSvg(P())}</span>${t("learners")}</button></div>
   ${LS.get("owner",false)?`<div class="panel"><h3>${OW("Visits (only on your phone)","الزيارات (على هاتفك فقط)")}</h3><p class="note" style="margin:0">${OW("Visitors don't see this. Full details are at tasnim.goatcounter.com.","الزوار لا يرون هذا. التفاصيل الكاملة في tasnim.goatcounter.com.")}</p><div id="ownv" class="ownv"><p class="note">…</p></div><div class="row"><button class="btn out" type="button" id="ownR">${OW("Refresh","تحديث")}</button><button class="btn soft" type="button" id="ownH">${OW("Hide on this phone","إخفاء على هذا الهاتف")}</button></div></div>`:""}
-  <div class="panel"><h3>${t("resetMe")}</h3><p class="note" style="margin:0">${t("resetSub")}</p><div class="row"><button class="btn soft" type="button" id="rMe" style="color:var(--bad)">${t("resetMe")}</button><button class="btn soft" type="button" id="rAll" style="color:var(--bad)">${t("resetAll")}</button></div></div></div>`;
+  <div class="panel"><h3>${t("resetMe")}</h3><p class="note" style="margin:0">${t("resetSub")}</p><div class="row"><button class="btn out" type="button" id="binS">${IC.trash}${OW("Recently deleted","المحذوفات مؤخرًا")}</button><button class="btn soft" type="button" id="rMe" style="color:var(--bad)">${t("resetMe")}</button><button class="btn soft" type="button" id="rAll" style="color:var(--bad)">${t("resetAll")}</button></div></div></div>`;
  const r=$("#setRoot");r.querySelectorAll(".seg[data-k]").forEach(s=>s.onclick=e=>{const b=e.target.closest("[data-v]");if(!b)return;let v=b.dataset.v;if(s.dataset.k==="tries")v=+v;ST[s.dataset.k]=v;saveSet();this.render()});
  r.querySelectorAll("[data-sw]").forEach(b=>b.onclick=()=>{ST[b.dataset.sw]=!ST[b.dataset.sw];saveSet();this.render()});
  r.querySelectorAll("[data-lang]").forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
@@ -2428,9 +2503,10 @@ const Settings={render(){const seg=(k,arr)=>`<div class="seg" data-k="${k}">${ar
     box.innerHTML=`<div><b>${nn(here)}</b><span>${OW("This site","هذا الموقع")}</span></div><div><b>${nn(all)}</b><span>${OW("All your sites","كل مواقعك")}</span></div>`}
    catch(e){if(box.isConnected)box.innerHTML=`<p class="note">${e===404?OW("No visits counted yet.","لا توجد زيارات بعد."):OW("Couldn't load the numbers. In GoatCounter, open Settings and tick “Allow adding visitor counts on your website”, then tap Refresh.","تعذّر تحميل الأرقام. افتح الإعدادات في GoatCounter وفعّل «Allow adding visitor counts on your website»، ثم اضغط تحديث.")}</p>`}};
   load();$("#ownR").onclick=load;$("#ownH").onclick=()=>{LS.set("owner",false);this.render()}}
+ $("#binS").onclick=()=>BIN.sheet();
  const arm=(b,fn)=>b.onclick=()=>{if(b.dataset.arm){fn();toast(t("resetDone"),"msg");this.render()}else{b.dataset.arm=1;b.textContent=t("confirm")}};
- arm($("#rMe"),()=>{Object.keys(localStorage).filter(k=>k.startsWith("tuhfa2.p."+PID+".")).forEach(k=>localStorage.removeItem(k));Mem.run=null;Mem.setup=null;Quiz.setup=null});
- arm($("#rAll"),()=>{Object.keys(localStorage).filter(k=>k.startsWith("tuhfa2.p.")).forEach(k=>localStorage.removeItem(k));PROFILES=[{id:"p1",shape:"flower",color:0,name:""}];PID="p1";LS.set("profiles",PROFILES);LS.set("pid",PID);Mem.run=null;Mem.setup=null;Quiz.setup=null;renderPf()})}};
+ arm($("#rMe"),()=>{const bid=BIN.add("ls",{en:t("resetMe"),ar:t("resetMe"),ls:BIN.snap("tuhfa2.p."+PID+"."),reload:1});setTimeout(()=>BIN.pop(["bin:"+bid],1),300);Object.keys(localStorage).filter(k=>k.startsWith("tuhfa2.p."+PID+".")).forEach(k=>localStorage.removeItem(k));Mem.run=null;Mem.setup=null;Quiz.setup=null});
+ arm($("#rAll"),()=>{const bid=BIN.add("ls",{en:t("resetAll"),ar:t("resetAll"),ls:BIN.snap("tuhfa2.p."),profiles:PROFILES.slice(),reload:1});setTimeout(()=>BIN.pop(["bin:"+bid],1),300);Object.keys(localStorage).filter(k=>k.startsWith("tuhfa2.p.")).forEach(k=>localStorage.removeItem(k));PROFILES=[{id:"p1",shape:"flower",color:0,name:""}];PID="p1";LS.set("profiles",PROFILES);LS.set("pid",PID);Mem.run=null;Mem.setup=null;Quiz.setup=null;renderPf()})}};
 
 /* ================= visitors ================= */
 /* The visit count is private to the owner, so it is not shown on the page. */
