@@ -411,6 +411,7 @@ table.mis .a{font-family:var(--text);font-size:1.2rem;direction:rtl}
 .opt.done{opacity:.5;border-color:var(--ok)}
 .opt .n{display:block;font-size:.78rem;font-weight:800;color:var(--acc);min-height:1em}
 .blank{font-family:var(--text);font-size:1.15rem;width:7em;text-align:center;padding:2px 6px;border-radius:8px;border:2px dashed var(--acc);background:var(--acc-soft)}
+.gapw{display:inline-block;min-width:3.4em;padding:0 6px;border-bottom:2px dashed var(--acc);color:var(--acc)} .gapw.right{border-bottom:2px solid var(--ok);color:var(--ok)}
 .blank.right{border:2px solid var(--ok);background:var(--ok-soft)} .blank.wrong{border:2px solid var(--bad);background:var(--bad-soft)}
 textarea{width:100%;font-size:1.2rem;line-height:1.9;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;min-height:90px;direction:rtl}
 .fb{border-radius:12px;padding:12px 14px}
@@ -1537,8 +1538,8 @@ en:{repeat:"repeat",crushHow_:"Tap the words of the line in order.",gCrush:"Word
  noSR:"<b>Voice checking is not available in this browser.</b> Mark each word with ✓ / ✗.",
  tipTap:"Stuck? Tap the highlighted word to show it.",
  qTypes:"Question types",qCount:"Number of questions",qStart:"Start quiz",
- tComplete:"Complete the line",tNext:"What comes next",tWrite:"Write it",tMatch:"Match start and end",tOrder:"Put in order",tRecite:"Recite",
- qComplete:"How does this line end? Pick the words that finish it.",qNext:"Which line comes right after this one? Pick how it starts.",qWriteB:"Write the missing word in the empty box.",qWriteF:"Write how this line ends, from memory.",
+ tComplete:"Complete the line",tNext:"What comes next",tWrite:"Write it",tGap:"Missing word",tMatch:"Match start and end",tOrder:"Put in order",tRecite:"Recite",
+ qComplete:"How does this line end? Pick the words that finish it.",qNext:"Which line comes right after this one? Pick how it starts.",qWriteB:"Write the missing word in the empty box.",qGap:"Which word is missing from this line?",qWriteF:"Write how this line ends, from memory.",
  qMatchA:"Tap the start of a line…",qMatchB:"…then tap how that line ends.",qOrder:"Tap the lines in order, from first to last.",
  qReciteA:"Say the rest of this line out loud.",qReciteB:"Say the next line out loud.",
  check:"Check",next:"Next",finish:"See results",rec:"Record",showAns:"Show answer",gotIt:"I got it right",missed:"I got it wrong",
@@ -1582,8 +1583,8 @@ ar:{repeat:"تكرار",crushHow_:"اضغط كلمات البيت بالترتي
  noSR:"<b>التصحيح الصوتي غير متاح في هذا المتصفح.</b> صحّح كل كلمة بـ ✓ / ✗.",
  tipTap:"إذا توقفت فاضغط على الكلمة المظللة لتظهر.",
  qTypes:"أنواع الأسئلة",qCount:"عدد الأسئلة",qStart:"ابدأ الاختبار",
- tComplete:"أكمل البيت",tNext:"ما الذي يليه",tWrite:"اكتب",tMatch:"صِل البداية بالنهاية",tOrder:"رتّب",tRecite:"سمّع",
- qComplete:"كيف ينتهي هذا البيت؟ اختر الكلمات التي تكمله.",qNext:"ما البيت الذي يأتي بعد هذا؟ اختر بدايته.",qWriteB:"اكتب الكلمة الناقصة في المربع الفارغ.",qWriteF:"اكتب بقية البيت من حفظك.",
+ tComplete:"أكمل البيت",tNext:"ما الذي يليه",tWrite:"اكتب",tGap:"الكلمة الناقصة",tMatch:"صِل البداية بالنهاية",tOrder:"رتّب",tRecite:"سمّع",
+ qComplete:"كيف ينتهي هذا البيت؟ اختر الكلمات التي تكمله.",qNext:"ما البيت الذي يأتي بعد هذا؟ اختر بدايته.",qWriteB:"اكتب الكلمة الناقصة في المربع الفارغ.",qGap:"ما الكلمة الناقصة من هذا البيت؟",qWriteF:"اكتب بقية البيت من حفظك.",
  qMatchA:"اضغط على بداية بيت…",qMatchB:"…ثم اضغط على نهايته.",qOrder:"اضغط على الأبيات بترتيبها من الأول إلى الأخير.",
  qReciteA:"سمّع بقية هذا البيت بصوتك.",qReciteB:"سمّع البيت الذي يأتي بعده بصوتك.",
  check:"تحقق",next:"التالي",finish:"النتيجة",rec:"سجّل",showAns:"أظهر الإجابة",gotIt:"أصبت",missed:"أخطأت",
@@ -2493,9 +2494,9 @@ const Games={cur:null,timer:null,game:null,lvl:null,
 const Quiz={setup:null,qs:null,i:0,score:0,lis:null,
  root(){return $("#quizRoot")},
  leave(){if(this.lis){this.lis.stop();this.lis=null}Rec.stop(ST.rec)},
- render(){const m=this.root();if(!m)return;if(this.qs){this.renderQ();return}this.setup=this.setup||ps.get("quizSetup",{from:1,to:16,n:10,types:["complete","next","write","match","order","recite"]});
+ render(){const m=this.root();if(!m)return;if(this.qs){this.renderQ();return}this.setup=this.setup||ps.get("quizSetup",{from:1,to:16,n:10,types:["complete","next","gap","write","match","order","recite"]});
   const s=this.setup;const rp=rangePicker(s,()=>{ps.set("quizSetup",s);this.render()},()=>{const b=$("#qs");b&&b.click()});const hist=ps.get("quizHist",[]);
-  const types=[["complete","tComplete"],["next","tNext"],["write","tWrite"],["match","tMatch"],["order","tOrder"],["recite","tRecite"]];
+  const types=[["complete","tComplete"],["next","tNext"],["gap","tGap"],["write","tWrite"],["match","tMatch"],["order","tOrder"],["recite","tRecite"]];
   m.innerHTML=`<div class="stack"><div class="head" style="margin-bottom:0"><h2>${LANG==="ar"?"اختبر حفظك":"Test what you memorized"}</h2></div>
    <div class="panel"><h3>${t("qTypes")}</h3><div class="seg" id="qmode"><button type="button" data-m="random" class="${s.mode!=="pick"?"on":""}">${t("qRandom")}</button><button type="button" data-m="pick" class="${s.mode==="pick"?"on":""}">${t("qPick")}</button></div>
    ${s.mode==="pick"?`<p class="hintline">${t("qPickHint")}</p>`:`<p class="note" style="margin:0">${t("qRandomD")}</p>`}<div class="chips" id="qt" ${s.mode==="pick"?"":"hidden"}>${types.map(([k,l])=>`<button type="button" class="chip ${s.types.includes(k)?"on":""}" data-k="${k}">${s.types.includes(k)?"✓ ":""}${t(l)}</button>`).join("")}</div>
@@ -2507,9 +2508,13 @@ const Quiz={setup:null,qs:null,i:0,score:0,lis:null,
   rp.bind(m);$("#qmode").onclick=e=>{const b=e.target.closest("[data-m]");if(!b)return;s.mode=b.dataset.m;if(s.mode==="pick"&&!s.types.length)s.types=["complete"];ps.set("quizSetup",s);this.render()};$("#qt").onclick=e=>{const c=e.target.closest(".chip");if(!c)return;const k=c.dataset.k;s.types.includes(k)?s.types.splice(s.types.indexOf(k),1):s.types.push(k);ps.set("quizSetup",s);this.render()};
   $("#qn").onclick=e=>{const b=e.target.closest("[data-n]");if(b){s.n=+b.dataset.n;ps.set("quizSetup",s);this.render()}};
   $("#qs").onclick=()=>{if(s.mode==="pick"&&!s.types.length){toast(t("pickType"),"",3500);const q=$("#qt");q&&(q.classList.remove("flash"),void q.offsetWidth,q.classList.add("flash"));return}unlockAudio();this.start();history.pushState(null,"","#quiz/run");this.render();window.scrollTo(0,0);bismillah()}},
- start(){const pool=range(this.setup.from,this.setup.to);const ty=this.setup.mode==="pick"&&this.setup.types.length?this.setup.types:["complete","next","write","match","order","recite"];this.qs=Array.from({length:this.setup.n},()=>this.gen(pick(ty),pool));this.i=0;this.score=0},
+ start(){const pool=range(this.setup.from,this.setup.to);const ty=this.setup.mode==="pick"&&this.setup.types.length?this.setup.types:["complete","next","gap","write","match","order","recite"];this.qs=Array.from({length:this.setup.n},()=>this.gen(pick(ty),pool));this.i=0;this.score=0},
  gen(ty,pool){const v=pick(pool);const others=ex=>{let c=pool.filter(x=>!ex.includes(x));if(c.length<3)c=range(1,61).filter(x=>!ex.includes(x));return shuffle(c).slice(0,3)};
   if(ty==="complete")return{ty,v,opts:shuffle([v,...others([v])])};if(ty==="next"){const vv=v<61?v:60;return{ty,v:vv,opts:shuffle([vv+1,...others([vv,vv+1])])}}
+  /* Missing word: one word of the line is hidden; the other choices are words from other lines of the poem. */
+  if(ty==="gap"){const half=Math.random()<.5?0:1,w=toks(V[v-1][half]),cand=w.map((x,i)=>i).filter(i=>norm(w[i]).length>=3),b=pick(cand.length?cand:[0]),tg=norm(w[b]),seen=new Set([tg]),alt=[];
+   for(const x of shuffle(V.flat().flatMap(toks)))if(norm(x).length>=3&&!seen.has(norm(x))){seen.add(norm(x));alt.push(x.replace(/[،.؟:«»]/g,""));if(alt.length===3)break}
+   const opts=shuffle([w[b].replace(/[،.؟:«»]/g,""),...alt]);return{ty,v,half,b,opts,a:opts.indexOf(w[b].replace(/[،.؟:«»]/g,""))}}
   if(ty==="write"){if(Math.random()<.35)return{ty,v,full:true};const half=Math.random()<.5?0:1;const w=toks(V[v-1][half]);const cand=w.map((x,i)=>i).filter(i=>norm(w[i]).length>=3);return{ty,v,half,blanks:shuffle(cand.length?cand:[0]).slice(0,1)}}
   if(ty==="match"){let c=shuffle(pool).slice(0,4);if(c.length<4)c=[...c,...shuffle(range(1,61).filter(x=>!c.includes(x))).slice(0,4-c.length)];return{ty,vs:c,ls:shuffle(c),rs:shuffle(c)}}
   if(ty==="order"){const s=pool.length>=4?pick(pool.slice(0,pool.length-3)):Math.max(1,Math.min(58,pool[0]));return{ty,vs:range(s,s+3),sh:shuffle(range(s,s+3))}}
@@ -2517,6 +2522,8 @@ const Quiz={setup:null,qs:null,i:0,score:0,lis:null,
  renderQ(){const q=this.qs[this.i],m=this.root();let h=`<div class="mhead"><div class="r"><b>${t("question")} ${num(this.i+1)} ${t("of")} ${num(this.qs.length)}</b><span class="sp"></span><span class="pill ok" id="qsc">${num(this.score)}</span>${gameBtn()}<button class="btn sm soft" type="button" id="qx" aria-label="close">${IC.close}</button></div><div class="prog"><i style="width:${this.i/this.qs.length*100}%"></i></div></div><div class="q">`;
   if(q.ty==="complete")h+=`<p class="qlabel">${t("qComplete")}</p>${qcard(q.v,false)}<div class="opts kopts" id="opts">${q.opts.map((o,k)=>`<button type="button" class="opt k${k}" data-v="${o}">${optBadge(k)}<span>${V[o-1][1]}</span></button>`).join("")}</div>`;
   else if(q.ty==="next")h+=`<p class="qlabel">${t("qNext")}</p>${qcard(q.v)}<div class="opts kopts" id="opts">${q.opts.map((o,k)=>`<button type="button" class="opt k${k}" data-v="${o}">${optBadge(k)}<span>${V[o-1][0]}</span></button>`).join("")}</div>`;
+  else if(q.ty==="gap"){const w=toks(V[q.v-1][q.half]),line=w.map((x,i)=>i===q.b?`<span class="gapw" id="gapw">?</span>`:x).join(" ");
+   h+=`<p class="qlabel">${t("qGap")}</p><div class="qcard"><span class="vnum">${t("verse")} ${num(q.v)}</span>${q.half===1?lineOf(q.v,0):""}<div class="ln" lang="ar">${line}</div>${q.half===0?lineOf(q.v,1):""}</div><div class="opts kopts" id="opts">${q.opts.map((o,k)=>`<button type="button" class="opt k${k}" data-v="${k}">${optBadge(k)}<span lang="ar">${o}</span></button>`).join("")}</div>`}
   else if(q.ty==="write"){if(q.full)h+=`<p class="qlabel">${t("qWriteF")}</p>${qcard(q.v,false)}<textarea id="wta" lang="ar" placeholder="${t("typeHere")}"></textarea>`;
    else{const w=toks(V[q.v-1][q.half]);const line=w.map((x,i)=>q.blanks.includes(i)?`<input type="text" class="blank" data-b="${i}" dir="rtl" lang="ar" autocomplete="off" aria-label="blank">`:x).join(" ");
     h+=`<p class="qlabel">${t("qWriteB")}</p><div class="qcard"><span class="vnum">${t("verse")} ${num(q.v)}</span>${q.half===1?lineOf(q.v,0):""}<div class="ln" lang="ar">${line}</div>${q.half===0?lineOf(q.v,1):""}</div>`}
@@ -2525,9 +2532,9 @@ const Quiz={setup:null,qs:null,i:0,score:0,lis:null,
   else if(q.ty==="order")h+=`<p class="qlabel">${t("qOrder")}</p><div class="opts kopts" id="ord">${q.sh.map((v,k)=>`<button type="button" class="opt k${k}" data-v="${v}">${optBadge(k)}<span><span class="n"></span>${V[v-1][0]}</span></button>`).join("")}</div>`;
   else h+=`<p class="qlabel">${q.mode==="next"?t("qReciteB"):t("qReciteA")}</p>${q.mode==="next"?qcard(q.v):qcard(q.v,false)}<div id="rnote">${micHelp()}</div><div class="row" style="justify-content:center"><button class="mic" type="button" id="rmic" aria-label="${t("rec")}">${IC.mic}</button></div><div class="row" style="justify-content:center"><button class="btn out" type="button" id="rshow">${t("showAns")}</button></div>`;
   h+=`<div id="fb"></div></div>`;m.innerHTML=h;$("#qx").onclick=()=>{this.leave();this.qs=null;this.render()};
-  if(q.ty==="complete"||q.ty==="next"){const ans=q.ty==="next"?q.v+1:q.v;let tries=0;$("#opts").onclick=e=>{const b=e.target.closest(".opt");if(!b||q.done||b.disabled)return;const ok=+b.dataset.v===ans;
+  if(q.ty==="complete"||q.ty==="next"||q.ty==="gap"){const ans=q.ty==="gap"?q.a:q.ty==="next"?q.v+1:q.v;let tries=0;$("#opts").onclick=e=>{const b=e.target.closest(".opt");if(!b||q.done||b.disabled)return;const ok=+b.dataset.v===ans;
    if(!ok){tries++;b.classList.add("wrong");b.disabled=true;if(tries<3){onWrong();toast(t("tryAgain").replace("{n}",num(3-tries)),"",1800);return}triedOut()}
-   q.done=1;$$("#opts .opt").forEach(x=>{x.disabled=true;if(+x.dataset.v===ans)x.classList.add("right")});this.result(ok,ok?null:V[ans-1][q.ty==="next"?0:1],false,!ok)}}
+   q.done=1;$$("#opts .opt").forEach(x=>{x.disabled=true;if(+x.dataset.v===ans)x.classList.add("right")});if(q.ty==="gap"){const g=$("#gapw");g.textContent=toks(V[q.v-1][q.half])[q.b];g.classList.add("right")}this.result(ok,ok||q.ty==="gap"?null:V[ans-1][q.ty==="next"?0:1],false,!ok)}}
   if(q.ty==="write")$("#wchk").onclick=()=>{if(q.done)return;q.done=1;let ok;
    if(q.full){const tg=toks(V[q.v-1][1]);const mk=lcs(toks($("#wta").value).map(norm),tg.map(norm));ok=mk.filter(Boolean).length/tg.length>=.85;this.result(ok,tg.map((w,i)=>`<span class="tk ${mk[i]?"m1":"x"}">${w}</span>`).join(" "))}
    else{ok=true;const w=toks(V[q.v-1][q.half]);$$(".blank").forEach(inp=>{const tg=norm(w[+inp.dataset.b]),g=norm(inp.value);const r=g===tg||sim(g,tg)>=.85;inp.classList.add(r?"right":"wrong");if(!r)ok=false;inp.readOnly=true});this.result(ok,q.blanks.map(b=>w[b]).join(" · "))}};
