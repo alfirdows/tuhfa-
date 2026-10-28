@@ -8,17 +8,19 @@ const TX={
   coins:"دنانير",best:"أفضل نتيجة",hint:"اسحب يمينًا أو يسارًا لتغيّر الطريق، ولأعلى لتقفز. أو المس جانب الشاشة.",go:"انطلق!",
   great:["ممتاز!","أحسنت!","رائع!","بارك الله فيك!"],oops:"الجواب:",over:"انتهى السباق",right:"صحيح",wrong:"خطأ",dist:"المسافة",
   review:"راجع هذه",earned:"جمعت",paused:"توقف مؤقت",resume:"تابع",sound:"الصوت",on:"يعمل",off:"مطفأ",owned:"عندك",use:"اختر",inUse:"مختار",buy:"اشترِ",
-  need:"تحتاج دنانير أكثر",bonus:"هدية أول سباق اليوم",magnet:"مغناطيس الدنانير!",heart:"قلب إضافي",heartD:"لسباق واحد",cloak:"لون الرداء",trail:"أثر لامع",trailD:"نجوم خلف العدّاء",
+  need:"تحتاج دنانير أكثر",pace:"السرعة",slow:"بطيء",normal:"متوسط",fast:"سريع",bonus:"هدية أول سباق اليوم",magnet:"مغناطيس الدنانير!",heart:"قلب إضافي",heartD:"لسباق واحد",cloak:"لون الفانوس",trail:"أثر لامع",trailD:"نجوم خلف الفانوس",
   colors:{green:"أخضر",blue:"أزرق",purple:"بنفسجي",red:"أحمر",gold:"ذهبي",night:"ليلي"},combo:"متتالية",lives:"قلوب",items:"قلب إضافي جاهز",yourWallet:"دنانيرك"},
  en:{title:"Lantern Run",sub:"Run, collect coins, and go through the gate with the right answer",start:"Start",shop:"Shop",close:"Close",again:"Play again",
   coins:"coins",best:"Best",hint:"Swipe left or right to change lanes, swipe up to jump. Or tap a side of the screen.",go:"Go!",
   great:["Excellent!","Well done!","Great!","Barak Allahu fik!"],oops:"Answer:",over:"Run over",right:"Right",wrong:"Wrong",dist:"Distance",
   review:"Review these",earned:"You collected",paused:"Paused",resume:"Resume",sound:"Sound",on:"On",off:"Off",owned:"Owned",use:"Use",inUse:"In use",buy:"Buy",
-  need:"You need more coins",bonus:"First run today gift",magnet:"Coin magnet!",heart:"Extra heart",heartD:"For one run",cloak:"Cloak colour",trail:"Sparkle trail",trailD:"Stars behind the runner",
+  need:"You need more coins",pace:"Speed",slow:"Slow",normal:"Medium",fast:"Fast",bonus:"First run today gift",magnet:"Coin magnet!",heart:"Extra heart",heartD:"For one run",cloak:"Lantern colour",trail:"Sparkle trail",trailD:"Stars behind the lantern",
   colors:{green:"Green",blue:"Blue",purple:"Purple",red:"Red",gold:"Gold",night:"Night"},combo:"in a row",lives:"hearts",items:"Extra heart ready",yourWallet:"Your coins"}
 };
 const CLOAKS=[["green","#3f7f55",0],["blue","#2f6db5",120],["purple","#7a4f9e",250],["red","#c0392b",400],["night","#1d2b4f",600],["gold","#c9962c",900]];
 const TRAIL_PRICE=700,HEART_PRICE=60;
+/* speeds: start, top, how fast it speeds up, seconds to read each question, quiet seconds between questions */
+const PACE={slow:[4.5,8,.02,10,5],normal:[6.5,12,.05,8,4],fast:[9,18,.1,6,3]};
 const CSS=`
 .lr-ov{position:fixed;inset:0;z-index:9999;background:#120f2a;color:#fff;font-family:var(--font,system-ui);touch-action:none;user-select:none;-webkit-user-select:none;overscroll-behavior:none}
 .lr-ov canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
@@ -45,6 +47,7 @@ const CSS=`
 .lr-go:active{transform:translateY(3px);box-shadow:0 2px 0 #9c6a10}
 @keyframes lrbeat{50%{transform:scale(1.05)}}
 .lr-sec{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25)!important}
+.lr-pc.on{background:#ffe08a!important;color:#3a2600!important}
 .lr-big{font-size:48px;font-weight:800;color:#ffe08a;display:flex;align-items:center;gap:10px;justify-content:center}
 .lr-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:8px 0}
 .lr-stat{background:rgba(255,255,255,.1);border-radius:14px;padding:8px 14px;min-width:84px}.lr-stat b{display:block;font-size:22px}.lr-stat span{font-size:12px;color:#cfc8f5}
@@ -63,16 +66,16 @@ const COIN=`<svg class="lr-coin" viewBox="0 0 40 40"><circle cx="20" cy="20" r="
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const rnd=(a,b)=>a+Math.random()*(b-a),pick=a=>a[Math.floor(Math.random()*a.length)];
 
-/* tiny sound effects made in the browser (no music, no files) */
+/* tiny sound effects made in the browser: single short taps, never music or melodies, no files */
 const SFX={ctx:null,on:true,
  tone(f,d,type="sine",v=.12,slide=0){if(!this.on)return;try{this.ctx=this.ctx||new (window.AudioContext||window.webkitAudioContext)();const c=this.ctx,o=c.createOscillator(),g=c.createGain(),t=c.currentTime;
   o.type=type;o.frequency.setValueAtTime(f,t);if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+d)}catch(e){}},
- coin(){this.tone(1320,.09,"square",.05);setTimeout(()=>this.tone(1760,.12,"square",.05),55)},
- right(){[660,880,1100].forEach((f,i)=>setTimeout(()=>this.tone(f,.16,"triangle",.12),i*80))},
- wrong(){this.tone(220,.3,"sawtooth",.08,110)},
- hit(){this.tone(140,.25,"square",.1,60)},
- jump(){this.tone(380,.18,"triangle",.08,760)},
- lane(){this.tone(520,.05,"sine",.04)}};
+ coin(){this.tone(1200,.05,"sine",.05)},
+ right(){this.tone(880,.12,"sine",.08)},
+ wrong(){this.tone(200,.22,"sine",.08,120)},
+ hit(){this.tone(150,.18,"sine",.09,80)},
+ jump(){this.tone(400,.12,"sine",.05,700)},
+ lane(){this.tone(520,.04,"sine",.03)}};
 
 function play(o){
  /* any language: words come from TX (add a new language there, or pass o.text); missing words fall back to English */
@@ -97,7 +100,8 @@ function play(o){
 
  function newGame(){
   const extra=S.get("lrHeart",0)>0;if(extra)S.set("lrHeart",S.get("lrHeart",0)-1);
-  g={t:0,dist:0,speed:9,lane:1,x:0,y:0,vy:0,hearts:3+(extra?1:0),inv:0,coins:0,combo:0,right:0,wrong:0,miss:[],objs:[],next:14,gateAt:38,gate:null,shake:0,magnet:0,parts:[],run:0,trail:S.get("lrTrailOn",false)&&S.get("lrTrail",false),over:false,cd:3.2};
+  const pc=PACE[S.get("lrPace","slow")]||PACE.slow;
+  g={pc,t:0,dist:0,speed:pc[0],lane:1,x:0,y:0,vy:0,hearts:3+(extra?1:0),inv:0,coins:0,combo:0,right:0,wrong:0,miss:[],objs:[],next:14,qAt:pc[0]*3,gate:null,shake:0,magnet:0,parts:[],run:0,trail:S.get("lrTrailOn",false)&&S.get("lrTrail",false),over:false,cd:3.2};
   idle=0;hud.hidden=false;updHud();qEl.classList.add("hide");
  }
  function updHud(){ov.querySelector("#lrC span").textContent=g.coins;ov.querySelector("#lrH").textContent="❤".repeat(Math.max(0,g.hearts))||"–";
@@ -107,15 +111,16 @@ function play(o){
  function build(){
   while(g.next<g.dist+FAR+20){
    const z=g.next;
-   if(z>=g.gateAt-14&&z<=g.gateAt+8){g.next=g.gateAt+9;continue}
+   if(g.gate&&z<=g.gate.z+8){g.next=g.gate.z+9;continue}
    const r=z<55?.1:Math.random(),free=Math.floor(Math.random()*3);
    if(r<.38){const ln=Math.floor(Math.random()*3);const arc=Math.random()<.3;for(let k=0;k<6;k++)g.objs.push({k:"coin",ln,z:z+k*1.3,h:arc?Math.sin(k/5*Math.PI)*1.4:0})}
    else if(r<.7){const ln=[0,1,2].filter(x=>x!==free);const one=pick(ln);g.objs.push({k:"low",ln:one,z});if(Math.random()<.5)for(let k=0;k<4;k++)g.objs.push({k:"coin",ln:one,z:z-1.6+k*1.1,h:Math.sin(k/3*Math.PI)*1.6+.2})}
    else if(r<.9){const blocks=[0,1,2].filter(x=>x!==free);const n=Math.random()<.5?1:2;blocks.slice(0,n).forEach(b=>g.objs.push({k:"wall",ln:b,z}));for(let k=0;k<4;k++)g.objs.push({k:"coin",ln:free,z:z-2+k*1.3,h:0})}
    else{if(g.t>8&&!g.objs.some(x=>x.k==="mag"))g.objs.push({k:"mag",ln:free,z,h:.6})}
-   g.next=z+rnd(7,11)-Math.min(3,g.speed/8);
+   g.next=z+rnd(7,11)*(g.pc[0]<5?1.4:1);
   }
-  if(!g.gate&&g.dist+FAR>g.gateAt){const q=o.question();if(q){g.gate={z:g.gateAt,q,done:false};showQ(q)}else g.gateAt+=60}
+  /* one question at a time: show it, clear the road of obstacles, and give time to read before its gates arrive */
+  if(!g.gate&&g.dist>=g.qAt){const q=o.question();if(q){const z=g.dist+g.speed*g.pc[3];g.gate={z,q,done:false};g.objs=g.objs.filter(ob=>ob.k==="coin"||ob.z<g.dist+4||ob.z>z+8);showQ(q)}else g.qAt+=60}
  }
  function showQ(q){qEl.innerHTML=`<div class="lr-qp"><small>${esc(q.label||"")}</small>${esc(q.p)}</div><div class="lr-ch">${q.c.map(c=>`<span>${esc(c)}</span>`).join("")}</div>`;qEl.classList.remove("hide")}
  function pop(txt,bad){const d=document.createElement("div");d.className="lr-pop"+(bad?" bad":"");d.textContent=txt;ov.appendChild(d);setTimeout(()=>d.remove(),bad?1900:900);if(bad)d.style.animationDuration="1.9s"}
@@ -128,8 +133,8 @@ function play(o){
 
  /* ---------- update ---------- */
  function step(dt){
-  if(g.cd>0){g.cd-=dt;if(g.cd<=0)SFX.right();return}
-  g.t+=dt;g.speed=Math.min(20,9+g.t*.11);const dd=g.speed*dt;g.dist+=dd;g.run+=dd;
+  if(g.cd>0){g.cd-=dt;return}
+  g.t+=dt;if(!g.gate)g.speed=Math.min(g.pc[1],g.speed+g.pc[2]*dt);const dd=g.speed*dt;g.dist+=dd;g.run+=dd;
   g.x+=(LANES[g.lane]-g.x)*Math.min(1,dt*14);
   if(g.y>0||g.vy>0){g.vy-=30*dt;g.y=Math.max(0,g.y+g.vy*dt);if(g.y===0)g.vy=0}
   g.inv=Math.max(0,g.inv-dt);g.shake=Math.max(0,g.shake-dt);g.magnet=Math.max(0,g.magnet-dt);
@@ -148,7 +153,7 @@ function play(o){
    if(ok){g.right++;g.combo++;const add=10*Math.min(5,g.combo);g.coins+=add;pop(`${pick(L.great)} +${add}`);SFX.right();const p=P(near-1,0,1.5);burst(p.x,p.y,"#9ee2b5",26);burst(p.x,p.y,"#ffd56b",16)}
    else{g.wrong++;g.combo=0;g.miss.push({p:q.p,a:q.c[q.a],label:q.label});pop(`${L.oops} ${q.c[q.a]}`,true);SFX.wrong();hurt(true)}
    updHud();setTimeout(()=>qEl.classList.add("hide"),ok?700:1700);
-   g.gateAt=g.gate.z+rnd(58,70)+g.speed*1.2;setTimeout(()=>{if(g)g.gate=null},10)}
+   g.qAt=g.gate.z+g.speed*g.pc[4];setTimeout(()=>{if(g)g.gate=null},10)}
   for(const p of g.parts){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=500*dt;p.life-=dt}g.parts=g.parts.filter(p=>p.life>0);
   if(g.trail&&Math.random()<.6){const p=P(g.x,0,g.y+.4);g.parts.push({x:p.x+rnd(-8,8),y:p.y,vx:rnd(-20,20),vy:rnd(20,60),life:.5,col:pick(["#ffe08a","#fff","#9ee2b5"]),r:rnd(1.5,3)})}
  }
@@ -219,22 +224,22 @@ function play(o){
    const ty=top.y+w*.3,tw=Math.min(w*1.05,ctx.measureText(q.c[i]).width+fs);ctx.fillStyle="rgba(20,16,50,.88)";rr(p.x-tw/2,ty-fs*.8,tw,fs*1.6,fs*.5);ctx.fill();
    ctx.fillStyle="#fff7dc";let s=q.c[i];while(ctx.measureText(s).width>w*1.0&&s.length>3)s=s.slice(0,-2);if(s!==q.c[i])s+="…";ctx.fillText(s,p.x,ty+fs*.05);ctx.direction="inherit"}}
  function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
- function drawRunner(t){/* seen from behind: hooded runner with a book satchel */
+ function drawRunner(t){/* the player is a glowing lantern (no people or animals) */
   if(g.inv>0&&Math.floor(t*14)%2&&g.hearts>0)return;
   const gp=P(g.x,0),p=P(g.x,0,g.y),s=p.s,run=g.cd>0?0:g.run*1.9,air=g.y>0.05,col=cloak();
-  ctx.fillStyle="rgba(0,0,0,.25)";ctx.beginPath();ctx.ellipse(gp.x,gp.y,s*.32*(1-Math.min(.5,g.y/4)),s*.08,0,0,7);ctx.fill();
-  const bob=air?0:Math.abs(Math.sin(run))*s*.05,by=p.y-bob;
-  const l1=air?.3:Math.sin(run),l2=air?-.3:-Math.sin(run);
-  ctx.strokeStyle="#2b2238";ctx.lineCap="round";ctx.lineWidth=s*.11;
-  ctx.beginPath();ctx.moveTo(p.x-s*.09,by-s*.42);ctx.lineTo(p.x-s*.1,by-s*.16+Math.max(0,l1)*s*.1);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(p.x+s*.09,by-s*.42);ctx.lineTo(p.x+s*.1,by-s*.16+Math.max(0,l2)*s*.1);ctx.stroke();
-  ctx.fillStyle="#f4efe6";ctx.beginPath();ctx.ellipse(p.x-s*.1,by-s*.13+Math.max(0,l1)*s*.1,s*.07,s*.045,0,0,7);ctx.fill();ctx.beginPath();ctx.ellipse(p.x+s*.1,by-s*.13+Math.max(0,l2)*s*.1,s*.07,s*.045,0,0,7);ctx.fill();
-  ctx.fillStyle=col;ctx.beginPath();ctx.moveTo(p.x-s*.2,by-s*.95);ctx.quadraticCurveTo(p.x-s*.27,by-s*.55,p.x-s*.24,by-s*.36);ctx.lineTo(p.x+s*.24,by-s*.36);ctx.quadraticCurveTo(p.x+s*.27,by-s*.55,p.x+s*.2,by-s*.95);ctx.closePath();ctx.fill();
-  ctx.strokeStyle=col;ctx.lineWidth=s*.09;const sw=air?-.6:Math.sin(run)*.5;
-  ctx.beginPath();ctx.moveTo(p.x-s*.2,by-s*.85);ctx.lineTo(p.x-s*.3,by-s*.6-sw*s*.12);ctx.stroke();ctx.beginPath();ctx.moveTo(p.x+s*.2,by-s*.85);ctx.lineTo(p.x+s*.3,by-s*.6+sw*s*.12);ctx.stroke();
-  ctx.fillStyle="#7a4f2a";rr(p.x-s*.15,by-s*.84,s*.3,s*.3,s*.05);ctx.fill();ctx.fillStyle="#e3b04b";ctx.fillRect(p.x-s*.15,by-s*.72,s*.3,s*.04);ctx.fillStyle="#5a3a1e";ctx.fillRect(p.x-s*.17,by-s*.88,s*.04,s*.2);ctx.fillRect(p.x+s*.13,by-s*.88,s*.04,s*.2);
-  ctx.fillStyle=col;ctx.beginPath();ctx.arc(p.x,by-s*1.06,s*.16,0,7);ctx.fill();ctx.fillStyle="rgba(0,0,0,.15)";ctx.beginPath();ctx.arc(p.x,by-s*1.06,s*.16,.2,Math.PI-.2);ctx.fill();
-  ctx.strokeStyle="#e3b04b";ctx.lineWidth=s*.05;ctx.beginPath();const tail=Math.sin(t*12)*s*.06;ctx.moveTo(p.x+s*.08,by-s*.95);ctx.quadraticCurveTo(p.x+s*.25,by-s*.9+tail,p.x+s*.34,by-s*.98-tail);ctx.stroke()}
+  ctx.fillStyle="rgba(0,0,0,.22)";ctx.beginPath();ctx.ellipse(gp.x,gp.y,s*.3*(1-Math.min(.5,g.y/4)),s*.07,0,0,7);ctx.fill();
+  const bob=air?0:Math.abs(Math.sin(run))*s*.04,cx=p.x,cy=p.y-s*.62-bob,sw=air?0:Math.sin(run*.5)*.08;
+  const fl=.85+.15*Math.sin(t*11);let gl=ctx.createRadialGradient(cx,cy,0,cx,cy,s*.9);gl.addColorStop(0,`rgba(255,214,110,${.55*fl})`);gl.addColorStop(1,"rgba(255,214,110,0)");ctx.fillStyle=gl;ctx.beginPath();ctx.arc(cx,cy,s*.9,0,7);ctx.fill();
+  ctx.save();ctx.translate(cx,cy);ctx.rotate(sw);
+  const w=s*.26,h=s*.36;
+  ctx.strokeStyle="#a87920";ctx.lineWidth=s*.035;ctx.beginPath();ctx.arc(0,-h-s*.14,s*.07,Math.PI,0);ctx.stroke();
+  ctx.fillStyle="#b8892f";ctx.beginPath();ctx.moveTo(-w*.7,-h*.78);ctx.lineTo(0,-h-s*.1);ctx.lineTo(w*.7,-h*.78);ctx.closePath();ctx.fill();
+  ctx.fillStyle=col;ctx.beginPath();ctx.moveTo(-w*.55,-h*.78);ctx.lineTo(w*.55,-h*.78);ctx.lineTo(w,0);ctx.lineTo(w*.55,h*.7);ctx.lineTo(-w*.55,h*.7);ctx.lineTo(-w,0);ctx.closePath();ctx.fill();
+  gl=ctx.createRadialGradient(0,0,0,0,0,w*.9);gl.addColorStop(0,`rgba(255,240,180,${fl})`);gl.addColorStop(1,"rgba(255,200,90,.15)");ctx.fillStyle=gl;
+  ctx.beginPath();ctx.moveTo(-w*.38,-h*.6);ctx.lineTo(w*.38,-h*.6);ctx.lineTo(w*.7,0);ctx.lineTo(w*.38,h*.52);ctx.lineTo(-w*.38,h*.52);ctx.lineTo(-w*.7,0);ctx.closePath();ctx.fill();
+  ctx.strokeStyle="#a87920";ctx.lineWidth=s*.02;ctx.beginPath();ctx.moveTo(0,-h*.6);ctx.lineTo(0,h*.52);ctx.moveTo(-w*.7,0);ctx.lineTo(w*.7,0);ctx.stroke();
+  ctx.fillStyle="#b8892f";ctx.fillRect(-w*.6,h*.7,w*1.2,s*.05);ctx.beginPath();ctx.moveTo(-w*.3,h*.75+s*.05);ctx.lineTo(w*.3,h*.75+s*.05);ctx.lineTo(0,h*.75+s*.16);ctx.fill();
+  ctx.restore()}
 
  /* ---------- loop ---------- */
  function loop(ts){raf=requestAnimationFrame(loop);const dt=Math.min(.05,(ts-(last||ts))/1000);last=ts;if(state==="play"&&g)step(dt);else{idle+=dt}if(!g)idle+=0;draw()}
@@ -259,10 +264,12 @@ function play(o){
   menu.innerHTML=`<div class="lr-card"><div class="lr-big" style="font-size:44px">🏮</div><h2>${L.title}</h2><p>${L.sub}</p>
    <div class="lr-row"><div class="lr-stat"><b style="display:flex;gap:6px;align-items:center;justify-content:center">${COIN}${wallet()}</b><span>${L.yourWallet}</span></div><div class="lr-stat"><b>${best}</b><span>${L.best}</span></div></div>
    ${hearts?`<p>❤ ${L.items} (${hearts})</p>`:""}
+   <p style="font-weight:700;margin-top:6px">${L.pace}</p><div class="lr-row" style="margin-top:0">${["slow","normal","fast"].map(k=>`<button class="lr-btn lr-sec lr-pc ${S.get("lrPace","slow")===k?"on":""}" style="min-width:0;font-size:15px;min-height:44px" data-p="${k}">${L[k]}</button>`).join("")}</div>
    <button class="lr-btn lr-go" id="lrS">${L.start}</button><button class="lr-btn lr-sec" id="lrShop">${L.shop}</button>
    <div class="lr-row"><button class="lr-btn lr-sec" style="min-width:0;font-size:15px;min-height:44px" id="lrSnd">🔊 ${L.sound}: ${SFX.on?L.on:L.off}</button><button class="lr-btn lr-sec" style="min-width:0;font-size:15px;min-height:44px" id="lrE">${L.close}</button></div></div>`;
   menu.querySelector("#lrS").onclick=()=>{try{SFX.ctx=SFX.ctx||new (window.AudioContext||window.webkitAudioContext)();SFX.ctx.resume()}catch(e){}menu.innerHTML="";newGame();state="play"};
   menu.querySelector("#lrShop").onclick=shop;menu.querySelector("#lrE").onclick=close;
+  menu.querySelectorAll(".lr-pc").forEach(b=>b.onclick=()=>{S.set("lrPace",b.dataset.p);menuStart()});
   menu.querySelector("#lrSnd").onclick=()=>{SFX.on=!SFX.on;S.set("lrSound",SFX.on);menuStart()};
  }
  function pause(){if(state!=="play")return;state="pause";menu.innerHTML=`<div class="lr-card"><h2>${L.paused}</h2><button class="lr-btn lr-go" id="lrR">${L.resume}</button><button class="lr-btn lr-sec" id="lrQ2">${L.close}</button></div>`;
