@@ -1,6 +1,6 @@
 /* Offline support: pages are fetched fresh when online (so updates reach everyone), and saved for offline use. */
-const CACHE="tuhfa-v21";
-const CORE=["./","index.html","manifest.webmanifest","icon-180.png","icon-192.png","icon-512.png","audio/ghamdi.mp3","fonts/ScheherazadeNew-Regular.woff","fonts/ScheherazadeNew-Bold.woff","fonts/IBMPlexSansArabic-Regular.woff","fonts/IBMPlexSansArabic-SemiBold.woff","fonts/IBMPlexSansArabic-Bold.woff"];
+const CACHE="tuhfa-v22";
+const CORE=["./","index.html","run.js","manifest.webmanifest","icon-180.png","icon-192.png","icon-512.png","audio/ghamdi.mp3","fonts/ScheherazadeNew-Regular.woff","fonts/ScheherazadeNew-Bold.woff","fonts/IBMPlexSansArabic-Regular.woff","fonts/IBMPlexSansArabic-SemiBold.woff","fonts/IBMPlexSansArabic-Bold.woff"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()))});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 async function rangeFrom(cached,req){const buf=await cached.arrayBuffer();const m=/bytes=(\d*)-(\d*)/.exec(req.headers.get("range")||"");let a=m&&m[1]?+m[1]:0,b=m&&m[2]?+m[2]:buf.byteLength-1;b=Math.min(b,buf.byteLength-1);
