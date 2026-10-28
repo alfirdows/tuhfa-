@@ -359,7 +359,8 @@ html[dir="rtl"] .qk{padding:4px 8px 4px 12px}
 .m.h.fl{color:var(--ink)} .m.h.fl::after{display:none}
 .m.h.lt{color:var(--ink)} .m.h.lt::after{left:0;right:32%;top:4%;bottom:0;border-radius:6px}
 .m.ok{color:var(--ink)}
-.m.peeked{color:var(--acc)}
+.m.peeked{color:#3b62a8}html[data-theme=dark] .m.peeked{color:#8fb0ff}@media (prefers-color-scheme:dark){html:not([data-theme=light]) .m.peeked{color:#8fb0ff}}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.82rem;color:var(--muted)}.legend i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-inline-end:5px;vertical-align:-1px}
 .m.fixed{color:var(--orange);text-decoration:underline var(--orange) 2px;text-underline-offset:9px}
 .m.bad{color:var(--bad);text-decoration:underline var(--bad) 2.5px;text-underline-offset:9px}
 .m rt{font-size:.5em;font-weight:700;color:var(--bad);text-decoration:line-through;line-height:1}
@@ -1412,8 +1413,9 @@ const OW=(en,ar)=>LANG==="ar"?ar:en;
 const AD=n=>String(n).replace(/\d/g,d=>"٠١٢٣٤٥٦٧٨٩"[d]);
 const LS={get(k,d){try{const v=localStorage.getItem("tuhfa2."+k);return v==null?d:JSON.parse(v)}catch(e){return d}},
  set(k,v){try{localStorage.setItem("tuhfa2."+k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem("tuhfa2."+k)}catch(e){}}};
+/* One way to memorize: the site listens whenever the phone can (there is no voice/manual choice any more). */
 const DEF={game:true,reciter:"ghamdi",rep:1,speed:1,cont:true,tapPlay:true,mode:"voice",tries:3,hide:"shapes",beep:true,vib:true,rec:true,tr:true,tl:true,mn:true,fs:1,goal:"easy",goalN:5,theme:"system",turn:false,loop:false};
-let ST=Object.assign({},DEF,LS.get("settings",{}));
+let ST=Object.assign({},DEF,LS.get("settings",{}));ST.mode="voice";
 const saveSet=()=>LS.set("settings",ST);
 let LANG=LS.get("lang",null)||((navigator.language||"").slice(0,2)==="ar"?"ar":"en");
 const RUN_HEAD="مَتْنُ تُحْفَةِ الأَطْفَالِ";
@@ -2115,12 +2117,13 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   $("#tRec").onclick=()=>{Sheet.open(`<div class="shd"><span class="t">${t("recs")}</span><button class="x" type="button" aria-label="close">${IC.close}</button></div><div id="recbox"></div>`);const fill=()=>recsHTML().then(h=>{const b=$("#recbox");if(b){b.innerHTML=h;bindRecs(b,fill)}});fill()};
   $("#tHist").onclick=()=>Sheet.open(`<div class="shd"><span class="t">${t("hist")}</span><button class="x" type="button" aria-label="close">${IC.close}</button></div>${hist.length?`<div class="list">${hist.slice(0,20).map(h=>`<div class="it"><div class="g"><b>${rangeLabel(h.vs)}</b><div class="note">${fmtD(h.date)} · ${fmtT(h.time)}</div></div><span class="pill ${h.acc>=90?"ok":h.acc>=70?"warn":"bad"}">${num(h.acc)}%</span></div>`).join("")}</div>`:`<p class="note">${t("noHist")}</p>`}`);
   $("#misOpen").onclick=()=>MISL.openSheet();
-  rp.bind(m);const go=view=>{unlockAudio();this.newRun(range(this.setup.from,this.setup.to));this.run.view=view;this.save();history.pushState(null,"","#memorize/run");this.render();window.scrollTo(0,0);bismillah()};
+  rp.bind(m);const go=view=>{unlockAudio();this.newRun(range(this.setup.from,this.setup.to));this.run.view=view;this.save();history.pushState(null,"","#memorize/run");this.render();window.scrollTo(0,0);bismillah();if(SR&&!this.listening)this.toggleMic()};
   $("#mstart").onclick=()=>go(ps.get("lastView",0));
-  if(saved){$("#mcont").onclick=()=>{unlockAudio();this.run=saved;history.pushState(null,"","#memorize/run");this.render();bismillah()};$("#mdisc").onclick=()=>{const bid=BIN.add("ls",{en:t("discard"),ar:t("discard"),ls:BIN.snap("tuhfa2.p."+PID+".session")});ps.del("session");this.render();BIN.pop(["bin:"+bid],1)}}
+  if(saved){$("#mcont").onclick=()=>{unlockAudio();this.run=saved;history.pushState(null,"","#memorize/run");this.render();bismillah();if(SR&&!this.listening)this.toggleMic()};$("#mdisc").onclick=()=>{const bid=BIN.add("ls",{en:t("discard"),ar:t("discard"),ls:BIN.snap("tuhfa2.p."+PID+".session")});ps.del("session");this.render();BIN.pop(["bin:"+bid],1)}}
 },
  wordHTML(k){const r=this.run,w=this.W[k],s=r.st[k]||0;const cls=["m"];let inner=qh(w.w);if(w.q)cls.push("qt");
-  if(s===0){cls.push("h");if(k===r.idx)cls.push("cur");if(ST.hide==="first"&&w.i===0)cls.push("fl");if(ST.hide==="letters")cls.push("lt")}
+  if(s===0&&r.pk&&r.pk[k]){cls.push("peeked","seen");if(k===r.idx)cls.push("cur")}
+  else if(s===0){cls.push("h");if(k===r.idx)cls.push("cur");if(ST.hide==="first"&&w.i===0)cls.push("fl");if(ST.hide==="letters")cls.push("lt")}
   else if(s===1||s===5)cls.push("ok");else if(s===3)cls.push("peeked");else if(s===4)cls.push("fixed");else if(s===6)cls.push("h","skip");else if(s===2)cls.push("bad")
   return `<span class="${cls.join(" ")}" data-k="${k}">${inner}</span>`},
  viewBtn(){return `${IC.bulb}<span>${[t("hidden"),t("hint"),t("shown")][this.run.view||0]}</span>`},
@@ -2129,13 +2132,15 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   <button class="qk" type="button" id="qBack">${IC.undo}<span>${t("backL")}</span></button>`},
  chNav(){const r=this.run;const a=chOf(r.verses[0]),b=chOf(r.verses[r.verses.length-1]);
   return `${a>0?`<button class="qk" type="button" id="chPrev">${IC.back}<span>${t("prevCh")}</span></button>`:""}${b<CH.length-1?`<button class="qk" type="button" id="chNext"><span>${t("nextCh")}</span><span class="flipx2">${IC.back.replace('class="flipx" ',"")}</span></button>`:""}`},
- goChapter(i){const view=this.run?this.run.view||0:0;this.stopMic(true);const c=CH[i];this.setup={from:c[0],to:c[1]};ps.set("memRange",this.setup);this.newRun(range(c[0],c[1]));this.run.view=view;this.save();this.render();window.scrollTo(0,0);bismillah()},
+ goChapter(i){const view=this.run?this.run.view||0:0;this.stopMic(true);const c=CH[i];this.setup={from:c[0],to:c[1]};ps.set("memRange",this.setup);this.newRun(range(c[0],c[1]));this.run.view=view;this.save();this.render();window.scrollTo(0,0);bismillah();if(SR&&!this.listening)this.toggleMic()},
  /* "again": you are already trying this word (a slip was heard, or nothing moved for a few words), so a close word is enough. */
  again(){const r=this.run;return !!r.tries[r.idx]||(this.stuck||0)>=2},
  /* The expected word was heard. If an earlier try was also close, that was the phone mishearing you, not a mistake. */
+ /* Said right: from memory if the word was hidden; read (blue) if the words were shown or you peeked at it. */
+ ok(k){const r=this.run;return (r.view||0)===2||(r.pk&&r.pk[k])?3:1},
  hit(){const r=this.run,i=r.idx,e=this.W[i];onRight();this.cand=null;this.undo=[];
   if(r.tries[i]&&r.said[i]&&wnear(norm(r.said[i]),e.n,true)){r.mist=Math.max(0,r.mist-r.tries[i]);delete r.tries[i];delete r.said[i]}
-  r.st[i]=r.tries[i]?4:1;this.advance();this.misUI()},
+  r.st[i]=r.tries[i]?4:this.ok(i);this.advance();this.misUI()},
  peek(raw){const r=this.run;if(!r||this.held||r.idx>=this.W.length)return false;const h=norm(raw),e=this.W[r.idx];
   if(h&&wnear(h,e.n,this.again())){this.hbuf=(this.hbuf||[]).concat([h]).slice(-6);this.hit();return true}return false},
  extra(v){/* chapter-heading words and the basmala: if a student reads them it is fine, and skipping them is fine too */
@@ -2196,14 +2201,14 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
    <div class="prog"><i id="mprog"></i></div></div>
    <div id="mnote"></div><div id="mhint" style="margin-bottom:8px"></div><div class="mtext" id="mz">${body}</div><div class="spacer"></div>
    <div class="dock calm"><div class="in">
-    ${manual?`<button class="db bad" type="button" id="dbad">${IC.x}<span>${t("mistake")}</span></button>`:`<button class="db" type="button" id="vBtn">${vw===2?IC.eye:IC.eyeoff}<span>${[t("hidden"),t("hint"),t("shown")][vw]}</span></button>`}
+    ${manual?`<button class="db bad" type="button" id="dbad">${IC.x}<span>${t("mistake")}</span></button>`:`<button class="db" type="button" id="vBtn">${vw===2?IC.eyeoff:IC.eye}<span>${vw===2?OW("Hide words","أخفِ الكلمات"):OW("Show words","أظهر الكلمات")}</span></button>`}
     <div class="micw"><button class="mic" type="button" id="dmic" aria-label="${t("mic")}">${IC.mic}</button><span id="micl">${t("startL")}</span></div>
     ${manual?`<button class="db ok" type="button" id="dok">${IC.ok}<span>${t("correct")}</span></button>`:`<button class="db" type="button" id="mvOpen">${IC.rev}<span>${OW("Review","مراجعة")}</span><b class="cnt" id="mmis" hidden></b></button>`}
     <button class="db endb" type="button" id="dend"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg><span>${t("endL")}</span></button></div></div>`;
   this.applyView();this.prog();this.note();this.curVerse();this.micUI();this.misUI();this.retUI();refit();
   if(!IN_FRAME&&!micGranted&&micState!=="denied"&&(ST.rec||ST.mode==="voice"))askMic().then(()=>this.note());
-  const setView=v=>{if(v===(r.view||0))return;r.view=v;if(v)r.peeks++;ps.set("lastView",v);this.applyView();this.save();toast([t("vHidden"),t("vHint"),t("vShown")][v],"",3000);const b=$("#vBtn");if(b)b.innerHTML=`${v===2?IC.eye:IC.eyeoff}<span>${[t("hidden"),t("hint"),t("shown")][v]}</span>`};
-  if($("#vBtn"))$("#vBtn").onclick=()=>setView(((r.view||0)+1)%3);
+  const setView=v=>{if(v===(r.view||0))return;r.view=v;if(v)r.peeks++;ps.set("lastView",v);this.applyView();this.save();toast([t("vHidden"),t("vHint"),t("vShown")][v],"",3000);const b=$("#vBtn");if(b)b.innerHTML=`${v===2?IC.eyeoff:IC.eye}<span>${v===2?OW("Hide words","أخفِ الكلمات"):OW("Show words","أظهر الكلمات")}</span>`};
+  if($("#vBtn"))$("#vBtn").onclick=()=>{const v=r.view||0;if(v!==2)r.hideV=v;setView(v===2?(r.hideV||0):2)};
   if($("#mvOpen"))$("#mvOpen").onclick=()=>this.openReview(null);
   $("#dend").onclick=()=>{const old=$("#endpop");if(old){old.remove();return}const d=document.createElement("div");d.id="endpop";d.className="endpop";
    d.innerHTML=`<button type="button" data-a="pause">${IC.pause}${t("pauseFull")}</button><button type="button" data-a="save">${t("saveExit")}</button><button type="button" data-a="end" class="red"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>${t("endShow")}</button><button type="button" data-a="x" class="x2">${t("cancel")}</button>`;
@@ -2216,13 +2221,14 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
      <div class="row" id="mquick">${this.quick()}</div></div>
     <div class="og"><h4>${OW("Moving around","التنقّل")}</h4><div class="row" id="chnav">${this.chNav()}<button class="qk" type="button" id="xv">${IC.bulb}<span>${t("revealV")}</span></button></div></div>
     ${manual?"":`<div class="og"><h4>${OW("Mark by hand","التصحيح يدويًا")}</h4><div class="row"><button class="qk" type="button" id="hbad">${IC.x}<span>${t("mistake")}</span></button><button class="qk" type="button" id="hok">${IC.ok}<span>${t("correct")}</span></button></div></div>`}
+    <div class="og"><h4>${OW("Colours","الألوان")}</h4><span class="legend"><span><i style="background:var(--ink)"></i>${OW("From memory","من الحفظ")}</span><span><i style="background:#3b62a8"></i>${OW("Read (shown or peeked)","قراءة (ظاهرة أو نظرت إليها)")}</span><span><i style="background:var(--orange)"></i>${OW("Right after a slip","صحيح بعد خطأ")}</span><span><i style="background:var(--bad)"></i>${OW("Mistake","خطأ")}</span></span><p class="note" style="margin:0">${OW("Only words said while hidden count as memorized. Tap a hidden word to peek at it.","الكلمات التي تقولها وهي مخفية فقط تُحسب حفظًا. اضغط على كلمة مخفية لتراها.")}</p></div>
     <div class="og"><h4>${OW("More","المزيد")}</h4><div class="row">${gameBtn()}<button class="qk" type="button" id="xs"><span>${t("saveExit")}</span></button><button class="qk" type="button" id="xf"><span>${t("endNow")}</span></button><button class="qk" type="button" id="xr">${IC.retry}<span>${t("restart")}</span></button></div></div></div>`);
    const S=$("#sheet");this.bindQuick();
    $("#vseg").onclick=e=>{const b=e.target.closest("[data-view]");if(!b)return;setView(+b.dataset.view);$$("#vseg [data-view]").forEach(x=>x.classList.toggle("on",x===b))};
    const cp=$("#chPrev",S),cn=$("#chNext",S);if(cp)cp.onclick=()=>{Sheet.close();this.goChapter(chOf(r.verses[0])-1)};if(cn)cn.onclick=()=>{Sheet.close();this.goChapter(chOf(r.verses[r.verses.length-1])+1)};
    $("#xv").onclick=()=>{Sheet.close();this.revealVerse()};if($("#hbad"))$("#hbad").onclick=()=>{this.manualWrong()};if($("#hok"))$("#hok").onclick=()=>{onRight();this.mark(1)};
    $("#xs").onclick=()=>{Sheet.close();this.exit()};$("#xf").onclick=()=>{Sheet.close();this.finish()};$("#xr").onclick=()=>{Sheet.close();this.stopMic(false);this.newRun(r.verses);this.render()}};
-  $("#mz").onclick=e=>{const mv=e.target.closest("[data-mv]");if(mv){const v=+mv.dataset.mv;this.askJump(ALLW.findIndex(x=>x.v===v),true);return}const el=e.target.closest(".m");if(!el)return;const k=+el.dataset.k;if(r.st[k]===2||r.st[k]===4||r.st[k]===6){this.openReview(k);return}if(k===r.idx)this.mark(3)};
+  $("#mz").onclick=e=>{const mv=e.target.closest("[data-mv]");if(mv){const v=+mv.dataset.mv;this.askJump(ALLW.findIndex(x=>x.v===v),true);return}const el=e.target.closest(".m");if(!el)return;const k=+el.dataset.k;if(r.st[k]===2||r.st[k]===4||r.st[k]===6){this.openReview(k);return}if(k===r.idx&&!r.st[k]&&(r.view||0)!==2){r.pk=r.pk||{};r.pk[k]=1;r.peeks++;this.setW(k);this.save()}};
   clearInterval(this.timer);this.timer=setInterval(()=>{if(document.hidden||!this.run)return;if(this.listening&&Date.now()-lastAct>SILENCE){this.stopMic(true);toast(t("silent"),"msg",5000)}r.elapsed++;const tm=$("#mtime");tm&&(tm.textContent=fmtT(r.elapsed));if(r.elapsed%5===0)this.save()},1000);this.scrollCur(true)},
  bindQuick(){$("#qTries").onclick=()=>{const seq=[1,2,3,0];ST.tries=seq[(seq.indexOf(ST.tries)+1)%4];saveSet();$("#mquick").innerHTML=this.quick();this.bindQuick()};
   $("#qBack").onclick=()=>{Sheet.close();const r=this.run,w=this.W[r.idx]||this.W[this.W.length-1];let v=w.v;const atStart=w.h===0&&w.i===0;if(atStart&&r.verses.indexOf(v)>0)v=r.verses[r.verses.indexOf(v)-1];else if(atStart&&v>1)v=v-1;this.jumpTo({v,h:0,i:0})};
@@ -2246,14 +2252,14 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
  heard(words){const r=this.run;if(!r||this.held)return;for(const raw of words){if(this.held)return;const h=norm(raw);if(r.idx>=this.W.length)return;const W=this.W,i=r.idx,e=W[i];
    if(h){this.hbuf=(this.hbuf||[]).concat([h]).slice(-6)}
    if(wnear(h,e.n,this.again())){this.hit();continue}
-   if(W[i+1]&&e.n.length<=3&&!r.tries[i]&&wmatch(h,W[i+1].n)){onRight();r.st[i]=1;this.advance();if(this.run&&r.idx<this.W.length){r.st[r.idx]=1;this.advance()}continue}
-   if(W[i+2]&&wmatch(h,e.n+W[i+1].n+W[i+2].n)){onRight();for(let k=0;k<3&&this.run&&r.idx<this.W.length;k++){r.st[r.idx]=1;this.advance()}continue}
-   if(W[i+1]&&wmatch(h,e.n+W[i+1].n)){onRight();r.st[i]=r.tries[i]?4:1;this.advance();if(this.run&&r.idx<this.W.length){r.st[r.idx]=1;this.advance()}continue}
+   if(W[i+1]&&e.n.length<=3&&!r.tries[i]&&wmatch(h,W[i+1].n)){onRight();r.st[i]=this.ok(i);this.advance();if(this.run&&r.idx<this.W.length){r.st[r.idx]=this.ok(r.idx);this.advance()}continue}
+   if(W[i+2]&&wmatch(h,e.n+W[i+1].n+W[i+2].n)){onRight();for(let k=0;k<3&&this.run&&r.idx<this.W.length;k++){r.st[r.idx]=this.ok(r.idx);this.advance()}continue}
+   if(W[i+1]&&wmatch(h,e.n+W[i+1].n)){onRight();r.st[i]=r.tries[i]?4:this.ok(i);this.advance();if(this.run&&r.idx<this.W.length){r.st[r.idx]=this.ok(r.idx);this.advance()}continue}
    if(h.length<2)continue;if(this.extra(e.v).some(x=>x===h||(h.length>3&&sim(h,x)>=.8)))continue;
    /* Reading on quickly: the word heard is one of the next few, so the words before it were said wrong or skipped. Mark them and keep going. */
    {let j=0;for(let d=1;d<=3&&W[i+d];d++)if((d===1||h.length>3)&&wmatch(h,W[i+d].n)){j=d;break}
     if(j){onRight();this.cand=null;for(let d=0;d<j&&this.run&&r.idx<this.W.length;d++){const k=r.idx;if(!r.tries[k]){r.tries[k]=1;r.mist++;(r.mt=r.mt||{})[k]=Date.now()}r.st[k]=2;this.advance()}
-     this.misUI();if(this.run&&r.idx<this.W.length){r.st[r.idx]=1;this.advance()}this.save();continue}}
+     this.misUI();if(this.run&&r.idx<this.W.length){r.st[r.idx]=this.ok(r.idx);this.advance()}this.save();continue}}
    /* Nothing moved: after a few words, listen afresh so the phone stops repeating the same wrong guess. */
    this.stuck=(this.stuck||0)+1;if(this.stuck===3&&this.lis)this.lis.refresh();
    /* Words from another place: after two in a row, follow you there, back or ahead, anywhere in the poem. */
@@ -2275,19 +2281,19 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
  /* Results screen. "I said it right" removes a mistake the website got wrong; accuracy is recalculated and saved. */
  showResults(r,W,first){const rows=[];const per={};let bad=0;W.forEach((w,i)=>{per[w.v]=per[w.v]||[0,0];per[w.v][1]++;const s=r.st[i];if(s===2||s===4){bad++;rows.push({w,i})}else if(s===1||s===5)per[w.v][0]++});
   const accs={};for(const v in per)accs[v]=Math.round(per[v][0]/per[v][1]*100);
-  const acc=Math.max(0,Math.round((W.length-bad)/W.length*100));const ach=recordVerses(accs);
+  const acc=Math.max(0,Math.round((W.length-bad)/W.length*100)),memP=Math.round(W.filter((w,i)=>[1,4,5].includes(r.st[i])).length/W.length*100),readN=W.filter((w,i)=>r.st[i]===3).length;const ach=recordVerses(accs);
   if(first){r.misDate=Date.now();MISL.save([...MISL.fromRun(r,W,r.misDate),...MISL.all()])}
   const hist=ps.get("memHist",[]);if(first){hist.unshift({date:Date.now(),vs:r.verses,acc,time:r.elapsed})}else if(hist[0])hist[0].acc=acc;ps.set("memHist",hist.slice(0,40));
   const mvs=[...new Set(rows.map(x=>x.w.v))].sort((a,b)=>a-b);
   this.root().innerHTML=`<div class="stack"><div class="panel"><h3>${t("done")} · ${rangeLabel(r.verses)}</h3>
-   <div class="sum"><div><b>${num(acc)}%</b><span>${t("acc")}</span></div><div><b>${num(r.mist)}</b><span>${t("mistakes")}</span></div><div><b>${fmtT(r.elapsed)}</b><span>${t("time")}</span></div></div></div>
+   <div class="sum"><div><b>${num(memP)}%</b><span>${OW("From memory","من الحفظ")}</span></div><div><b>${num(acc)}%</b><span>${t("acc")}</span></div><div><b>${fmtT(r.elapsed)}</b><span>${t("time")}</span></div></div>${readN?`<p class="note" style="margin:8px 0 0">${OW(readN+" words were read (shown or peeked), so they are not counted as memorized.","قُرئت "+num(readN)+" كلمة (ظاهرة أو بعد النظر)، فلم تُحسب حفظًا.")}</p>`:""}</div>
    <div class="panel"><h3>${t("misTitle")}</h3>${rows.length?(()=>{const ms=MISL.all().filter(m=>m.t===r.misDate),c={wrong:0,missed:0,extra:0};ms.forEach(m=>c[m.type]++);
      return`<div class="mcount">${[["wrong","خطأ","Wrong word"],["missed","سقط","Left out"],["extra","زيادة","Added word"]].filter(x=>c[x[0]]).map(x=>`<span class="pill bad">${OW(x[2],x[1])} · ${num(c[x[0]])}</span>`).join("")}</div>
      <button class="btn pri" type="button" id="fmv" style="width:100%;justify-content:center">${IC.rev}${OW("Go through my mistakes","راجع أخطائي")}<span class="pill" style="margin-inline-start:6px">${num(ms.length)}</span></button>`})():`<p>${t("none")}</p>`}
    <div class="row">${mvs.length?`<button class="btn pri" type="button" id="fm">${t("retryM")}</button>`:""}<button class="btn out" type="button" id="fa">${IC.retry}${t("again")}</button><button class="btn soft" type="button" id="fn">${t("newS")}</button><button class="btn soft" type="button" id="fmis">${OW("Recitation review","مراجعة التسميع")}</button></div>
    ${(()=>{const a=chOf(r.verses[0]),b=chOf(r.verses[r.verses.length-1]);return `<nav class="pgnav">${a>0?`<button type="button" class="pg-prev" id="fprev"><small>${t("prevCh")}</small><b lang="ar">${CH[a-1][2]}</b></button>`:"<span></span>"}${b<CH.length-1?`<button type="button" class="pg-next" id="fnext"><small>${t("nextCh")}</small><b lang="ar">${CH[b+1][2]}</b></button>`:""}</nav>`})()}</div></div>`;
   {const a=chOf(r.verses[0]),b=chOf(r.verses[r.verses.length-1]);const fp=$("#fprev"),fx=$("#fnext");const go=i=>{$("#modal").innerHTML="";this.run={view:r.view||0};this.goChapter(i)};if(fp)fp.onclick=()=>go(a-1);if(fx)fx.onclick=()=>go(b+1)}
-  if(mvs.length)$("#fm").onclick=()=>{this.newRun(mvs);this.render();bismillah()};$("#fa").onclick=()=>{this.newRun(r.verses);this.render();bismillah()};$("#fn").onclick=()=>this.render();$("#fmis").onclick=()=>MISL.openSheet();
+  if(mvs.length)$("#fm").onclick=()=>{this.newRun(mvs);this.render();bismillah();this.toggleMic()};$("#fa").onclick=()=>{this.newRun(r.verses);this.render();bismillah();this.toggleMic()};$("#fn").onclick=()=>this.render();$("#fmis").onclick=()=>MISL.openSheet();
   if($("#fmv"))$("#fmv").onclick=()=>MV.open(MISL.all().filter(m=>m.t===r.misDate),0,{del:m=>{BIN.pop([BIN.mis(m.id)],1);const i=+m.id.split("-")[1];r.mist=Math.max(0,r.mist-(r.tries[i]||1));r.st[i]=5;delete r.said[i];delete r.tries[i];const y=scrollY;this.showResults(r,W,false);scrollTo(0,y)}});
   $$("[data-play]",this.root()).forEach(b=>b.onclick=()=>{unlockAudio();const w=W[+b.dataset.play];Player.playSeg(AUDIO.words[`${w.v}:${w.h}:${w.i}`],1,"word")});
   $$("[data-ok]",this.root()).forEach(b=>b.onclick=()=>{const i=+b.dataset.ok;if(r.misDate)MISL.del(r.misDate.toString(36)+"-"+i);r.mist=Math.max(0,r.mist-(r.tries[i]||1));r.st[i]=5;delete r.said[i];delete r.tries[i];toast(t("undoDone"));const y=scrollY;this.showResults(r,W,false);scrollTo(0,y)});
@@ -2594,7 +2600,6 @@ const Settings={render(){const seg=(k,arr)=>`<div class="seg" data-k="${k}">${ar
    <div class="it"><div class="t">${t("textSize")}</div><div class="sizer"><button type="button" data-fs="-1">A−</button><button type="button" data-fs="1">A+</button></div></div></div>
   ${remindHTML()}
   <div class="panel set"><h3>${t("memSet")}</h3>
-   <div class="it"><div class="t">${t("checking")}</div>${seg("mode",[["voice",t("voice")],["manual",t("manual")]])}</div>
    <div class="it"><div class="t">${t("triesSet")}<small>${t("triesSub")}</small></div>${seg("tries",[[1,num(1)],[2,num(2)],[3,num(3)],[0,t("noLimit")]])}</div>
    <div class="it"><div class="t">${t("hideSet")}</div>${seg("hide",[["shapes",t("styleS")],["letters",t("styleL")],["first",t("styleW")]])}</div>
    <div class="it"><div class="t">${t("sound")}</div>${sw("beep")}</div><div class="it"><div class="t">${t("vib")}<small>${t("vibSub")}</small></div>${sw("vib")}</div><div class="it"><div class="t">${t("recSet")}</div>${sw("rec")}</div></div>
