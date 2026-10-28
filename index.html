@@ -2396,7 +2396,7 @@ const RUN_ALL=[...new Set(V.flatMap(h=>h.flatMap(x=>toks(x))).map(w=>w.replace(/
 /* each goal is two verses of the chosen level, in order; the next goal goes on from there */
 function runRound(pool,n){const i0=(2*(n||0))%pool.length,st=pool[i0],vs=pool.includes(st+1)?[st,st+1]:[st],words=[];
  vs.forEach((v,n)=>[0,1].forEach(h=>toks(V[v-1][h]).forEach((w,k)=>words.push({w:w.replace(/[«»]/g,""),sep:""}))));
- return{words,decoys:RUN_ALL}}
+ return{words,decoys:RUN_ALL,title:`${t("verse")} ${num(vs[vs.length-1])}`}}
 /* ================= GAMES ================= */
 const GAMES=[["run",IC.bolt,"gRun","gRunD","g5"],["crush",IC.drops,"gCrush","gCrushD","g5"],["flash",IC.cards,"gFlash","gFlashD","g1"],["speed",IC.bolt,"gSpeed","gSpeedD","g2"],["build",IC.blocks,"gBuild","gBuildD","g3"],["match",IC.grid,"gMatch","gMatchD","g4"]];
 const OPT_SH=['<circle cx="12" cy="12" r="8"/>','<rect x="4.5" y="4.5" width="15" height="15" rx="2"/>','<path d="M12 3c4 5 7 8.5 7 12a7 7 0 0 1-14 0c0-3.5 3-7 7-12z"/>','<rect x="3" y="7" width="18" height="10" rx="5"/>'];
@@ -2432,7 +2432,7 @@ const Games={cur:null,timer:null,game:null,lvl:null,
  /* word drop: tap the words of each line in order; they pop, the tiles above fall down and new ones drop in */
  run(){const lvl=this.lvl,pool=this.pool(),S={get:(k,d)=>ps.get(k+(k==="lrGoalN"||k==="lrStars"?"."+lvl:""),d),set:(k,v)=>ps.set(k+(k==="lrGoalN"||k==="lrStars"?"."+lvl:""),v)};
   if(!window.LanternRun)return this.render();this.cur="run";
-  this.runH=LanternRun.play({lang:LANG,nameFont:'"Book Naskh",serif',textFont:'"Book Naskh",serif',store:S,round:n=>runRound(pool,n),
+  this.runH=LanternRun.play({lang:LANG,siteName:LANG==="ar"?"متن تحفة الأطفال":"Matn Tuhfat al-Atfal",url:location.origin+location.pathname,shared:{get:(k,d)=>LS.get(k,d),set:(k,v)=>LS.set(k,v)},player:{id:PID,name:P().name||""},nameFont:'"Book Naskh",serif',textFont:'"Book Naskh",serif',store:S,round:n=>runRound(pool,n),
    wallet:{get:()=>ps.get("coins",0),add:n=>ps.set("coins",Math.max(0,ps.get("coins",0)+n))},
    onEnd:r=>{const stars=r.right>=8?3:r.right>=4?2:r.right>=1?1:0,G=this.stars();G.run=G.run||{};if(lvl!=="c"&&lvl!=null&&(G.run[lvl]||0)<stars){G.run[lvl]=stars;ps.set("gameStars",G)}
     const best=ps.get("gameBest",{});if(best.run==null||r.score>best.run){best.run=r.score;ps.set("gameBest",best)}if(r.right){const d=xpData();d.total+=r.right*2;d.today+=r.right*2;ps.set("xp",d);xpHUD()}},
