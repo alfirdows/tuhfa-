@@ -11,8 +11,8 @@ DURATION:PT15M
 RRULE:FREQ=DAILY
 SUMMARY:حان وقت وردك · Time for your daily portion
 DESCRIPTION:متن تحفة الأطفال · Matn Tuhfat al-Atfal\nhttps:/
- /fastaqim.github.io/tuhfa-/#memorize
-URL:https://fastaqim.github.io/tuhfa-/#memorize
+ /alfirdows.github.io/tuhfa-/#memorize
+URL:https://alfirdows.github.io/tuhfa-/#memorize
 TRANSP:TRANSPARENT
 BEGIN:VALARM
 ACTION:DISPLAY

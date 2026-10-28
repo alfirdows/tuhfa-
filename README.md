@@ -1,3 +1,3 @@
 # تحفة الأطفال · Tuhfat al-Atfal
 
-Website: https://fastaqim.github.io/tuhfa-/
+Website: https://alfirdows.github.io/tuhfa-/
