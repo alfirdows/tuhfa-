@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//fastaqim//tuhfa daily reminder//AR
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:tuhfa-daily-1030@fastaqim.github.io
+DTSTAMP:20261028T000000Z
+DTSTART:20261028T103000
+DURATION:PT15M
+RRULE:FREQ=DAILY
+SUMMARY:حان وقت وردك · Time for your daily portion
+DESCRIPTION:متن تحفة الأطفال · Matn Tuhfat al-Atfal\nhttps:/
+ /fastaqim.github.io/tuhfa-/#memorize
+URL:https://fastaqim.github.io/tuhfa-/#memorize
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:حان وقت وردك · Time for your daily portion
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+END:VCALENDAR
