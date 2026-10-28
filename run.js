@@ -4,23 +4,23 @@
 "use strict";
 /* To add a language: copy the "en" block below, give it the language code (e.g. fr, ur), and translate the words. */
 const TX={
- ar:{title:"سباق الفانوس",sub:"اجرِ، اجمع الدنانير، وادخل من باب الجواب الصحيح",start:"ابدأ",shop:"المتجر",close:"إغلاق",again:"العب مرة أخرى",
-  coins:"دنانير",best:"أفضل نتيجة",hint:"اسحب يمينًا أو يسارًا لتغيّر الطريق، ولأعلى لتقفز. أو المس جانب الشاشة.",go:"انطلق!",
-  great:["ممتاز!","أحسنت!","رائع!","بارك الله فيك!"],oops:"الجواب:",over:"انتهى السباق",right:"صحيح",wrong:"خطأ",dist:"المسافة",
-  review:"راجع هذه",earned:"جمعت",paused:"توقف مؤقت",resume:"تابع",sound:"الصوت",on:"يعمل",off:"مطفأ",owned:"عندك",use:"اختر",inUse:"مختار",buy:"اشترِ",
-  need:"تحتاج دنانير أكثر",pace:"السرعة",slow:"بطيء",normal:"متوسط",fast:"سريع",bonus:"هدية أول سباق اليوم",magnet:"مغناطيس الدنانير!",heart:"قلب إضافي",heartD:"لسباق واحد",cloak:"لون الفانوس",trail:"أثر لامع",trailD:"نجوم خلف الفانوس",
+ ar:{title:"سباق الفانوس",sub:"اجرِ والتقط الكلمة التالية من المتن، كلمةً كلمة، وابتعد عن الكلمات الخطأ.",start:"ابدأ",shop:"المتجر",close:"إغلاق",again:"العب مرة أخرى",
+  coins:"دنانير",best:"أفضل نتيجة",hint:"اسحب يمينًا أو يسارًا (أو المس جانب الشاشة) لتلتقط الكلمة التالية.",go:"انطلق!",
+  great:["ممتاز!","أحسنت!","رائع!","بارك الله فيك!"],oops:"الجواب:",over:"انتهى السباق",right:"صحيح",wrong:"خطأ",dist:"النتيجة",
+  review:"أخطاؤك: راجعها",earned:"جمعت",paused:"توقف مؤقت",resume:"تابع",sound:"الصوت",on:"يعمل",off:"مطفأ",owned:"عندك",use:"اختر",inUse:"مختار",buy:"اشترِ",
+  need:"تحتاج دنانير أكثر",doneAll:"أكملت المتن!",nextW:"الكلمة التالية",missedT:"الكلمة الصحيحة كانت",pace:"السرعة",steer:"اضغط على الجواب الصحيح",qWas:"بعد",ansIs:"الجواب الصحيح",shopD:"اشترِ بدنانيرك",closeD:"اخرج من اللعبة",slow:"بطيء",normal:"متوسط",fast:"سريع",bonus:"هدية أول سباق اليوم",magnet:"مغناطيس الدنانير!",heart:"قلب إضافي",heartD:"لسباق واحد",cloak:"لون الفانوس",trail:"أثر لامع",trailD:"نجوم خلف الفانوس",
   colors:{green:"أخضر",blue:"أزرق",purple:"بنفسجي",red:"أحمر",gold:"ذهبي",night:"ليلي"},combo:"متتالية",lives:"قلوب",items:"قلب إضافي جاهز",yourWallet:"دنانيرك"},
- en:{title:"Lantern Run",sub:"Run, collect coins, and go through the gate with the right answer",start:"Start",shop:"Shop",close:"Close",again:"Play again",
-  coins:"coins",best:"Best",hint:"Swipe left or right to change lanes, swipe up to jump. Or tap a side of the screen.",go:"Go!",
-  great:["Excellent!","Well done!","Great!","Barak Allahu fik!"],oops:"Answer:",over:"Run over",right:"Right",wrong:"Wrong",dist:"Distance",
-  review:"Review these",earned:"You collected",paused:"Paused",resume:"Resume",sound:"Sound",on:"On",off:"Off",owned:"Owned",use:"Use",inUse:"In use",buy:"Buy",
-  need:"You need more coins",pace:"Speed",slow:"Slow",normal:"Medium",fast:"Fast",bonus:"First run today gift",magnet:"Coin magnet!",heart:"Extra heart",heartD:"For one run",cloak:"Lantern colour",trail:"Sparkle trail",trailD:"Stars behind the lantern",
+ en:{title:"Lantern Run",sub:"Run and pick up the next word of the text, one word at a time. Stay away from the wrong words.",start:"Start",shop:"Shop",close:"Close",again:"Play again",
+  coins:"coins",best:"Best",hint:"Swipe left or right (or tap a side of the screen) to pick up the next word.",go:"Go!",
+  great:["Excellent!","Well done!","Great!","Barak Allahu fik!"],oops:"Answer:",over:"Run over",right:"Right",wrong:"Wrong",dist:"Score",
+  review:"Your mistakes to review",earned:"You collected",paused:"Paused",resume:"Resume",sound:"Sound",on:"On",off:"Off",owned:"Owned",use:"Use",inUse:"In use",buy:"Buy",
+  need:"You need more coins",doneAll:"You finished the text!",nextW:"next word",missedT:"The right word was",pace:"Speed",steer:"Tap the right answer",qWas:"After",ansIs:"Right answer",shopD:"Spend your coins",closeD:"Leave the game",slow:"Slow",normal:"Medium",fast:"Fast",bonus:"First run today gift",magnet:"Coin magnet!",heart:"Extra heart",heartD:"For one run",cloak:"Lantern colour",trail:"Sparkle trail",trailD:"Stars behind the lantern",
   colors:{green:"Green",blue:"Blue",purple:"Purple",red:"Red",gold:"Gold",night:"Night"},combo:"in a row",lives:"hearts",items:"Extra heart ready",yourWallet:"Your coins"}
 };
 const CLOAKS=[["green","#3f7f55",0],["blue","#2f6db5",120],["purple","#7a4f9e",250],["red","#c0392b",400],["night","#1d2b4f",600],["gold","#c9962c",900]];
 const TRAIL_PRICE=700,HEART_PRICE=60;
-/* speeds: start, top, how fast it speeds up, seconds to read each question, quiet seconds between questions */
-const PACE={slow:[4.5,8,.02,10,5],normal:[6.5,12,.05,8,4],fast:[9,18,.1,6,3]};
+/* speeds: start, top, how fast it speeds up, wrong words per row, seconds between words */
+const PACE={slow:[4.2,6,.01,1,3.6],normal:[6,10,.03,1,3],fast:[8.5,15,.06,2,2.6]};
 const CSS=`
 .lr-ov{position:fixed;inset:0;z-index:9999;background:#120f2a;color:#fff;font-family:var(--font,system-ui);touch-action:none;user-select:none;-webkit-user-select:none;overscroll-behavior:none}
 .lr-ov canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
@@ -29,14 +29,16 @@ const CSS=`
 .lr-pill{background:rgba(10,8,30,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.18);border-radius:99px;padding:6px 12px;font-weight:700;font-size:17px;display:inline-flex;align-items:center;gap:6px;color:#fff}
 .lr-ib{width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(10,8,30,.55);color:#fff;font-size:18px;display:grid;place-items:center;cursor:pointer;padding:0}
 .lr-coin{width:20px;height:20px;flex:none}
-.lr-q{position:absolute;left:10px;right:10px;top:calc(env(safe-area-inset-top) + 62px);text-align:center;pointer-events:none;transition:opacity .25s,transform .25s}
+.lr-q{position:absolute;left:14px;right:14px;top:calc(env(safe-area-inset-top) + 70px);text-align:center;transition:opacity .25s,transform .25s;z-index:2}
+.lr-q.hide{pointer-events:none}
 .lr-q.hide{opacity:0;transform:translateY(-12px)}
-.lr-qp{display:inline-block;max-width:100%;background:rgba(255,253,245,.96);color:#1b1a14;border-radius:18px;padding:8px 16px;font-size:20px;line-height:1.6;box-shadow:0 6px 20px rgba(0,0,0,.35);font-family:var(--lr-text)}
-.lr-qp small{display:block;font-family:var(--font,system-ui);font-size:12px;color:#6b5a2a;font-weight:700;line-height:1.3}
-.lr-ch{display:flex;gap:6px;margin-top:8px;direction:ltr}
-.lr-ch span{flex:1;background:rgba(20,16,50,.8);border:2px solid #e3b04b;border-radius:14px;padding:6px 4px;font-family:var(--lr-name);font-size:19px;line-height:1.5;color:#fff7dc;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.lr-ch span.ok{background:#2e7a4f;border-color:#9ee2b5}.lr-ch span.no{background:#9b2c22;border-color:#ffb3aa}
-.lr-pop{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);font-size:34px;font-weight:800;color:#ffe08a;text-shadow:0 3px 0 #7a4a00,0 0 18px rgba(255,200,80,.7);pointer-events:none;animation:lrpop .9s ease-out forwards;white-space:nowrap}
+.lr-qp{display:inline-block;max-width:100%;background:rgba(255,253,245,.97);color:#1b1a14;border-radius:20px;padding:12px 18px;font-size:26px;line-height:1.6;box-shadow:0 6px 20px rgba(0,0,0,.35);font-family:var(--lr-text)}
+.lr-qp small{display:block;font-family:var(--font,system-ui);font-size:14px;color:#6b5a2a;font-weight:700;line-height:1.3}
+.lr-ch{display:flex;flex-direction:column;gap:10px;margin:14px auto 0;max-width:360px}
+.lr-ch button{background:rgba(20,16,50,.92);border:2px solid #e3b04b;border-radius:18px;padding:10px 12px;font-family:var(--lr-name);font-size:28px;line-height:1.5;color:#fff7dc;cursor:pointer;min-height:64px;box-shadow:0 4px 0 #7a5a17}
+.lr-ch button:active{transform:translateY(2px)}
+.lr-ch button.ok{background:#2e7a4f;border-color:#9ee2b5}.lr-ch button.no{background:#9b2c22;border-color:#ffb3aa}
+.lr-pop{position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);font-size:34px;font-weight:800;color:#ffe08a;text-shadow:0 3px 0 #7a4a00,0 0 18px rgba(255,200,80,.7);pointer-events:none;animation:lrpop .9s ease-out forwards;white-space:nowrap}
 .lr-pop.bad{color:#fff;text-shadow:0 3px 0 #7a1a10;font-size:22px;background:rgba(155,44,34,.92);padding:8px 16px;border-radius:16px;font-family:var(--lr-name)}
 @keyframes lrpop{0%{opacity:0;transform:translate(-50%,-30%) scale(.6)}15%{opacity:1;transform:translate(-50%,-50%) scale(1.15)}30%{transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-110%) scale(1)}}
 .lr-card{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:calc(env(safe-area-inset-top) + 16px) 18px calc(env(safe-area-inset-bottom) + 16px);text-align:center;background:linear-gradient(180deg,rgba(18,15,42,.55),rgba(18,15,42,.92));overflow:auto}
@@ -48,6 +50,9 @@ const CSS=`
 @keyframes lrbeat{50%{transform:scale(1.05)}}
 .lr-sec{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25)!important}
 .lr-pc.on{background:#ffe08a!important;color:#3a2600!important}
+.lr-strip{font-family:var(--lr-name)!important;font-size:24px!important;line-height:1.9!important;direction:rtl}
+.lr-strip .miss{color:#b42318;text-decoration:underline wavy #e88}.lr-strip .last{color:#2e7a4f}.lr-strip .sep{color:#a87920}
+.lr-strip .blank{color:#a87920;animation:lrbeat 1s ease-in-out infinite;display:inline-block}
 .lr-big{font-size:48px;font-weight:800;color:#ffe08a;display:flex;align-items:center;gap:10px;justify-content:center}
 .lr-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:8px 0}
 .lr-stat{background:rgba(255,255,255,.1);border-radius:14px;padding:8px 14px;min-width:84px}.lr-stat b{display:block;font-size:22px}.lr-stat span{font-size:12px;color:#cfc8f5}
@@ -84,7 +89,7 @@ function play(o){
  SFX.on=S.get("lrSound",true);
  if(!document.getElementById("lr-css")){const st=document.createElement("style");st.id="lr-css";st.textContent=CSS;document.head.appendChild(st)}
  const ov=document.createElement("div");ov.className="lr-ov";ov.dir=AR?"rtl":"ltr";ov.style.setProperty("--lr-name",o.nameFont||"serif");ov.style.setProperty("--lr-text",o.textFont||"serif");
- ov.innerHTML=`<canvas></canvas><div class="lr-hud" hidden><span class="lr-pill" id="lrC">${COIN}<span>0</span></span><span class="lr-pill" id="lrH" style="color:#ff6b6b;letter-spacing:2px"></span><span class="lr-pill" id="lrX" hidden></span><span style="flex:1"></span><button class="lr-ib" id="lrP" aria-label="${L.paused}">❚❚</button></div><div class="lr-q hide" id="lrQ"></div><div id="lrM"></div><p class="lr-hint" hidden>${L.hint}</p>`;
+ ov.innerHTML=`<canvas></canvas><div class="lr-hud" hidden><span class="lr-pill" id="lrC">${COIN}<span>0</span></span><span class="lr-pill" id="lrH" style="color:#ff6b6b;letter-spacing:2px"></span><span class="lr-pill" id="lrX" hidden></span><span style="flex:1"></span><button class="lr-pill" id="lrV" style="cursor:pointer;font-size:14px"></button><button class="lr-ib" id="lrP" aria-label="${L.paused}">❚❚</button></div><div class="lr-q hide" id="lrQ"></div><div id="lrM"></div><p class="lr-hint" hidden>${L.hint}</p>`;
  document.body.appendChild(ov);document.documentElement.style.overflow="hidden";
  const cv=ov.querySelector("canvas"),ctx=cv.getContext("2d"),hud=ov.querySelector(".lr-hud"),qEl=ov.querySelector("#lrQ"),menu=ov.querySelector("#lrM"),hintEl=ov.querySelector(".lr-hint");
  let W=0,H=0,DPR=1;
@@ -101,59 +106,69 @@ function play(o){
  function newGame(){
   const extra=S.get("lrHeart",0)>0;if(extra)S.set("lrHeart",S.get("lrHeart",0)-1);
   const pc=PACE[S.get("lrPace","slow")]||PACE.slow;
-  g={pc,t:0,dist:0,speed:pc[0],lane:1,x:0,y:0,vy:0,hearts:3+(extra?1:0),inv:0,coins:0,combo:0,right:0,wrong:0,miss:[],objs:[],next:14,qAt:pc[0]*3,gate:null,shake:0,magnet:0,parts:[],run:0,trail:S.get("lrTrailOn",false)&&S.get("lrTrail",false),over:false,cd:3.2};
-  idle=0;hud.hidden=false;updHud();qEl.classList.add("hide");
+  const R=o.round()||{words:[]};
+  g={pc,seq:R.words,decoys:R.decoys||[],got:R.words.map((_,k)=>k?0:1),rowK:1,rowZ:pc[0]*4.5,t:0,dist:0,speed:pc[0],lane:1,x:0,y:0,vy:0,hearts:3+(extra?1:0),inv:0,coins:0,combo:0,right:0,wrong:0,miss:[],objs:[],next:14,qAt:pc[0]*3,gate:null,shake:0,magnet:0,parts:[],run:0,trail:S.get("lrTrailOn",false)&&S.get("lrTrail",false),over:false,cd:3.2};
+  g.sp=()=>g.pc[0]*g.pc[4]+3;g.rowZ0=()=>g.pc[0]*4.5;
+  idle=0;hud.hidden=false;updHud();strip();
  }
- function updHud(){ov.querySelector("#lrC span").textContent=g.coins;ov.querySelector("#lrH").textContent="❤".repeat(Math.max(0,g.hearts))||"–";
+ function updHud(){const pk=S.get("lrPace","slow");ov.querySelector("#lrV").textContent=`${{slow:"🐢",normal:"🚶",fast:"⚡"}[pk]||""} ${L[pk]||L.slow}`;ov.querySelector("#lrC span").textContent=g.coins;ov.querySelector("#lrH").textContent="❤".repeat(Math.max(0,g.hearts))||"–";
   const x=ov.querySelector("#lrX");x.hidden=g.combo<2;x.textContent=`×${Math.min(5,g.combo)} 🔥`}
 
- /* track builder: coin lines, things to jump over, blocked lanes, and answer gates */
+ /* track builder: coin lines, things to jump over, and blocked lanes */
  function build(){
   while(g.next<g.dist+FAR+20){
    const z=g.next;
-   if(g.gate&&z<=g.gate.z+8){g.next=g.gate.z+9;continue}
-   const r=z<55?.1:Math.random(),free=Math.floor(Math.random()*3);
+   if(g.rowK<=g.seq.length&&Math.abs(((z-g.rowZ0())%g.sp()+g.sp())%g.sp())<4){g.next=z+4;continue}
+   const r=(z<40||g.pc[0]<5)?Math.random()*.38:Math.random(),free=Math.floor(Math.random()*3);
    if(r<.38){const ln=Math.floor(Math.random()*3);const arc=Math.random()<.3;for(let k=0;k<6;k++)g.objs.push({k:"coin",ln,z:z+k*1.3,h:arc?Math.sin(k/5*Math.PI)*1.4:0})}
    else if(r<.7){const ln=[0,1,2].filter(x=>x!==free);const one=pick(ln);g.objs.push({k:"low",ln:one,z});if(Math.random()<.5)for(let k=0;k<4;k++)g.objs.push({k:"coin",ln:one,z:z-1.6+k*1.1,h:Math.sin(k/3*Math.PI)*1.6+.2})}
    else if(r<.9){const blocks=[0,1,2].filter(x=>x!==free);const n=Math.random()<.5?1:2;blocks.slice(0,n).forEach(b=>g.objs.push({k:"wall",ln:b,z}));for(let k=0;k<4;k++)g.objs.push({k:"coin",ln:free,z:z-2+k*1.3,h:0})}
    else{if(g.t>8&&!g.objs.some(x=>x.k==="mag"))g.objs.push({k:"mag",ln:free,z,h:.6})}
    g.next=z+rnd(7,11)*(g.pc[0]<5?1.4:1);
   }
-  /* one question at a time: show it, clear the road of obstacles, and give time to read before its gates arrive */
-  if(!g.gate&&g.dist>=g.qAt){const q=o.question();if(q){const z=g.dist+g.speed*g.pc[3];g.gate={z,q,done:false};g.objs=g.objs.filter(ob=>ob.k==="coin"||ob.z<g.dist+4||ob.z>z+8);showQ(q)}else g.qAt+=60}
+  /* rows of words: one is the next word of the text, the others are wrong words to stay away from */
+  while(g.rowK<g.seq.length&&g.rowZ<g.dist+FAR){const k=g.rowK,right=g.seq[k].w,ln=Math.floor(Math.random()*3),others=[0,1,2].filter(x=>x!==ln);
+   const pool=g.decoys.filter(x=>x!==right&&!g.seq.slice(Math.max(0,k-1),k+2).some(y=>y.w===x));
+   g.objs.push({k:"word",ln,z:g.rowZ,w:right,ok:true,row:k});
+   shuffle(others).slice(0,g.pc[3]).forEach(o2=>g.objs.push({k:"word",ln:o2,z:g.rowZ,w:pool.length?pick(pool):"…",ok:false,row:k}));
+   g.rowK++;g.rowZ+=g.sp()}
  }
- function showQ(q){qEl.innerHTML=`<div class="lr-qp"><small>${esc(q.label||"")}</small>${esc(q.p)}</div><div class="lr-ch">${q.c.map(c=>`<span>${esc(c)}</span>`).join("")}</div>`;qEl.classList.remove("hide")}
+ const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+ /* the text built so far, in one strip at the top: words you picked up, missed words in red, and a blank for the next one */
+ /* no box at the top: the word you are on glows just above the lantern, so the eyes stay in one spot */
+ function strip(){if(!g)return;qEl.classList.add("hide");const n=g.got.findIndex(x=>x===0),upto=n<0?g.seq.length:n;g.cur=g.seq[upto-1]?g.seq[upto-1].w:""}
+ function resolve(k,ok,how){if(g.got[k])return;g.got[k]=ok?1:-1;g.objs.forEach(ob=>{if(ob.k==="word"&&ob.row===k)ob.done=ob.ok?(ok?"got":"show"):(how===ob?"bad":"gone")});
+  if(ok){g.right++;g.combo++;const add=5*Math.min(5,g.combo);g.coins+=add;SFX.right();const p=P(g.x,0,1);burst(p.x,p.y,"#9ee2b5",22);burst(p.x,p.y,"#ffd56b",12);g.flash={w:g.seq[k].w,t:.7,ok:true};if(g.combo>1&&g.combo%3===0)pop(`${pick(L.great)} +${add}`)}
+  else{g.wrong++;g.combo=0;g.miss.push({p:g.seq.slice(Math.max(0,k-4),k).map(x=>(x.sep?x.sep+" ":"")+x.w).join(" ")+" ـــ",a:g.seq[k].w});g.flash={w:g.seq[k].w,t:1.6};if(how)hurt(true);else SFX.wrong()}
+  updHud();strip();if(!g.got.includes(0))setTimeout(()=>{if(g&&!g.over){pop(L.doneAll);SFX.right();setTimeout(()=>end(false,true),1300)}},500)}
  function pop(txt,bad){const d=document.createElement("div");d.className="lr-pop"+(bad?" bad":"");d.textContent=txt;ov.appendChild(d);setTimeout(()=>d.remove(),bad?1900:900);if(bad)d.style.animationDuration="1.9s"}
  function burst(x,y,col,n=14){for(let i=0;i<n;i++)g.parts.push({x,y,vx:rnd(-160,160),vy:rnd(-260,-60),life:rnd(.4,.8),col,r:rnd(2,4.5)})}
 
  /* ---------- projection ---------- */
- const HZ=()=>H*.34,BOT=()=>H*.86,U0=()=>Math.min(W*.2,H*.13);
+ const HZ=()=>H*.32,BOT=()=>H*.74,U0=()=>Math.min(W*.2,H*.13);
  const sc=d=>CAM/(Math.max(-2.9,d)+CAM);
  const P=(X,d,h=0)=>{const s=sc(d),u=U0();return{x:W/2+X*GAP*u*s,y:HZ()+(BOT()-HZ())*s-h*u*s,s:u*s}};
 
  /* ---------- update ---------- */
  function step(dt){
   if(g.cd>0){g.cd-=dt;return}
-  g.t+=dt;if(!g.gate)g.speed=Math.min(g.pc[1],g.speed+g.pc[2]*dt);const dd=g.speed*dt;g.dist+=dd;g.run+=dd;
+  g.t+=dt;g.speed=Math.min(g.pc[1],g.speed+g.pc[2]*dt);const dd=g.speed*dt;g.dist+=dd;g.run+=dd;
   g.x+=(LANES[g.lane]-g.x)*Math.min(1,dt*14);
   if(g.y>0||g.vy>0){g.vy-=30*dt;g.y=Math.max(0,g.y+g.vy*dt);if(g.y===0)g.vy=0}
-  g.inv=Math.max(0,g.inv-dt);g.shake=Math.max(0,g.shake-dt);g.magnet=Math.max(0,g.magnet-dt);
+  g.inv=Math.max(0,g.inv-dt);if(g.flash&&(g.flash.t-=dt)<=0)g.flash=null;g.shake=Math.max(0,g.shake-dt);g.magnet=Math.max(0,g.magnet-dt);
   build();
   const near=Math.round(g.x+1);
   for(const ob of g.objs){const d=ob.z-g.dist;
    if(ob.k==="coin"&&g.magnet>0&&d<6&&!ob.got){ob.ln=near}
+   if(ob.k==="word"&&ob.ok&&d<-0.6&&!g.got[ob.row])resolve(ob.row,false,null);
    if(ob.got||ob.hit||d>0.35||d<-1)continue;
    if(ob.ln!==near)continue;
    if(ob.k==="coin"){if(Math.abs(g.y-ob.h)<1.3){ob.got=true;g.coins+=1;SFX.coin();const p=P(ob.ln-1,0,ob.h+.5);burst(p.x,p.y,"#ffd56b",5);updHud()}}
    else if(ob.k==="mag"){ob.got=true;g.magnet=8;pop(L.magnet);SFX.right()}
+   else if(ob.k==="word"){if(!ob.done&&!g.got[ob.row]){ob.hit=true;resolve(ob.row,ob.ok,ob.ok?null:ob)}}
    else if(g.inv<=0&&((ob.k==="low"&&g.y<.75)||ob.k==="wall")){ob.hit=true;hurt()}}
   g.objs=g.objs.filter(ob=>ob.z-g.dist>-3);
-  if(g.gate&&!g.gate.done&&g.gate.z-g.dist<=0.2){const q=g.gate.q,ok=near===q.a;g.gate.done=true;g.gate.pick=near;
-   const sp=qEl.querySelectorAll(".lr-ch span");if(sp[q.a])sp[q.a].classList.add("ok");if(!ok&&sp[near])sp[near].classList.add("no");
-   if(ok){g.right++;g.combo++;const add=10*Math.min(5,g.combo);g.coins+=add;pop(`${pick(L.great)} +${add}`);SFX.right();const p=P(near-1,0,1.5);burst(p.x,p.y,"#9ee2b5",26);burst(p.x,p.y,"#ffd56b",16)}
-   else{g.wrong++;g.combo=0;g.miss.push({p:q.p,a:q.c[q.a],label:q.label});pop(`${L.oops} ${q.c[q.a]}`,true);SFX.wrong();hurt(true)}
-   updHud();setTimeout(()=>qEl.classList.add("hide"),ok?700:1700);
-   g.qAt=g.gate.z+g.speed*g.pc[4];setTimeout(()=>{if(g)g.gate=null},10)}
+
   for(const p of g.parts){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=500*dt;p.life-=dt}g.parts=g.parts.filter(p=>p.life>0);
   if(g.trail&&Math.random()<.6){const p=P(g.x,0,g.y+.4);g.parts.push({x:p.x+rnd(-8,8),y:p.y,vx:rnd(-20,20),vy:rnd(20,60),life:.5,col:pick(["#ffe08a","#fff","#9ee2b5"]),r:rnd(1.5,3)})}
  }
@@ -178,15 +193,15 @@ function play(o){
   /* side arches with lanterns, far to near */
   const items=[];
   for(let k=Math.floor(dist/6)*6+6;k<dist+FAR;k+=6)for(const s of[-1,1])items.push({k:"arch",s,d:k-dist});
-  if(g){for(const ob of g.objs)if(!ob.got&&!(ob.hit&&ob.k!=="wall"))items.push({k:ob.k,ob,d:ob.z-g.dist});if(g.gate)items.push({k:"gate",d:g.gate.z-g.dist})}
+  if(g){for(const ob of g.objs)if(!ob.got&&!(ob.hit&&ob.k!=="wall"&&ob.k!=="word"))items.push({k:ob.k,ob,d:ob.z-g.dist})}
   items.sort((p,q)=>q.d-p.d);
   for(const it of items){if(it.d>FAR||it.d<-2.6)continue;
    if(it.k==="arch")drawArch(it.s,it.d,t);
-   else if(it.k==="gate")drawGate(it.d);
+   else if(it.k==="word")drawWord(it.ob,it.d);
    else drawObj(it.ob,it.d,t);
    if(it.d<0.6&&it.d>-0.4&&g&&!it.drewP){}
   }
-  if(g)drawRunner(t);
+  if(g)drawRunner(t);if(g&&g.cd<=0)drawBubble(t);
   if(g)for(const p of g.parts){ctx.globalAlpha=Math.max(0,p.life*1.6);ctx.fillStyle=p.col;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fill()}ctx.globalAlpha=1;
   if(g&&g.magnet>0){ctx.fillStyle="rgba(255,224,138,.12)";ctx.fillRect(0,0,W,H)}
   if(g&&g.inv>0&&g.hearts>0){ctx.fillStyle=`rgba(200,40,30,${g.inv>1.1?.25:0})`;ctx.fillRect(0,0,W,H)}
@@ -215,14 +230,19 @@ function play(o){
    ctx.fillStyle="#7a4a2a";ctx.fillRect(p.x-w/2,p.y-h*.45,w,h*.45);ctx.fillStyle="#e0a33a";for(let i=0;i<4;i++){ctx.beginPath();ctx.arc(p.x-w*.3+i*w*.2,p.y-h*.47,w*.08,0,7);ctx.fill()}
    for(let i=0;i<5;i++){ctx.fillStyle=i%2?"#f3ead2":"#c0392b";ctx.beginPath();ctx.moveTo(p.x-w*.6+i*w*.24,p.y-h);ctx.lineTo(p.x-w*.6+(i+1)*w*.24,p.y-h);ctx.lineTo(p.x-w*.6+(i+1)*w*.24,p.y-h*.8);ctx.quadraticCurveTo(p.x-w*.6+(i+.5)*w*.24,p.y-h*.7,p.x-w*.6+i*w*.24,p.y-h*.8);ctx.fill()}}
  }
- function drawGate(d){const q=g.gate.q;for(let i=0;i<3;i++){const p=P(i-1,d),top=P(i-1,d,2.7),w=p.s*GAP*.92;if(p.s<3)continue;
-   const done=g.gate.done,col=done?(i===q.a?"#2e7a4f":(i===g.gate.pick?"#9b2c22":"#7a6a55")):"#f1e2bf";
-   ctx.fillStyle=col;ctx.beginPath();ctx.moveTo(p.x-w/2,p.y);ctx.lineTo(p.x-w/2,top.y+w*.35);ctx.quadraticCurveTo(p.x-w/2,top.y-w*.05,p.x,top.y-w*.3);ctx.quadraticCurveTo(p.x+w/2,top.y-w*.05,p.x+w/2,top.y+w*.35);ctx.lineTo(p.x+w/2,p.y);
-   ctx.lineTo(p.x+w*.36,p.y);ctx.lineTo(p.x+w*.36,top.y+w*.4);ctx.quadraticCurveTo(p.x+w*.36,top.y+w*.05,p.x,top.y-w*.12);ctx.quadraticCurveTo(p.x-w*.36,top.y+w*.05,p.x-w*.36,top.y+w*.4);ctx.lineTo(p.x-w*.36,p.y);ctx.closePath();ctx.fill();
-   ctx.strokeStyle="#a87920";ctx.lineWidth=Math.max(1,p.s*.03);ctx.stroke();
-   const fs=Math.max(9,Math.min(34,p.s*.32));ctx.font=`700 ${fs}px ${o.nameFont||"serif"}`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.direction="rtl";
-   const ty=top.y+w*.3,tw=Math.min(w*1.05,ctx.measureText(q.c[i]).width+fs);ctx.fillStyle="rgba(20,16,50,.88)";rr(p.x-tw/2,ty-fs*.8,tw,fs*1.6,fs*.5);ctx.fill();
-   ctx.fillStyle="#fff7dc";let s=q.c[i];while(ctx.measureText(s).width>w*1.0&&s.length>3)s=s.slice(0,-2);if(s!==q.c[i])s+="…";ctx.fillText(s,p.x,ty+fs*.05);ctx.direction="inherit"}}
+ function drawBubble(t){const f=g.flash,w=f?f.w:g.cur;if(!w)return;const p=P(g.x,0),fs0=Math.round(Math.min(40,Math.max(26,W*.08))),y=p.y+fs0*1.7+16;
+  const fs=fs0;ctx.font=`700 ${fs}px ${o.nameFont||"serif"}`;ctx.direction="rtl";const tw=ctx.measureText(w).width+fs*1.2,h=fs*1.7;
+  const bad=f&&!f.ok,good=f&&f.ok;ctx.save();ctx.shadowColor=bad?"rgba(255,90,70,.8)":"rgba(255,214,110,.9)";ctx.shadowBlur=18;
+  ctx.fillStyle=bad?"#9b2c22":good?"#2e7a4f":"#fff7e0";rr(p.x-tw/2,y-h,tw,h,h/2);ctx.fill();ctx.restore();
+  ctx.beginPath();ctx.moveTo(p.x-8,y-h);ctx.lineTo(p.x+8,y-h);ctx.lineTo(p.x,y-h-9);ctx.fillStyle=bad?"#9b2c22":good?"#2e7a4f":"#fff7e0";ctx.fill();
+  ctx.fillStyle=bad||good?"#fff":"#2b1d05";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(w,p.x,y-h*.46);ctx.direction="inherit"}
+ function drawWord(ob,d){if(ob.done==="got"||ob.done==="gone")return;if(!ob.done&&ob.row!==g.got.indexOf(0))return;/* only the next row of words, never a crowd */const p=P(ob.ln-1,d);if(p.s<2)return;let w=p.s*GAP*.95;
+  const bad=ob.done==="bad",show=ob.done==="show",h=Math.max(24,w*.55);ctx.font=`700 ${Math.max(15,h*.66)}px ${o.nameFont||"serif"}`;w=Math.max(w,ctx.measureText(ob.w).width+h*.6);const y=p.y-h-p.s*.25;
+  ctx.fillStyle="rgba(0,0,0,.18)";ctx.beginPath();ctx.ellipse(p.x,p.y,w*.45,p.s*.08,0,0,7);ctx.fill();
+  ctx.fillStyle="#a87920";ctx.fillRect(p.x-p.s*.03,y+h,p.s*.06,p.y-y-h);
+  ctx.fillStyle=bad?"#9b2c22":show?"#2e7a4f":"#fff7e0";rr(p.x-w/2,y,w,h,h*.3);ctx.fill();ctx.strokeStyle=bad?"#ffb3aa":"#e3b04b";ctx.lineWidth=Math.max(1.5,p.s*.04);ctx.stroke();
+  const fs=Math.max(15,h*.66);ctx.font=`700 ${fs}px ${o.nameFont||"serif"}`;
+  ctx.textAlign="center";ctx.textBaseline="middle";ctx.direction="rtl";ctx.fillStyle=bad||show?"#fff":"#2b1d05";ctx.fillText(ob.w,p.x,y+h*.52);ctx.direction="inherit"}
  function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
  function drawRunner(t){/* the player is a glowing lantern (no people or animals) */
   if(g.inv>0&&Math.floor(t*14)%2&&g.hearts>0)return;
@@ -275,17 +295,18 @@ function play(o){
  function pause(){if(state!=="play")return;state="pause";menu.innerHTML=`<div class="lr-card"><h2>${L.paused}</h2><button class="lr-btn lr-go" id="lrR">${L.resume}</button><button class="lr-btn lr-sec" id="lrQ2">${L.close}</button></div>`;
   menu.querySelector("#lrR").onclick=()=>{menu.innerHTML="";last=0;state="play"};menu.querySelector("#lrQ2").onclick=()=>{end(true)}}
  ov.querySelector("#lrP").onclick=pause;
- function end(quit){if(!g||g.over)return;g.over=true;state="over";qEl.classList.add("hide");
-  const score=Math.round(g.dist)+g.right*50;let earned=g.coins,bonus=0;
+ ov.querySelector("#lrV").onclick=()=>{const ks=["slow","normal","fast"],k=ks[(ks.indexOf(S.get("lrPace","slow"))+1)%3];S.set("lrPace",k);if(g){g.pc=PACE[k];g.speed=Math.min(Math.max(g.pc[0],Math.min(g.speed,g.pc[1])),g.pc[1]);if(k==="slow")g.speed=g.pc[0]}updHud()};
+ function end(quit,finished){if(!g||g.over)return;g.over=true;state="over";qEl.classList.add("hide");
+  const score=g.right*10+(finished?50:0);let earned=g.coins,bonus=0;
   const day=new Date().toDateString();if(S.get("lrDay","")!==day&&(g.right>0||g.coins>=10)){bonus=20;S.set("lrDay",day)}
   earned+=bonus;if(earned>0)o.wallet.add(earned);const best=S.get("lrBest",0),nb=score>best;if(nb)S.set("lrBest",score);
   o.onEnd&&o.onEnd({coins:earned,score,right:g.right,wrong:g.wrong,miss:g.miss});
   hud.hidden=true;
-  menu.innerHTML=`<div class="lr-card"><h2>${L.over}</h2><p>${L.earned}</p><div class="lr-big">${COIN.replace('class="lr-coin"','class="lr-coin" style="width:44px;height:44px"')}+${earned}</div>
+  menu.innerHTML=`<div class="lr-card"><h2>${finished?L.doneAll:L.over}</h2><p>${L.earned}</p><div class="lr-big">${COIN.replace('class="lr-coin"','class="lr-coin" style="width:44px;height:44px"')}+${earned}</div>
    ${bonus?`<p>🎁 ${L.bonus} (+${bonus})</p>`:""}
    <div class="lr-row"><div class="lr-stat"><b>${score}${nb?" ⭐":""}</b><span>${L.dist}</span></div><div class="lr-stat"><b style="color:#9ee2b5">${g.right}</b><span>${L.right}</span></div><div class="lr-stat"><b style="color:#ffb3aa">${g.wrong}</b><span>${L.wrong}</span></div></div>
-   ${g.miss.length?`<div class="lr-rev"><b>${L.review}</b>${g.miss.map(m=>`<div><span lang="ar" style="font-family:var(--lr-text)">${esc(m.p)}</span><br><span class="a" lang="ar">${esc(m.a)}</span></div>`).join("")}</div>`:""}
-   <button class="lr-btn lr-go" id="lrA">${L.again}</button><div class="lr-row"><button class="lr-btn lr-sec" style="min-width:140px" id="lrShop">${L.shop}</button><button class="lr-btn lr-sec" style="min-width:140px" id="lrE">${L.close}</button></div></div>`;
+   ${g.miss.length?`<div class="lr-rev"><b>${L.review}</b>${g.miss.map(m=>`<div><small style="color:#cfc8f5">${L.qWas}${m.label?" · "+esc(m.label):""}</small><br><span lang="ar" style="font-family:var(--lr-text)">${esc(m.p)}</span><br><small style="color:#cfc8f5">${L.ansIs}:</small> <span class="a" lang="ar">${esc(m.a)}</span></div>`).join("")}</div>`:""}
+   <button class="lr-btn lr-go" id="lrA">${L.again}</button><div class="lr-row"><button class="lr-btn lr-sec" style="min-width:140px;line-height:1.2" id="lrShop">${L.shop}<br><small style="font-weight:500;font-size:12px">${L.shopD}</small></button><button class="lr-btn lr-sec" style="min-width:140px;line-height:1.2" id="lrE">${L.close}<br><small style="font-weight:500;font-size:12px">${L.closeD}</small></button></div></div>`;
   menu.querySelector("#lrA").onclick=()=>{menu.innerHTML="";newGame();state="play"};menu.querySelector("#lrShop").onclick=shop;menu.querySelector("#lrE").onclick=close;
  }
  function shop(){state="menu";hud.hidden=true;const own=S.get("lrOwn",["green"]),cur=S.get("lrCloak","green"),hasTrail=S.get("lrTrail",false),trailOn=S.get("lrTrailOn",false);
