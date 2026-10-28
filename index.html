@@ -1562,7 +1562,7 @@ en:{repeat:"repeat",crushHow_:"Tap the words of the line in order.",gCrush:"Word
  triesSet:"Wrong tries before a word is marked",triesSub:"After that, the word is shown in red and you carry on.",hideSet:"Hidden words look like",
  sound:"Soft beep on mistakes",vib:"Vibrate on mistakes",vibSub:"Works on Android. iPhones do not let websites vibrate.",recSet:"Save recordings",
  resetMe:"Reset this learner",resetAll:"Reset everything",resetSub:"Deletes progress, streaks and history. Recordings are kept.",confirm:"Tap again to confirm",resetDone:"Done. Starting fresh.",
- games:"Practice",gamesSub:"Pick a game, then a level.",gRun:"Lantern Run",gRunD:"A running game: pick up the words of the verse in order, one by one.",runHow:"Swipe or tap a side of the screen to move. Pick up the next word of the verse and stay away from the wrong words.",best:"Best",
+ games:"Practice",gamesSub:"Pick a game, then a level.",gRun:"Race of the Memorizers",gRunD:"A running game: pick up the words of the verse in order, one by one.",runHow:"Swipe or tap a side of the screen to move. Pick up the next word of the verse and stay away from the wrong words.",best:"Best",
  gFlash:"Flash cards",gFlashD:"See the first half, remember the second, then flip.",gSpeed:"Quick choice",gSpeedD:"Answer fast for more points. Build a streak.",
  gBuild:"Build the line",gBuildD:"Put the words of the second half in order.",gMatch:"Find the pair",gMatchD:"Flip a first half and its second half.",
  tapFlip:"Tap the card to flip",knewIt:"I knew it",againC:"Again",left:"left",pts:"points",moves:"moves",round:"Round",cards:"cards",
@@ -1606,7 +1606,7 @@ ar:{repeat:"تكرار",crushHow_:"اضغط كلمات البيت بالترتي
  triesSet:"عدد المحاولات الخاطئة قبل تعليم الكلمة",triesSub:"بعدها تظهر الكلمة بالأحمر وتكمل.",hideSet:"شكل الكلمات المخفية",
  sound:"تنبيه صوتي خفيف عند الخطأ",vib:"اهتزاز عند الخطأ",vibSub:"يعمل على أندرويد. أجهزة iPhone لا تسمح للمواقع بالاهتزاز.",recSet:"حفظ التسجيلات",
  resetMe:"إعادة تعيين هذا المتعلّم",resetAll:"إعادة تعيين الكل",resetSub:"يحذف التقدّم والسلاسل والسجل، وتبقى التسجيلات.",confirm:"اضغط مرة أخرى للتأكيد",resetDone:"تم. بداية جديدة.",
- games:"التدريب",gamesSub:"اختر لعبة ثم مرحلة.",gRun:"سباق الفانوس",gRunD:"لعبة جري: التقط كلمات البيت بالترتيب، كلمةً كلمة.",runHow:"اسحب أو المس جانب الشاشة لتتحرك. التقط الكلمة التالية من البيت وابتعد عن الكلمات الخطأ.",best:"الأفضل",
+ games:"التدريب",gamesSub:"اختر لعبة ثم مرحلة.",gRun:"سباق الحُفّاظ",gRunD:"لعبة جري: التقط كلمات البيت بالترتيب، كلمةً كلمة.",runHow:"اسحب أو المس جانب الشاشة لتتحرك. التقط الكلمة التالية من البيت وابتعد عن الكلمات الخطأ.",best:"الأفضل",
  gFlash:"البطاقات",gFlashD:"ترى الصدر، فتتذكر العجز، ثم تقلب البطاقة.",gSpeed:"الاختيار السريع",gSpeedD:"أجب بسرعة لنقاط أكثر، واصنع سلسلة.",
  gBuild:"ركّب البيت",gBuildD:"رتّب كلمات العجز بالترتيب الصحيح.",gMatch:"جِد الزوج",gMatchD:"اقلب صدرًا وعجزه.",
  tapFlip:"اضغط على البطاقة لقلبها",knewIt:"عرفتُه",againC:"مرة أخرى",left:"متبقية",pts:"نقطة",moves:"حركة",round:"الجولة",cards:"بطاقة",
@@ -2388,12 +2388,13 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   $("#rvPlay").onclick=()=>{unlockAudio();Player.playSeg(AUDIO.words[`${w.v}:${w.h}:${w.i}`],1,"word")};$("#rvX").onclick=()=>{n.innerHTML=""}}
 };
 
-/* ================= Lantern Run: lively running game (run.js is the same file on every site) ================= */
+/* ================= Race of the Memorizers: lively running game (run.js is the same file on every site) ================= */
 const runBanner=()=>`<button class="runb" id="runB" type="button"><span class="lt">🏮</span><span><b>${t("gRun")}</b><span class="d">${t("gRunD")}</span></span><span class="go"><svg viewBox="0 0 40 40" width="18" height="18"><circle cx="20" cy="20" r="18" fill="#e3b04b" stroke="#a87920" stroke-width="2"/><path d="M20 10l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill="#fff3cf"/></svg>${num(ps.get("coins",0))}</span></button>`;
 function bindRun(){const b=$("#runB");if(b)b.onclick=()=>{Games.game="run";location.hash="#games/run";setTimeout(()=>{Games.cur=null;Games.render();window.scrollTo(0,0)},60)}}
 /* a short run over the poem's own words: two verses from the chosen range, word by word */
 const RUN_ALL=[...new Set(V.flatMap(h=>h.flatMap(x=>toks(x))).map(w=>w.replace(/[«»]/g,"")))];
-function runRound(pool){const st=pool[Math.floor(Math.random()*Math.max(1,pool.length-1))],vs=pool.includes(st+1)?[st,st+1]:[st],words=[];
+/* each goal is two verses of the chosen level, in order; the next goal goes on from there */
+function runRound(pool,n){const i0=(2*(n||0))%pool.length,st=pool[i0],vs=pool.includes(st+1)?[st,st+1]:[st],words=[];
  vs.forEach((v,n)=>[0,1].forEach(h=>toks(V[v-1][h]).forEach((w,k)=>words.push({w:w.replace(/[«»]/g,""),sep:""}))));
  return{words,decoys:RUN_ALL}}
 /* ================= GAMES ================= */
@@ -2429,9 +2430,9 @@ const Games={cur:null,timer:null,game:null,lvl:null,
   addXP(stars*20,null);const ach=recordVerses({});this.leave();this.render();const nx=l!=="c"&&l!=null&&l<CH.length-1?l+1:null;
   celebrate({title,stats:flowers(stars,"big")+stats,extra:achieveExtra(ach),again:()=>this.play(l),next:nx!=null?{label:`${t("nextLv")} ›`,fn:()=>this.play(nx)}:null})},
  /* word drop: tap the words of each line in order; they pop, the tiles above fall down and new ones drop in */
- run(){const lvl=this.lvl,pool=this.pool(),S={get:(k,d)=>ps.get(k,d),set:(k,v)=>ps.set(k,v)};
+ run(){const lvl=this.lvl,pool=this.pool(),S={get:(k,d)=>ps.get(k+(k==="lrGoalN"||k==="lrStars"?"."+lvl:""),d),set:(k,v)=>ps.set(k+(k==="lrGoalN"||k==="lrStars"?"."+lvl:""),v)};
   if(!window.LanternRun)return this.render();this.cur="run";
-  this.runH=LanternRun.play({lang:LANG,nameFont:'"Book Naskh",serif',textFont:'"Book Naskh",serif',store:S,round:()=>runRound(pool),
+  this.runH=LanternRun.play({lang:LANG,nameFont:'"Book Naskh",serif',textFont:'"Book Naskh",serif',store:S,round:n=>runRound(pool,n),
    wallet:{get:()=>ps.get("coins",0),add:n=>ps.set("coins",Math.max(0,ps.get("coins",0)+n))},
    onEnd:r=>{const stars=r.right>=8?3:r.right>=4?2:r.right>=1?1:0,G=this.stars();G.run=G.run||{};if(lvl!=="c"&&lvl!=null&&(G.run[lvl]||0)<stars){G.run[lvl]=stars;ps.set("gameStars",G)}
     const best=ps.get("gameBest",{});if(best.run==null||r.score>best.run){best.run=r.score;ps.set("gameBest",best)}if(r.right){const d=xpData();d.total+=r.right*2;d.today+=r.right*2;ps.set("xp",d);xpHUD()}},
