@@ -1331,6 +1331,38 @@ main{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 /* "ways to learn" on a phone: compact rows, icon beside the words */
 @media (max-width:560px){.tile{grid-template-columns:auto 1fr;column-gap:14px!important;row-gap:2px!important;align-items:center;padding:14px 16px!important}.tile .ic{grid-row:span 2;width:44px!important;height:44px!important}.tile b{align-self:end}.tile>span:last-child{align-self:start;font-size:.88rem!important;line-height:1.6!important}}
 @media (max-width:360px){.menu a{font-size:.62rem!important;letter-spacing:-.01em}html[lang="ar"] .menu a{font-size:.7rem!important}.hctl>.hbtn,.hctl .lsw button{padding:0 8px!important}}
+/* ===== Motion and banner (2026-10-28), the same on every site: a deep banner on Home with a slowly turning star, a gentle rise-in, a gold shine on the title, cards that ease in as you scroll, numbered ways to learn, and moving sound bars while listening. All of it stops when the phone asks for less motion. Each site sets only --banner and --shine. ===== */
+:root{--star:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' fill='none' stroke='black' stroke-width='1.1'%3E%3Ccircle cx='100' cy='100' r='96'/%3E%3Ccircle cx='100' cy='100' r='88' stroke-dasharray='1 6' stroke-linecap='round' stroke-width='2'/%3E%3Crect x='38' y='38' width='124' height='124'/%3E%3Crect x='38' y='38' width='124' height='124' transform='rotate%2845 100 100%29'/%3E%3Ccircle cx='100' cy='100' r='54'/%3E%3Crect x='70' y='70' width='60' height='60' transform='rotate%2822.5 100 100%29'/%3E%3Crect x='70' y='70' width='60' height='60' transform='rotate%2867.5 100 100%29'/%3E%3Ccircle cx='100' cy='100' r='9'/%3E%3C/svg%3E")}
+.hero.pat{position:relative;isolation:isolate;overflow:hidden;background:var(--banner)!important;background-image:radial-gradient(120% 70% at 50% 0%,rgba(255,255,255,.09),transparent 65%)!important;color:#f6f1e4}
+.hero.pat::before,.hero.pat::after{content:"";position:absolute;z-index:-1;aspect-ratio:1;background:var(--shine);-webkit-mask:var(--star) center/contain no-repeat;mask:var(--star) center/contain no-repeat;pointer-events:none;animation:mo-turn 160s linear infinite}
+.hero.pat::before{width:min(560px,125vw);top:-160px;inset-inline-start:-190px;opacity:.26}
+.hero.pat::after{width:min(420px,95vw);bottom:-150px;inset-inline-end:-160px;opacity:.16;animation-direction:reverse}
+@keyframes mo-turn{to{transform:rotate(360deg)}}
+.hero.pat .frame{background:rgba(255,255,255,.035)!important;border-color:var(--shine)!important;outline-color:color-mix(in srgb,var(--shine) 50%,transparent)!important;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.hero.pat .frame>i.c{background:var(--shine)}
+.hero.pat h1{color:#fbf6e8!important}
+.hero.pat .kicker{color:var(--shine)!important}
+.hero.pat :is(p,.facts li,.facts li>span,.hadith small){color:rgba(255,255,255,.84)!important}
+.hero.pat .facts li{border-color:rgba(255,255,255,.2)!important}.hero.pat .facts b{color:var(--shine)!important}.hero.pat .facts{opacity:1!important}
+.hero.pat .orn::before,.hero.pat .orn::after{background:color-mix(in srgb,var(--shine) 60%,transparent)!important}.hero.pat .orn svg{color:var(--shine)}
+.hero.pat .btn.pri{background:var(--shine)!important;border-color:var(--shine)!important;color:#16191b!important}
+.hero.pat .btn.out{background:rgba(255,255,255,.1)!important;border-color:rgba(255,255,255,.4)!important;color:#fff!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.hero.pat .frame>:not(i){animation:mo-rise .8s cubic-bezier(.2,.7,.2,1) both}
+.hero.pat .frame>:nth-child(n+2){animation-delay:.08s}.hero.pat .frame>:nth-child(n+3){animation-delay:.16s}.hero.pat .frame>:nth-child(n+6){animation-delay:.26s}.hero.pat .frame>:nth-child(n+7){animation-delay:.36s}.hero.pat .frame>:nth-child(n+8){animation-delay:.46s}.hero.pat .frame>:nth-child(n+9){animation-delay:.56s}.hero.pat .frame>:nth-child(n+10){animation-delay:.66s}.hero.pat .frame>:nth-child(n+11){animation-delay:.76s}
+@keyframes mo-rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.sh{background:linear-gradient(100deg,var(--shine) 0 38%,#fff3cf 50%,var(--shine) 62% 100%);background-size:260% 100%;background-position:100% 0;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;padding-block:.15em;animation:mo-shine 7s ease-in-out 1s infinite}
+@keyframes mo-shine{0%,35%{background-position:100% 0}75%,100%{background-position:0 0}}
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}.rv.in{opacity:1;transform:none}
+.tile .ic{transition:transform .45s cubic-bezier(.3,1.6,.5,1)}.tile:hover .ic,.tile:active .ic{transform:rotate(-8deg) scale(1.1)}
+.hero~.sec .tiles{counter-reset:mo}
+.hero~.sec .tile{position:relative;padding-inline-end:54px!important}
+.hero~.sec .tile::after{counter-increment:mo;content:counter(mo);position:absolute;top:14px;inset-inline-end:14px;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--shine);color:var(--shine);display:grid;place-items:center;font-weight:800;font-size:.85rem;line-height:1}
+html[lang="ar"] .hero~.sec .tile::after{content:counter(mo,arabic-indic);font-size:1rem}
+@media (max-width:560px){.hero~.sec .tile::after{top:50%;margin-top:-14px}}
+:is(.mst.live,.mfocus .mbar .r2 .lv:not(.ps),.lv:not(.ps)) i{width:17px!important;height:13px!important;border-radius:0!important;background-color:transparent!important;background-image:linear-gradient(currentColor,currentColor),linear-gradient(currentColor,currentColor),linear-gradient(currentColor,currentColor),linear-gradient(currentColor,currentColor)!important;background-repeat:no-repeat!important;background-position:0 50%,33.3% 50%,66.6% 50%,100% 50%!important;background-size:3px 40%,3px 90%,3px 55%,3px 75%;animation:mo-bars .9s ease-in-out infinite!important}
+@keyframes mo-bars{0%,100%{background-size:3px 40%,3px 90%,3px 55%,3px 75%}50%{background-size:3px 95%,3px 35%,3px 85%,3px 45%}}
+@media (prefers-reduced-motion:reduce){.hero.pat::before,.hero.pat::after{animation:none!important}.rv{opacity:1!important;transform:none!important}.hero.pat .frame>*{opacity:1!important;transform:none!important}}
+:root{--banner:#25292d;--shine:#cdb487}
 </style>
 </head>
 <body>
@@ -1358,9 +1390,9 @@ main{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 <div class="view" id="view-home">
  <section class="hero pat"><div class="wrap">
   <div class="frame">
-   <div class="l-ar" lang="ar"><h1 lang="ar">تُحْفَةُ الأَطْفَالِ وَالغِلْمَانِ<br>فِي تَجْوِيدِ القُرْآنِ</h1>
+   <div class="l-ar" lang="ar"><h1 lang="ar"><span class="sh">تُحْفَةُ</span> الأَطْفَالِ وَالغِلْمَانِ<br>فِي تَجْوِيدِ القُرْآنِ</h1>
    <p class="full" dir="rtl">نَظْمُ الشَّيْخِ سُلَيْمَانَ بْنِ حُسَيْنٍ الجَمْزُورِيِّ</p></div>
-   <div class="l-en" lang="en" dir="ltr"><h1 class="enh1">Tuḥfat al-Aṭfāl</h1><p class="ensub">The Gift for Children and Young Students on the Tajwīd of the Qur’an</p>
+   <div class="l-en" lang="en" dir="ltr"><h1 class="enh1"><span class="sh">Tuḥfat al-Aṭfāl</span></h1><p class="ensub">The Gift for Children and Young Students on the Tajwīd of the Qur’an</p>
    <p class="enby">by Shaykh Sulaymān ibn Ḥusayn al-Jamzūrī</p></div>
    <p class="lead"><span class="l-en" lang="en">Read it with meanings, memorize it, practise and test yourself. Free for everyone.</span><span class="l-ar" lang="ar" dir="rtl">اقرأه بمعانيه، واحفظه، وتدرّب عليه، واختبر نفسك. مجاني للجميع.</span></p>
    <div class="cta"><a class="btn pri" href="#memorize"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg><span class="l-en" lang="en">Memorize</span><span class="l-ar" lang="ar" dir="rtl">ابدأ الحفظ</span></a><a class="btn out" href="#poem"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5zM12 6.5V19"/></svg><span class="l-en" lang="en">Read</span><span class="l-ar" lang="ar" dir="rtl">اقرأ المتن</span></a></div>
@@ -2708,6 +2740,12 @@ document.documentElement.lang=LANG;document.documentElement.dir=LANG==="ar"?"rtl
 applyTheme();renderPf();applyPoemOpts();PBar.init();Book.apply();xpHUD();$$("[data-game]").forEach(x=>x.outerHTML=gameBtn());route();
 
 /* the round mic steps aside while the page's own Start buttons are on screen (Home's hero, a Start bar), so there is one clear button */
+/* Home cards ease in as they scroll into view. Nothing is hidden unless this runs, and it does not run when the phone asks for less motion. */
+const Reveal=(()=>{if(!("IntersectionObserver" in window)||matchMedia("(prefers-reduced-motion: reduce)").matches)return{scan(){}};
+ const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{rootMargin:"0px 0px -6% 0px"});
+ const scan=()=>document.querySelectorAll(".hero~.sec :is(.head,.tile,.panel,.chapters>li,.prose,.refs)").forEach(el=>{if(el.dataset.rv)return;el.dataset.rv=1;const sib=[...el.parentNode.children].indexOf(el);el.style.transitionDelay=(sib%4)*70+"ms";el.classList.add("rv");io.observe(el)});
+ let t=0;const later=()=>{clearTimeout(t);t=setTimeout(scan,60)};const m=document.querySelector("main");if(m)new MutationObserver(later).observe(m,{childList:true,subtree:true});
+ addEventListener("hashchange",later);later();return{scan}})();
 function tuckFab(){const f=document.getElementById("fab");if(!f)return;const on=[...document.querySelectorAll(".hero .cta,.startbar")].some(c=>{if(!c.offsetParent&&getComputedStyle(c).position!=="fixed")return false;const r=c.getBoundingClientRect();return r.width>0&&r.bottom>0&&r.top<innerHeight});f.classList.toggle("tuck",on)}
 addEventListener("scroll",tuckFab,{passive:true});addEventListener("hashchange",()=>setTimeout(tuckFab,80));addEventListener("click",()=>setTimeout(tuckFab,120));setTimeout(tuckFab,300);
 </script>
