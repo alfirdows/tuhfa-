@@ -1172,6 +1172,47 @@ html[lang="ar"] .menu a{font-size:.74rem!important}
 .ct.glow{box-shadow:0 0 0 3px var(--ok),0 3px 0 rgba(0,0,0,.08);border-color:var(--ok)}
 
 :root{--lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'%3E%3Cg fill='none' stroke='%232b2f33' stroke-opacity='0.16' stroke-width='1.2'%3E%3Cpath d='M0 0C0 16 24 16 24 32C24 48 0 48 0 64M48 0C48 16 24 16 24 32C24 48 48 48 48 64'/%3E%3Cpath d='M24 -32C24 -16 48 -16 48 0M24 -32C24 -16 0 -16 0 0' transform='translate(0 64)'/%3E%3C/g%3E%3Cg fill='%232b2f33' fill-opacity='0.21'%3E%3Ccircle cx='24' cy='10' r='2.2'/%3E%3Ccircle cx='0' cy='42' r='2.2'/%3E%3Ccircle cx='48' cy='42' r='2.2'/%3E%3C/g%3E%3C/svg%3E");--ablaq:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Crect width='10' height='10' fill='%232a2f36'/%3E%3Crect x='10' width='10' height='10' fill='%23f4efe4'/%3E%3C/svg%3E")}@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'%3E%3Cg fill='none' stroke='%23d6d9dc' stroke-opacity='0.12' stroke-width='1.2'%3E%3Cpath d='M0 0C0 16 24 16 24 32C24 48 0 48 0 64M48 0C48 16 24 16 24 32C24 48 48 48 48 64'/%3E%3Cpath d='M24 -32C24 -16 48 -16 48 0M24 -32C24 -16 0 -16 0 0' transform='translate(0 64)'/%3E%3C/g%3E%3Cg fill='%23d6d9dc' fill-opacity='0.16'%3E%3Ccircle cx='24' cy='10' r='2.2'/%3E%3Ccircle cx='0' cy='42' r='2.2'/%3E%3Ccircle cx='48' cy='42' r='2.2'/%3E%3C/g%3E%3C/svg%3E");--ablaq:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Crect width='10' height='10' fill='%230f1216'/%3E%3Crect x='10' width='10' height='10' fill='%23cfc6b4'/%3E%3C/svg%3E")}}:root[data-theme="dark"]{--lattice:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'%3E%3Cg fill='none' stroke='%23d6d9dc' stroke-opacity='0.12' stroke-width='1.2'%3E%3Cpath d='M0 0C0 16 24 16 24 32C24 48 0 48 0 64M48 0C48 16 24 16 24 32C24 48 48 48 48 64'/%3E%3Cpath d='M24 -32C24 -16 48 -16 48 0M24 -32C24 -16 0 -16 0 0' transform='translate(0 64)'/%3E%3C/g%3E%3Cg fill='%23d6d9dc' fill-opacity='0.16'%3E%3Ccircle cx='24' cy='10' r='2.2'/%3E%3Ccircle cx='0' cy='42' r='2.2'/%3E%3Ccircle cx='48' cy='42' r='2.2'/%3E%3C/g%3E%3C/svg%3E");--ablaq:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Crect width='10' height='10' fill='%230f1216'/%3E%3Crect x='10' width='10' height='10' fill='%23cfc6b4'/%3E%3C/svg%3E")}.ownv{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}.ownv>div{display:grid;justify-items:center;gap:2px;padding:14px;border-radius:12px;background:var(--surface-2,#f4f5f7)}.ownv b{font-size:1.5rem;color:var(--acc,#3f7f55)}.ownv span{font-size:.85rem;color:var(--muted,#5a616b)}
+
+/* ---- calm Memorize screen: one slim line on top, verses, four buttons at the bottom ---- */
+body.dockpad .fab{display:none!important}
+.mhead.calm{gap:6px!important;padding-block:8px!important}
+.mhead.calm .r{display:flex;align-items:center;gap:8px}.mhead.calm .sp{flex:1}
+.mhead.calm .ib{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);display:grid;place-items:center;flex:none;padding:0}
+.mhead.calm .ib svg{width:20px;height:20px}
+.dock.calm .in{gap:4px!important;padding:6px 10px!important;align-items:flex-end!important}
+.dock.calm .db{position:relative;background:transparent!important;border:0!important;min-width:64px;min-height:52px!important;color:var(--ink)!important;font-weight:700!important;font-size:.7rem!important}
+.dock.calm .db svg{width:22px!important;height:22px!important}
+.dock.calm .db.endb{color:var(--bad)!important}.dock.calm .db.endb svg{color:var(--bad)!important}
+.dock.calm .db{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-end!important;gap:3px!important}
+.dock.calm .micw{display:flex;flex-direction:column;align-items:center;gap:2px;padding:0 4px}
+.dock.calm .mic{width:58px!important;min-width:58px!important;height:58px!important;border-radius:50%!important;padding:0!important}
+.dock.calm .mic b{display:none}.dock.calm .mic svg{width:24px!important;height:24px!important}
+.dock.calm #micl{font-size:.66rem;font-weight:700;color:var(--muted)}
+.dock.calm .cnt{position:absolute;top:0;inset-inline-end:8px;min-width:18px;height:18px;border-radius:9px;background:var(--bad);color:#fff;font-size:.68rem;display:grid;place-items:center;padding:0 5px}
+.dock.calm .cnt[hidden]{display:none}
+.opts{display:grid;gap:14px;padding-bottom:6px}.opts .og{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:12px}.opts .og:first-child{border-top:0;padding-top:0}
+.opts h4{margin:0;font-size:.82rem;color:var(--muted)}.opts .row{display:flex;flex-wrap:wrap;gap:8px}
+.mcount{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 10px}
+.retc{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(92px + env(safe-area-inset-bottom,0px));z-index:65;display:flex;align-items:center;gap:2px;padding:4px;border-radius:999px;background:var(--ink);color:var(--bg);box-shadow:0 8px 22px rgba(0,0,0,.22)}
+.retc button{border:0;background:transparent;color:inherit;font:inherit;font-weight:700;font-size:.84rem;display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;white-space:nowrap}
+.retc .x{padding:7px;opacity:.7}.retc svg{width:17px;height:17px}
+body:has(#mv) .retc{display:none}
+body.dockpad .toast{bottom:calc(146px + env(safe-area-inset-bottom,0px))!important}
+.mv{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(92px + env(safe-area-inset-bottom,0px));z-index:70;width:min(560px,calc(100vw - 20px));max-height:62vh;display:flex;flex-direction:column;background:var(--bg);border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:20px;box-shadow:0 14px 36px rgba(0,0,0,.22)}
+body:not(.dockpad) .mv{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+.mv .mvh{display:flex;align-items:center;gap:8px;padding:10px 12px 6px}.mv .mvh .sp{flex:1}
+.mv .mvi{width:30px;height:30px;border-radius:10px;background:var(--acc-soft);color:var(--gold);display:grid;place-items:center}.mv .mvi svg{width:18px;height:18px}
+.mv .mvh .c{color:var(--muted);font-weight:700;font-size:.85rem;font-variant-numeric:tabular-nums}
+.mv .mvt{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;font:inherit;font-size:.78rem;font-weight:700;padding:5px 10px}
+.mv .mvx{border:0;background:var(--surface-2);color:var(--ink);width:32px;height:32px;border-radius:50%;display:grid;place-items:center}
+.mv .mvb{overflow:auto;padding:4px 12px 10px;display:grid;gap:10px}
+.mv .mvf{display:flex;align-items:center;gap:8px;padding:8px 12px 12px;border-top:1px solid var(--line)}
+.mv .mvf button{border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:700;font-size:.85rem;border-radius:999px;padding:7px 12px;display:inline-flex;align-items:center;gap:4px}
+.mv .mvf button:disabled{opacity:.35}.mv .mvf svg{width:16px;height:16px}
+.mv .mvf .dots{flex:1;display:flex;justify-content:center;gap:5px;flex-wrap:wrap}.mv .mvf .dots i{width:7px;height:7px;border-radius:50%;background:var(--line)}.mv .mvf .dots i.on{background:var(--gold);width:16px;border-radius:4px}
+.mtile{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mtile button{position:relative;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:16px;padding:12px 6px;display:grid;justify-items:center;gap:6px;font:inherit;font-weight:700;font-size:.8rem}
+.mtile svg{width:24px;height:24px;color:var(--acc)}.mtile .cnt{position:absolute;top:6px;inset-inline-end:8px;min-width:18px;height:18px;border-radius:9px;background:var(--bad);color:#fff;font-size:.68rem;display:grid;place-items:center;padding:0 5px}
 </style>
 </head>
 <body>
@@ -1335,6 +1376,11 @@ function wmatch(h,e){if(!h||!e)return false;if(h===e)return true;const need=L=>L
  const ok=(a,b)=>{const L=Math.max(a.length,b.length);return L<=3?a===b:sim(a,b)>=need(L)};if(ok(h,e))return true;
  const h2=h.replace(/^[وف]/,""),e2=e.replace(/^[وف]/,"");if(h2.length>1&&e2.length>1&&(h2!==h||e2!==e)&&ok(h2,e2))return true;
  const a=h.replace(/^ال/,""),b=e.replace(/^ال/,"");return a.length>2&&b.length>2&&ok(a,b)}
+/* Sounds the phone often mixes up (ص/س, ض/د, ط/ت, ق/ك, ح/ه, ذ/ظ/ز, ث/س, ع and alif) count as one, and "ال" is ignored. */
+const fold=s=>s.replace(/^[وف]?ال/,"").replace(/[صث]/g,"س").replace(/ض/g,"د").replace(/[ذظ]/g,"ز").replace(/ط/g,"ت").replace(/ق/g,"ك").replace(/ح/g,"ه").replace(/غ/g,"خ").replace(/[عا]/g,"").replace(/(.)\1+/g,"$1");
+/* Kinder check: the same word as the phone usually mishears it. "again" = you are already trying this word, so a close word is enough. */
+function wnear(h,e,again){if(wmatch(h,e))return true;if(!h||!e)return false;const a=fold(h),b=fold(e);if(!a||!b)return false;if(a===b)return true;if(!again)return false;
+ const L=Math.max(a.length,b.length);return L<=2?false:L<=4?lev(a,b)<=1:sim(a,b)>=.6}
 const toks=s=>s.replace(/ـ«/g,"ـ «").split(/\s+/).filter(Boolean);
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 const pick=a=>a[Math.random()*a.length|0];
@@ -1360,7 +1406,7 @@ en:{repeat:"repeat",crushHow_:"Tap the words of the line in order.",gCrush:"Word
  retryM:"Practise these verses again",again:"Go again",newS:"Choose other verses",
  hist:"Recent sessions",noHist:"Your results will appear here.",
  recs:"My recordings",noRecs:"No recordings yet. Each time you pause the microphone, your recitation is saved here.",
- recWarn:"<b>Recordings are deleted automatically after 14 days.</b> They stay only on this device. Tap <b>Save</b> to keep one on your phone.",
+ recWarn:"Recordings stay on this device until you delete them. Tap <b>Save</b> to keep a copy in your phone's files.",
  daysLeft:"Deleted in {d} days",lastDay:"Deleted today",save:"Save",del:"Delete",recSaved:"Recording saved. It will be deleted on {d}.",
  inFrame:"<b>The microphone cannot work in this preview.</b> Open the website in Safari or Chrome to recite aloud. You can still mark yourself with ✓ and ✗.",
  micAsk:"Allow the microphone so the website can hear you recite.",micOn:"Turn on microphone",
@@ -1405,7 +1451,7 @@ ar:{repeat:"تكرار",crushHow_:"اضغط كلمات البيت بالترتي
  retryM:"أعد هذه الأبيات",again:"أعد مرة أخرى",newS:"اختر أبياتًا أخرى",
  hist:"الجلسات الأخيرة",noHist:"ستظهر نتائجك هنا.",
  recs:"تسجيلاتي",noRecs:"لا توجد تسجيلات بعد. كلما أوقفت الميكروفون يُحفظ تسميعك هنا.",
- recWarn:"<b>تُحذف التسجيلات تلقائيًا بعد ١٤ يومًا.</b> وهي على هذا الجهاز فقط. اضغط <b>حفظ</b> لتحفظ نسخة على هاتفك.",
+ recWarn:"تبقى التسجيلات على هذا الجهاز حتى تحذفها. اضغط <b>حفظ</b> لتحفظ نسخة في ملفات هاتفك.",
  daysLeft:"يُحذف بعد {d} أيام",lastDay:"يُحذف اليوم",save:"حفظ",del:"حذف",recSaved:"حُفظ التسجيل، وسيُحذف بتاريخ {d}.",
  inFrame:"<b>الميكروفون لا يعمل في هذه المعاينة.</b> افتح الموقع في Safari أو Chrome لتسمّع بصوتك، ويمكنك التصحيح بـ ✓ و ✗.",
  micAsk:"اسمح بالميكروفون ليسمع الموقع تسميعك.",micOn:"تشغيل الميكروفون",
@@ -1447,6 +1493,11 @@ function rangeLabel(vs){if(!vs||!vs.length)return"";const c=vs.every((v,i)=>!i||
 const DUAS=[["بارك الله فيك","May Allah bless you"],["وفقك الله","May Allah grant you success"],["فتح الله عليك","May Allah open the doors of good for you"],["زادك الله من فضله","May Allah increase you from His bounty"],["نفع الله بك","May Allah make you a source of benefit"],["شرح الله صدرك","May Allah expand your chest"]];
 
 const IC={
+ rev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8l3 3v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/><path d="m8.5 12 2.2 2.2L15.5 9.5M8.5 18h7"/></svg>',
+ eye:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+ eyeoff:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18M10.6 5.1A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.2M6.6 6.6C3.9 8.4 2 12 2 12s3.5 7 10 7c1.6 0 3-.4 4.3-1M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>',
+ chl:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg>',
+ chr:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>',
  trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>',
  bulb:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>',
  ok:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
@@ -1586,7 +1637,8 @@ const DB={db:null,open(){if(this.db)return Promise.resolve(this.db);return new P
  async tx(mode,fn){const db=await this.open();return new Promise((res,rej)=>{const x=db.transaction("recs",mode);const r=fn(x.objectStore("recs"));x.oncomplete=()=>res(r&&r.result);x.onerror=()=>rej(x.error)})},
  put(o){return this.tx("readwrite",s=>s.put(o)).catch(()=>{})},all(){return this.tx("readonly",s=>s.getAll()).catch(()=>[])},del(id){return this.tx("readwrite",s=>s.delete(id)).catch(()=>{})}};
 const KEEP=14*864e5;
-async function purge(){const all=await DB.all()||[];for(const r of all)if(Date.now()-r.date>KEEP)await DB.del(r.id)}
+/* Recordings stay until you delete them (no automatic deletion). */
+async function purge(){}
 let micGranted=false,lastAct=Date.now();const SILENCE=30000;
 function watchLevel(stream){try{unlockAudio();const src=AC.createMediaStreamSource(stream);const an=AC.createAnalyser();an.fftSize=1024;src.connect(an);const buf=new Uint8Array(an.fftSize);
  const iv=setInterval(()=>{if(!stream.active){clearInterval(iv);return}an.getByteTimeDomainData(buf);let m=0;for(const v of buf)m=Math.max(m,Math.abs(v-128));if(m>14)lastAct=Date.now()},300)}catch(e){}}
@@ -1596,10 +1648,10 @@ const Rec={mr:null,stream:null,chunks:[],label:"",t0:0,
   this.chunks=[];this.label=label;this.t0=Date.now();lastAct=Date.now();watchLevel(this.stream);this.mr.ondataavailable=e=>{if(e.data&&e.data.size)this.chunks.push(e.data)};this.mr.start(1000);micGranted=true;return true},
  stop(save=true){if(!this.mr)return Promise.resolve(null);const mr=this.mr;this.mr=null;
   return new Promise(res=>{mr.onstop=async()=>{try{this.stream.getTracks().forEach(x=>x.stop())}catch(e){}const dur=(Date.now()-this.t0)/1000;if(!save||!this.chunks.length||dur<1.5)return res(null);
-   const o={id:String(Date.now()),pid:PID,date:Date.now(),label:this.label,dur,type:mr.mimeType||"audio/webm",blob:new Blob(this.chunks,{type:mr.mimeType||"audio/webm"})};await DB.put(o);toast(t("recSaved").replace("{d}",fmtD(o.date+KEEP)),"msg",3500);res(o)};try{mr.stop()}catch(e){res(null)}})}};
+   const o={id:String(Date.now()),pid:PID,date:Date.now(),label:this.label,dur,type:mr.mimeType||"audio/webm",blob:new Blob(this.chunks,{type:mr.mimeType||"audio/webm"})};await DB.put(o);toast(OW("Recording saved","حُفظ التسجيل"),"msg",2500);res(o)};try{mr.stop()}catch(e){res(null)}})}};
 async function recsHTML(){const all=(await DB.all()||[]).filter(r=>!r.pid||r.pid===PID).sort((a,b)=>b.date-a.date);let h=`<div class="notice">${t("recWarn")}</div>`;
  if(!all.length)return h+`<p class="note">${t("noRecs")}</p>`;
- return h+`<div class="list">${all.map(r=>{const d=Math.max(0,Math.ceil((r.date+KEEP-Date.now())/864e5));return `<div class="it"><div class="g"><b>${esc(r.label)}</b><div class="note">${fmtD(r.date)} · ${fmtT(r.dur||0)} · <span style="color:var(--warn)">${d<1?t("lastDay"):t("daysLeft").replace("{d}",num(d))}</span></div></div>
+ return h+`<div class="list">${all.map(r=>{const d=Math.max(0,Math.ceil((r.date+KEEP-Date.now())/864e5));return `<div class="it"><div class="g"><b>${esc(r.label)}</b><div class="note">${fmtD(r.date)} · ${fmtT(r.dur||0)}</div></div>
   <button class="btn sm out" type="button" data-save="${r.id}">${IC.share}${t("save")}</button><button class="btn sm soft" type="button" data-del="${r.id}">${t("del")}</button><audio controls preload="none" data-src="${r.id}"></audio></div>`}).join("")}</div>`}
 async function bindRecs(root){const all=await DB.all()||[];const by={};all.forEach(r=>by[r.id]=r);
  root.querySelectorAll("audio[data-src]").forEach(a=>{const r=by[a.dataset.src];if(r)try{a.src=URL.createObjectURL(r.blob)}catch(e){}});
@@ -1661,22 +1713,51 @@ const MISL={all(){return ps.get("mistakes",[])},save(a){ps.set("mistakes",a.slic
   setTimeout(()=>{if(this.audio===a){a.pause();btn.classList.remove("on");this.audio=null}},9000)},
  openSheet(){Sheet.open(`<div class="shd"><span class="t">${OW("Recitation review","مراجعة التسميع")}</span><button class="x" type="button" aria-label="close">${IC.close}</button></div><p class="note" style="margin:0 0 6px">${OW("If the website misheard you, tap the bin to delete it.","إن أخطأ الموقع في سماعك فاضغط سلة المهملات لحذفه.")}</p><div id="misSh"></div>`);
   const box=$("#misSh"),draw=()=>{box.innerHTML=this.sessionsHTML();this.bind(box,draw)};draw()}};
+/* Mistakes, one at a time (our own design): a small card above the bottom bar shows one slip with what was expected and
+   what was heard. Next / Previous move through them, "Show all" lists them, × hides the card. */
+const MV={list:[],i:0,all:false,h:{},
+ open(list,at,h){Sheet.close();if(!list.length){toast(OW("No mistakes here.","لا أخطاء هنا."));return}this.list=list;this.i=Math.max(0,Math.min(list.length-1,at||0));this.all=false;this.h=h||{};this.draw()},
+ close(){const b=$("#mv");if(b)b.remove();this.list=[];if(MISL.audio){MISL.audio.pause();MISL.audio=null}},
+ draw(){if(!this.list.length)return this.close();this.i=Math.min(this.i,this.list.length-1);let b=$("#mv");
+  if(!b){b=document.createElement("div");b.id="mv";b.className="mv";b.setAttribute("role","dialog");document.body.appendChild(b);b.onclick=e=>this.click(e)}
+  const n=this.list.length,m=this.list[this.i],rtl=LANG==="ar";
+  b.innerHTML=`<div class="mvh"><span class="mvi">${IC.rev}</span><b>${OW("Recitation review","مراجعة التسميع")}</b><span class="c">${this.all?num(n):num(this.i+1)+" / "+num(n)}</span><span class="sp"></span>
+    ${n>1?`<button class="mvt" type="button" data-v="all">${this.all?OW("One by one","واحدًا واحدًا"):OW("Show all","أظهر الكل")}</button>`:""}<button class="mvx" type="button" data-v="x" aria-label="${OW("Hide","إخفاء")}">${IC.close}</button></div>
+    <div class="mvb">${(this.all?this.list:[m]).map(x=>MISL.card(x)).join("")}${!this.all&&this.h.x?`<div class="row">${this.h.x(m)}</div>`:""}</div>
+    ${!this.all&&n>1?`<div class="mvf"><button type="button" data-v="prev" ${this.i?"":"disabled"}>${rtl?IC.chr:IC.chl}${OW("Previous","السابق")}</button><span class="dots">${n<=12?this.list.map((_,k)=>`<i class="${k===this.i?"on":""}"></i>`).join(""):""}</span><button type="button" data-v="next" ${this.i<n-1?"":"disabled"}>${OW("Next","التالي")}${rtl?IC.chl:IC.chr}</button></div>`:""}`;
+  if(!this.all&&this.h.focus)this.h.focus(m)},
+ click(e){const v=e.target.closest("[data-v]");if(v){const k=v.dataset.v;if(k==="x")this.close();else{if(k==="all")this.all=!this.all;if(k==="next")this.i++;if(k==="prev")this.i--;this.draw()}return}
+  const d=e.target.closest("[data-mdel]");if(d){const m=this.list.find(x=>x.id===d.dataset.mdel);this.list=this.list.filter(x=>x!==m);if(this.h.del)this.h.del(m);else{MISL.del(m.id);toast(OW("Mistake deleted","حُذف الخطأ"))}this.draw();return}
+  const p=e.target.closest("[data-mplay]");if(p){const m=this.list.find(x=>x.id===p.dataset.mplay);if(this.h.play)this.h.play(m,p);else MISL.play(m.id,p);return}
+  const x=e.target.closest("[data-mx]");if(x&&this.h.go){this.h.go(this.list.find(y=>y.id===x.dataset.mx))}}};
 class Listener{constructor(onWords,onState){this.onWords=onWords;this.onState=onState;this.active=false;this.done=0;this.text="";this.finalText=""}
- start(){if(!SR)return false;this.active=true;lastAct=Date.now();this._spin();return true}
+ start(){if(!SR)return false;this.active=true;lastAct=this.last=Date.now();this._spin();clearInterval(this.dog);
+  /* The iPhone sometimes stops sending words without saying so. If nothing has come for a while, start again quietly. */
+  this.dog=setInterval(()=>{if(this.active&&Date.now()-this.last>7000)this.refresh()},1000);return true}
+ /* Listen afresh. The phone guesses each word from the words before it, so after one misheard word it can keep hearing
+    the same wrong word however many times it is repeated. A fresh start clears that. */
+ refresh(){if(!this.active||Date.now()-(this.ref||0)<2500)return;this.ref=this.last=Date.now();const old=this.r;clearTimeout(this.ft);
+  if(old){old.onresult=old.onend=old.onerror=null;try{old.abort()}catch(e){try{old.stop()}catch(e){}}}
+  this.finalText+=" "+this.text;this.text="";setTimeout(()=>{if(this.active&&this.r===old)try{this._spin()}catch(e){}},250)}
  _spin(){const r=new SR();this.r=r;r.lang="ar-SA";r.continuous=true;r.interimResults=true;this.prev=[];
   /* Words are used as soon as they appear. The newest word (still being heard) is only used if it is the expected word,
      so a half-heard word never counts as a mistake. */
-  r.onresult=e=>{lastAct=Date.now();let ws=[],full="",tail=null;for(let i=0;i<e.results.length;i++){const res=e.results[i];const w=toks(res[0].transcript);full+=" "+res[0].transcript;
+  r.onresult=e=>{if(this.r!==r)return;lastAct=this.last=Date.now();let ws=[],full="",tail=null;for(let i=0;i<e.results.length;i++){const res=e.results[i];const w=toks(res[0].transcript);full+=" "+res[0].transcript;
     if(res.isFinal||i<e.results.length-1)ws.push(...w);else{ws.push(...w.slice(0,-1));tail=w.length?w[w.length-1]:null}}
    /* Phones (iPhone especially) rewrite earlier words and restart the list after a pause, so compare with the words
-      already used instead of counting them: only words that are new or changed are passed on. */
+      already used instead of counting them: only words that are new or changed are passed on. An old word rewritten
+      far back is not passed on again (that used to look like going back and caused false mistakes). */
    this.text=full;const P=this.prev||[];let k=0;while(k<P.length&&k<ws.length&&norm(P[k])===norm(ws[k]))k++;
-   this.prev=ws.slice();if(ws.length>k)this.onWords(ws.slice(k));
-   if(tail&&this.onPeek&&this.onPeek(tail))this.prev.push(tail)};
-  r.onerror=e=>{if(["not-allowed","service-not-allowed","audio-capture"].includes(e.error)){this.active=false;micState="denied";this.onState("denied")}};
-  r.onend=()=>{if(this.active){this.finalText+=" "+this.text;this.text="";setTimeout(()=>{if(this.active)try{this._spin()}catch(e){}},0)}else this.onState("stopped")};
-  try{r.start()}catch(e){this.active=false;micState="denied";this.onState("denied")}}
- stop(){this.active=false;try{this.r&&this.r.stop()}catch(e){}}
+   const fresh=k===0&&P.length&&ws.length&&norm(ws[0])!==norm(P[0])&&ws.length<=P.length;const from=fresh?0:Math.max(k,Math.min(ws.length,P.length-2));
+   this.prev=ws.slice();if(ws.length>from)this.onWords(ws.slice(from));
+   clearTimeout(this.ft);if(tail&&this.onPeek&&this.onPeek(tail))this.prev.push(tail);
+   /* The newest word is still being heard. If you stop on it, use it after a short pause anyway, so a word said on its own
+      (or the second word of a jump back) is not left waiting. */
+   else if(tail)this.ft=setTimeout(()=>{if(this.r===r&&this.prev.length===ws.length){this.prev.push(tail);this.onWords([tail])}},800)};
+  r.onerror=e=>{if(["not-allowed","service-not-allowed","audio-capture"].includes(e.error)){this.active=false;clearInterval(this.dog);micState="denied";this.onState("denied")}};
+  r.onend=()=>{if(this.r!==r)return;if(this.active){this.finalText+=" "+this.text;this.text="";setTimeout(()=>{if(this.active&&this.r===r)try{this._spin()}catch(e){}},0)}else this.onState("stopped")};
+  try{r.start()}catch(e){this.active=false;clearInterval(this.dog);micState="denied";this.onState("denied")}}
+ stop(){this.active=false;clearInterval(this.dog);clearTimeout(this.ft);try{this.r&&this.r.stop()}catch(e){}}
  transcript(){return (this.finalText+" "+this.text).trim()}}
 function sayEn(text){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="en-US";u.rate=.95;speechSynthesis.speak(u)}catch(e){}}
 const RECITERS=[{id:"ghamdi",ar:"الشيخ سعد الغامدي",en:"Shaykh Saʿd al-Ghāmidī",src:"audio/ghamdi.mp3",map:GHAMDI}];
@@ -1901,7 +1982,7 @@ const gOf=w=>ALLW.findIndex(x=>x.v===w.v&&x.h===w.h&&x.i===w.i);
 const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
  root(){return $("#memRoot")},
  build(vs){const W=[];for(const v of vs){let inq=false;[0,1].forEach(h=>toks(V[v-1][h]).forEach((w,i)=>{const s=w.includes("«"),e=w.includes("»");W.push({v,h,i,w,n:norm(w),q:inq||s});inq=(inq||s)&&!e}))}return W},
- newRun(vs){wrongRun=0;this.held=false;this.hbuf=[];this.cand=null;this.run={verses:vs,idx:0,st:{},tries:{},said:{},mist:0,peeks:0,elapsed:0,part:0,view:0};this.save()},
+ newRun(vs){wrongRun=0;this.held=false;this.hbuf=[];this.cand=null;this.trail=[];this.undo=[];this.stuck=0;this.run={verses:vs,idx:0,st:{},tries:{},said:{},mist:0,peeks:0,elapsed:0,part:0,view:0};this.save()},
  save(){if(this.run)ps.set("session",this.run)},
  render(){const m=this.root();if(!m)return;if(this.run){this.renderRun();return}
   this.setup=this.setup||ps.get("memRange",{from:1,to:5});const saved=ps.get("session",null);
@@ -1911,17 +1992,17 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
    <div class="row"><button class="btn pri" type="button" id="mcont">${t("cont")}</button><button class="btn soft" type="button" id="mdisc">${t("discard")}</button></div></div>`}
   m.innerHTML=`<div class="stack"><div class="head" style="margin-bottom:0"><h2>${LANG==="ar"?"سمّع من حفظك":"Recite from memory"}</h2><p>${t("tipTap")}</p></div>
    <div class="panel"><h3>${t("range")}</h3>${rp.html}<div class="startbar"><button class="btn pri" type="button" id="mstart">${IC.mic}${t("startL")} · ${rangeLabel(range(this.setup.from,this.setup.to))}</button></div><p class="note" style="margin:0">${t("viewLater")}</p></div>${cont}
-   <div class="panel"><h3>${t("recs")}</h3><div id="recbox"></div></div>
-   <div class="panel"><h3>${OW("Recitation review","مراجعة التسميع")}</h3><p class="note" style="margin:0">${OW("Each mistake shows what was expected and what was heard. If the website misheard you, tap the bin to delete it.","يظهر كل خطأ المطلوبَ وما سُمع. إن أخطأ الموقع في سماعك فاضغط سلة المهملات لحذفه.")}</p><button class="btn pri" type="button" id="misOpen" style="width:100%;justify-content:space-between">${OW("Recitation review","مراجعة التسميع")}<span>${num(MISL.all().length)}</span></button></div>
-   <div class="panel"><h3>${t("hist")}</h3>${hist.length?`<div class="list">${hist.slice(0,8).map(h=>`<div class="it"><div class="g"><b>${rangeLabel(h.vs)}</b><div class="note">${fmtD(h.date)} · ${fmtT(h.time)}</div></div><span class="pill ${h.acc>=90?"ok":h.acc>=70?"warn":"bad"}">${num(h.acc)}%</span></div>`).join("")}</div>`:`<p class="note">${t("noHist")}</p>`}</div></div>`;
+   <div class="mtile"><button type="button" id="tRec">${IC.mic}<span>${t("recs")}</span></button><button type="button" id="misOpen">${IC.rev}<span>${OW("Recitation review","مراجعة التسميع")}</span>${MISL.all().length?`<b class="cnt">${num(MISL.all().length)}</b>`:""}</button><button type="button" id="tHist">${IC.cal}<span>${t("hist")}</span></button></div></div>`;
+  $("#tRec").onclick=()=>{Sheet.open(`<div class="shd"><span class="t">${t("recs")}</span><button class="x" type="button" aria-label="close">${IC.close}</button></div><div id="recbox"></div>`);purge().then(recsHTML).then(h=>{const b=$("#recbox");if(b){b.innerHTML=h;bindRecs(b)}})};
+  $("#tHist").onclick=()=>Sheet.open(`<div class="shd"><span class="t">${t("hist")}</span><button class="x" type="button" aria-label="close">${IC.close}</button></div>${hist.length?`<div class="list">${hist.slice(0,20).map(h=>`<div class="it"><div class="g"><b>${rangeLabel(h.vs)}</b><div class="note">${fmtD(h.date)} · ${fmtT(h.time)}</div></div><span class="pill ${h.acc>=90?"ok":h.acc>=70?"warn":"bad"}">${num(h.acc)}%</span></div>`).join("")}</div>`:`<p class="note">${t("noHist")}</p>`}`);
   $("#misOpen").onclick=()=>MISL.openSheet();
   rp.bind(m);const go=view=>{unlockAudio();this.newRun(range(this.setup.from,this.setup.to));this.run.view=view;this.save();history.pushState(null,"","#memorize/run");this.render();window.scrollTo(0,0);bismillah()};
   $("#mstart").onclick=()=>go(ps.get("lastView",0));
   if(saved){$("#mcont").onclick=()=>{unlockAudio();this.run=saved;history.pushState(null,"","#memorize/run");this.render();bismillah()};$("#mdisc").onclick=()=>{ps.del("session");this.render()}}
-  purge().then(recsHTML).then(h=>{const b=$("#recbox");if(b){b.innerHTML=h;bindRecs(b)}})},
+},
  wordHTML(k){const r=this.run,w=this.W[k],s=r.st[k]||0;const cls=["m"];let inner=qh(w.w);if(w.q)cls.push("qt");
   if(s===0){cls.push("h");if(k===r.idx)cls.push("cur");if(ST.hide==="first"&&w.i===0)cls.push("fl");if(ST.hide==="letters")cls.push("lt")}
-  else if(s===1||s===5)cls.push("ok");else if(s===3)cls.push("peeked");else if(s===4)cls.push("fixed");else if(s===6)cls.push("h","skip");else if(s===2){cls.push("bad");if(r.said[k])inner=`<ruby>${qh(w.w)}<rt>${esc(r.said[k])}</rt></ruby>`}
+  else if(s===1||s===5)cls.push("ok");else if(s===3)cls.push("peeked");else if(s===4)cls.push("fixed");else if(s===6)cls.push("h","skip");else if(s===2)cls.push("bad")
   return `<span class="${cls.join(" ")}" data-k="${k}">${inner}</span>`},
  viewBtn(){return `${IC.bulb}<span>${[t("hidden"),t("hint"),t("shown")][this.run.view||0]}</span>`},
  quick(){return `<button class="qk" type="button" id="qTries">${IC.x}<span>${ST.tries?num(ST.tries)+"× "+t("tries"):t("noLimit")}</span></button>
@@ -1930,19 +2011,45 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
  chNav(){const r=this.run;const a=chOf(r.verses[0]),b=chOf(r.verses[r.verses.length-1]);
   return `${a>0?`<button class="qk" type="button" id="chPrev">${IC.back}<span>${t("prevCh")}</span></button>`:""}${b<CH.length-1?`<button class="qk" type="button" id="chNext"><span>${t("nextCh")}</span><span class="flipx2">${IC.back.replace('class="flipx" ',"")}</span></button>`:""}`},
  goChapter(i){const view=this.run?this.run.view||0:0;this.stopMic(true);const c=CH[i];this.setup={from:c[0],to:c[1]};ps.set("memRange",this.setup);this.newRun(range(c[0],c[1]));this.run.view=view;this.save();this.render();window.scrollTo(0,0);bismillah()},
+ /* "again": you are already trying this word (a slip was heard, or nothing moved for a few words), so a close word is enough. */
+ again(){const r=this.run;return !!r.tries[r.idx]||(this.stuck||0)>=2},
+ /* The expected word was heard. If an earlier try was also close, that was the phone mishearing you, not a mistake. */
+ hit(){const r=this.run,i=r.idx,e=this.W[i];onRight();this.cand=null;this.undo=[];
+  if(r.tries[i]&&r.said[i]&&wnear(norm(r.said[i]),e.n,true)){r.mist=Math.max(0,r.mist-r.tries[i]);delete r.tries[i];delete r.said[i]}
+  r.st[i]=r.tries[i]?4:1;this.advance();this.misUI()},
  peek(raw){const r=this.run;if(!r||this.held||r.idx>=this.W.length)return false;const h=norm(raw),e=this.W[r.idx];
-  if(h&&wmatch(h,e.n)){this.hbuf=(this.hbuf||[]).concat([h]).slice(-6);onRight();this.cand=null;r.st[r.idx]=r.tries[r.idx]?4:1;this.advance();return true}return false},
+  if(h&&wnear(h,e.n,this.again())){this.hbuf=(this.hbuf||[]).concat([h]).slice(-6);this.hit();return true}return false},
  extra(v){/* chapter-heading words and the basmala: if a student reads them it is fine, and skipping them is fine too */
   const ci=chOf(v);const k="x"+ci;this._x=this._x||{};if(!this._x[k]){const ws=[CHH[ci],ci>0?CHH[ci-1]:"",ci<CH.length-1?CHH[ci+1]:"","بسم الله الرحمن الرحيم باب فصل أحكام"].join(" ");this._x[k]=toks(ws).map(norm).filter(Boolean)}return this._x[k]},
  micUI(){const b=$("#dmic");if(!b)return;const paused=!this.listening&&this.run&&this.run.part;
   b.classList.toggle("on",this.listening);b.classList.toggle("paused",!!paused);
   b.innerHTML=this.listening?`${IC.pause}<b>${t("pauseL")}</b>`:paused?`${IC.play}<b>${t("resumeL")}</b>`:`${IC.mic}<b>${t("startL")}</b>`;
-  const l=$("#micl");l.className="mst "+(this.listening?"live":paused?"pz":"");l.innerHTML=this.listening?`<i></i>${t("listening")}`:paused?`${IC.pause}${t("paused")}`:""},
- locate(){const b=this.hbuf||[];const cur=this.W[this.run.idx];if(!cur)return null;const cg=gOf(cur);
-  for(const L of [3,2]){if(b.length<L)continue;const tail=b.slice(-L);if(L===2&&tail.some(x=>x.length<3))continue;let best=null;
+  const l=$("#micl");l.className="mst "+(this.listening?"live":paused?"pz":"");l.innerHTML=this.listening?`<i></i>${t("listening")}`:paused?`${IC.pause}${t("paused")}`:t("startL")},
+ /* Where are you reciting? The last two or three words heard, in a row, anywhere in the poem (nearest first). */
+ locate(seq){const cur=this.W[this.run.idx];if(!cur)return null;const cg=gOf(cur);
+  for(const L of [3,2]){if(seq.length<L)continue;const tail=seq.slice(-L);if(tail.join("").length<5)continue;let best=null;
    for(let p=L-1;p<ALLW.length-1;p++){let ok=true;for(let k=0;k<L;k++)if(!wmatch(tail[k],ALLW[p-L+1+k].n)){ok=false;break}
-    if(!ok)continue;const g=p+1;if(g>=cg-1&&g<=cg+1)continue;if(best==null||Math.abs(g-cg)<Math.abs(best-cg))best=g}
-   if(best!=null)return {g:best}}return null},
+    if(!ok)continue;const g=p+1;if(best==null||Math.abs(g-cg)<Math.abs(best-cg))best=g}
+   if(best!=null)return best===cg?null:{g:best}}return null},
+ /* Follow the reader back or ahead. The words that led there were not mistakes. A long way keeps a button to return. */
+ follow(g){const r=this.run,cur=this.W[r.idx],cg=gOf(cur),tg=ALLW[g];
+  for(const k of this.undo||[])if(r.tries[k]){r.tries[k]--;r.mist=Math.max(0,r.mist-1);if(!r.tries[k]){delete r.tries[k];delete r.said[k];if(r.st[k]===2)delete r.st[k]}}
+  this.undo=[];this.trail=[];this.cand=null;
+  if(Math.abs(g-cg)>16||Math.abs(tg.v-cur.v)>=2){if(!r.ret||(g<cg&&cg>gOf(r.ret))){r.ret={v:cur.v,h:cur.h,i:cur.i};r.retDir=g<cg?1:-1}}
+  toast(OW("Following you from verse ","أتابعك من البيت ")+num(tg.v));this.jumpTo(tg)},
+ retUI(){const r=this.run;let c=$("#retc");if(!r||!r.ret||ROUTE!=="memorize"){if(c)c.remove();return}
+  if(!c){c=document.createElement("div");c.id="retc";c.className="retc";document.body.appendChild(c)}
+  c.innerHTML=`<button class="go" type="button">${IC.undo}<span>${OW("Back to where you were","ارجع إلى حيث كنت")} · ${t("verse")} ${num(r.ret.v)}</span></button><button class="x" type="button" aria-label="${OW("Close","إغلاق")}">${IC.close}</button>`;
+  $(".go",c).onclick=()=>{const tg=r.ret;r.ret=null;this.jumpTo(tg);toast(OW("Back where you were","رجعتَ إلى موضعك"))};$(".x",c).onclick=()=>{r.ret=null;this.save();this.retUI()}},
+ /* The mistakes of this recitation so far, for the review card. */
+ runMis(){const r=this.run;return r?MISL.fromRun(r,this.W,0):[]},
+ misUI(){const b=$("#mmis");if(!b)return;const n=this.runMis().length;b.textContent=n?num(n):"";b.hidden=!n},
+ openReview(k){const r=this.run;if(!r)return;const list=this.runMis();const at=k==null?0:Math.max(0,list.findIndex(m=>+m.id.split("-")[1]===k));const K=m=>+m.id.split("-")[1];
+  MV.open(list,at,{del:m=>{const k=K(m);r.mist=Math.max(0,r.mist-(r.tries[k]||1));r.st[k]=5;delete r.said[k];delete r.tries[k];this.setW(k);this.save();this.misUI();toast(t("undoDone"))},
+   play:m=>{unlockAudio();const w=this.W[K(m)];Player.playSeg(AUDIO.words[`${w.v}:${w.h}:${w.i}`],1,"word")},
+   focus:m=>{const el=$(`#mz .m[data-k="${K(m)}"]`);if(el){el.scrollIntoView({block:"center",behavior:"smooth"});el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash")}},
+   x:m=>`<button class="btn sm out" type="button" data-mx="${m.id}">${IC.retry}${t("redoHere")}</button>`,
+   go:m=>{const w=this.W[K(m)];MV.close();this.jumpTo({v:w.v,h:w.h,i:w.i})}})},
  askJump(g,manual){const r=this.run,cur=this.W[r.idx],tg=ALLW[g];const back=g<gOf(cur);const far=back&&chOf(tg.v)<chOf(cur.v);
   this.held=true;if(far||manual){if(this.listening)this.stopMic(true)}
   const n=$("#mhint");if(!n)return;clearTimeout(this._ht);
@@ -1956,33 +2063,50 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   let vs=r.verses.slice();if(!vs.includes(tg.v)){const lo=Math.min(tg.v,vs[0]),hi=Math.max(tg.v,vs[vs.length-1]);vs=[...new Set(vs.concat(range(lo,hi)))].sort((a,b)=>a-b)}
   r.verses=vs;const W=this.build(vs);r.st={};r.tries={};r.said={};W.forEach((w,k)=>{const kk=key(w);if(st[kk])r.st[k]=st[kk];if(tr[kk])r.tries[k]=tr[kk];if(sd[kk])r.said[k]=sd[kk]});
   const ni=W.findIndex(w=>w.v===tg.v&&w.h===tg.h&&w.i===tg.i);const oi=oldKey?W.findIndex(w=>key(w)===oldKey):W.length;
-  if(ni<oi){for(let k=ni;k<oi;k++){delete r.st[k];delete r.tries[k];delete r.said[k]}}else{for(let k=oi;k<ni;k++)if(!r.st[k])r.st[k]=6}
-  r.idx=ni;this.held=false;this.hbuf=[];this.cand=null;this.save();this.renderRun()},
+  /* Going back keeps what you had already recited, so coming forward again (or tapping "back to where you were") restores it. */
+  if(ni<oi){r.stash=r.stash||{};for(let k=ni;k<oi;k++){if(r.st[k]){r.stash[key(W[k])]=[r.st[k],r.tries[k]||0,r.said[k]||null];r.mist=Math.max(0,r.mist-(r.tries[k]||0))}delete r.st[k];delete r.tries[k];delete r.said[k]}}
+  else{for(let k=oi;k<ni;k++)if(!r.st[k]){if(r.tries[k]){r.mist=Math.max(0,r.mist-r.tries[k]);delete r.tries[k];delete r.said[k]}const sv=r.stash&&r.stash[key(W[k])];if(sv){r.st[k]=sv[0];if(sv[1]){r.tries[k]=sv[1];r.mist+=sv[1]}if(sv[2])r.said[k]=sv[2]}else r.st[k]=6}}
+  r.idx=ni;this.held=false;this.hbuf=[];this.cand=null;this.trail=[];this.undo=[];this.stuck=0;this.save();this.renderRun()},
  renderRun(){const r=this.run;this.W=this.build(r.verses);const m=this.root();document.body.classList.add("dockpad");
   let body="",prev=0;for(const v of r.verses){const ci=chOf(v);if(CH[ci][0]===v||(prev&&v!==prev+1))body+=`<header class="chh" style="margin-top:12px"><h3><a class="chl" href="#poem/c${ci+1}">${chName(ci)}</a></h3></header>`;
    const parts=[[],[]];this.W.forEach((w,k)=>{if(w.v===v)parts[w.h].push(this.wordHTML(k))});body+=verseBlock(v,parts[0].join(" "),parts[1].join(" "));prev=v}
-  m.innerHTML=`<div class="mhead"><div class="r"><b>${rangeLabel(r.verses)}</b><span class="sp"></span><span id="mlive"></span><span class="pill bad">✗ <span id="mmis">${num(r.mist)}</span></span><span class="pill" id="mtime">${fmtT(r.elapsed)}</span></div>
-   <div class="prog"><i id="mprog"></i></div><div class="r"><span class="seg viewseg" id="vseg">${[t("hidden"),t("hint"),t("shown")].map((l,i)=>`<button type="button" data-view="${i}">${l}</button>`).join("")}</span><span id="mquick" class="row" style="gap:8px">${this.quick()}</span>${gameBtn()}<span class="sp"></span><span class="row" style="gap:8px" id="chnav">${this.chNav()}</span><button class="qk" type="button" id="dmore">${IC.dots}<span>${t("more")}</span></button></div><div id="mmore"></div></div>
+  /* A calm screen: the verses in the middle, one slim line on top, and four buttons at the bottom
+     (how much to show, the microphone, the review, end). Everything else waits in Tools. */
+  const manual=ST.mode==="manual"||!SR,vw=r.view||0;
+  m.innerHTML=`<div class="mhead calm"><div class="r"><b>${rangeLabel(r.verses)}</b><span id="mlive"></span><span class="sp"></span><span class="pill" id="mtime">${fmtT(r.elapsed)}</span><button class="ib" type="button" id="dmore" aria-label="${OW("Tools","أدوات")}">${IC.dots}</button></div>
+   <div class="prog"><i id="mprog"></i></div></div>
    <div id="mnote"></div><div id="mhint" style="margin-bottom:8px"></div><div class="mtext" id="mz">${body}</div><div class="spacer"></div>
-   <div class="dock"><div class="in four">
-    <button class="db bad" type="button" id="dbad">${IC.x}<span>${t("mistake")}</span></button><div class="micw"><button class="mic" type="button" id="dmic" aria-label="${t("mic")}">${IC.mic}</button><span id="micl">${t("startL")}</span></div>
-    <button class="db ok" type="button" id="dok">${IC.ok}<span>${t("correct")}</span></button><button class="db endb" type="button" id="dend"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg><span>${t("endL")}</span></button></div></div>`;
-  this.applyView();this.prog();this.note();this.curVerse();this.bindQuick();this.micUI();refit();
-  const cp=$("#chPrev"),cn=$("#chNext");if(cp)cp.onclick=()=>this.goChapter(chOf(r.verses[0])-1);if(cn)cn.onclick=()=>this.goChapter(chOf(r.verses[r.verses.length-1])+1);
+   <div class="dock calm"><div class="in">
+    ${manual?`<button class="db bad" type="button" id="dbad">${IC.x}<span>${t("mistake")}</span></button>`:`<button class="db" type="button" id="vBtn">${vw===2?IC.eye:IC.eyeoff}<span>${[t("hidden"),t("hint"),t("shown")][vw]}</span></button>`}
+    <div class="micw"><button class="mic" type="button" id="dmic" aria-label="${t("mic")}">${IC.mic}</button><span id="micl">${t("startL")}</span></div>
+    ${manual?`<button class="db ok" type="button" id="dok">${IC.ok}<span>${t("correct")}</span></button>`:`<button class="db" type="button" id="mvOpen">${IC.rev}<span>${OW("Review","مراجعة")}</span><b class="cnt" id="mmis" hidden></b></button>`}
+    <button class="db endb" type="button" id="dend"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg><span>${t("endL")}</span></button></div></div>`;
+  this.applyView();this.prog();this.note();this.curVerse();this.micUI();this.misUI();this.retUI();refit();
   if(!IN_FRAME&&!micGranted&&micState!=="denied"&&(ST.rec||ST.mode==="voice"))askMic().then(()=>this.note());
-  $("#vseg").onclick=e=>{const b=e.target.closest("[data-view]");if(!b)return;const v=+b.dataset.view;if(v===(r.view||0))return;r.view=v;if(v)r.peeks++;ps.set("lastView",v);this.applyView();this.save();toast([t("vHidden"),t("vHint"),t("vShown")][v],"",3000)};
+  const setView=v=>{if(v===(r.view||0))return;r.view=v;if(v)r.peeks++;ps.set("lastView",v);this.applyView();this.save();toast([t("vHidden"),t("vHint"),t("vShown")][v],"",3000);const b=$("#vBtn");if(b)b.innerHTML=`${v===2?IC.eye:IC.eyeoff}<span>${[t("hidden"),t("hint"),t("shown")][v]}</span>`};
+  if($("#vBtn"))$("#vBtn").onclick=()=>setView(((r.view||0)+1)%3);
+  if($("#mvOpen"))$("#mvOpen").onclick=()=>this.openReview(null);
   $("#dend").onclick=()=>{const old=$("#endpop");if(old){old.remove();return}const d=document.createElement("div");d.id="endpop";d.className="endpop";
    d.innerHTML=`<button type="button" data-a="pause">${IC.pause}${t("pauseFull")}</button><button type="button" data-a="save">${t("saveExit")}</button><button type="button" data-a="end" class="red"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>${t("endShow")}</button><button type="button" data-a="x" class="x2">${t("cancel")}</button>`;
    $(".dock").appendChild(d);d.onclick=e=>{const a=e.target.closest("[data-a]");if(!a)return;d.remove();const k=a.dataset.a;
     if(k==="pause"){if(this.listening)this.stopMic(true);toast(t("paused"),"",2000)}else if(k==="save"){history.back()}else if(k==="end")this.finish()}};
-  $("#dok").onclick=()=>{onRight();this.mark(1)};$("#dbad").onclick=()=>this.manualWrong();$("#dmic").onclick=()=>this.toggleMic();
-  $("#dmore").onclick=()=>{const b=$("#mmore");if(b.innerHTML){b.innerHTML="";return}
-   b.innerHTML=`<div class="row"><button class="btn sm out" type="button" id="xv">${t("revealV")}</button><button class="btn sm out" type="button" id="xs">${t("saveExit")}</button><button class="btn sm out" type="button" id="xf">${t("endNow")}</button><button class="btn sm soft" type="button" id="xr">${IC.retry}${t("restart")}</button></div>`;
-   $("#xv").onclick=()=>this.revealVerse();$("#xs").onclick=()=>this.exit();$("#xf").onclick=()=>this.finish();$("#xr").onclick=()=>{this.stopMic(false);this.newRun(r.verses);this.render()};b.scrollIntoView({block:"nearest"})};
-  $("#mz").onclick=e=>{const mv=e.target.closest("[data-mv]");if(mv){const v=+mv.dataset.mv;this.askJump(ALLW.findIndex(x=>x.v===v),true);return}const el=e.target.closest(".m");if(!el)return;const k=+el.dataset.k;if(r.st[k]===2||r.st[k]===4){this.review(k);return}if(k===r.idx)this.mark(3)};
+  if($("#dok"))$("#dok").onclick=()=>{onRight();this.mark(1)};if($("#dbad"))$("#dbad").onclick=()=>this.manualWrong();$("#dmic").onclick=()=>this.toggleMic();
+  /* Tools: everything that is not needed while reciting. */
+  $("#dmore").onclick=()=>{Sheet.open(`<div class="shd"><span class="t">${OW("Tools","أدوات")}</span><button class="x" type="button" aria-label="close">${IC.close}</button></div><div class="opts">
+    <div class="og"><h4>${OW("Show the words","إظهار الكلمات")}</h4><span class="seg viewseg" id="vseg">${[t("hidden"),t("hint"),t("shown")].map((l,i)=>`<button type="button" data-view="${i}" class="${i===(r.view||0)?"on":""}">${l}</button>`).join("")}</span>
+     <div class="row" id="mquick">${this.quick()}</div></div>
+    <div class="og"><h4>${OW("Moving around","التنقّل")}</h4><div class="row" id="chnav">${this.chNav()}<button class="qk" type="button" id="xv">${IC.bulb}<span>${t("revealV")}</span></button></div></div>
+    ${manual?"":`<div class="og"><h4>${OW("Mark by hand","التصحيح يدويًا")}</h4><div class="row"><button class="qk" type="button" id="hbad">${IC.x}<span>${t("mistake")}</span></button><button class="qk" type="button" id="hok">${IC.ok}<span>${t("correct")}</span></button></div></div>`}
+    <div class="og"><h4>${OW("More","المزيد")}</h4><div class="row">${gameBtn()}<button class="qk" type="button" id="xs"><span>${t("saveExit")}</span></button><button class="qk" type="button" id="xf"><span>${t("endNow")}</span></button><button class="qk" type="button" id="xr">${IC.retry}<span>${t("restart")}</span></button></div></div></div>`);
+   const S=$("#sheet");this.bindQuick();
+   $("#vseg").onclick=e=>{const b=e.target.closest("[data-view]");if(!b)return;setView(+b.dataset.view);$$("#vseg [data-view]").forEach(x=>x.classList.toggle("on",x===b))};
+   const cp=$("#chPrev",S),cn=$("#chNext",S);if(cp)cp.onclick=()=>{Sheet.close();this.goChapter(chOf(r.verses[0])-1)};if(cn)cn.onclick=()=>{Sheet.close();this.goChapter(chOf(r.verses[r.verses.length-1])+1)};
+   $("#xv").onclick=()=>{Sheet.close();this.revealVerse()};if($("#hbad"))$("#hbad").onclick=()=>{this.manualWrong()};if($("#hok"))$("#hok").onclick=()=>{onRight();this.mark(1)};
+   $("#xs").onclick=()=>{Sheet.close();this.exit()};$("#xf").onclick=()=>{Sheet.close();this.finish()};$("#xr").onclick=()=>{Sheet.close();this.stopMic(false);this.newRun(r.verses);this.render()}};
+  $("#mz").onclick=e=>{const mv=e.target.closest("[data-mv]");if(mv){const v=+mv.dataset.mv;this.askJump(ALLW.findIndex(x=>x.v===v),true);return}const el=e.target.closest(".m");if(!el)return;const k=+el.dataset.k;if(r.st[k]===2||r.st[k]===4||r.st[k]===6){this.openReview(k);return}if(k===r.idx)this.mark(3)};
   clearInterval(this.timer);this.timer=setInterval(()=>{if(document.hidden||!this.run)return;if(this.listening&&Date.now()-lastAct>SILENCE){this.stopMic(true);toast(t("silent"),"msg",5000)}r.elapsed++;const tm=$("#mtime");tm&&(tm.textContent=fmtT(r.elapsed));if(r.elapsed%5===0)this.save()},1000);this.scrollCur(true)},
  bindQuick(){$("#qTries").onclick=()=>{const seq=[1,2,3,0];ST.tries=seq[(seq.indexOf(ST.tries)+1)%4];saveSet();$("#mquick").innerHTML=this.quick();this.bindQuick()};
-  $("#qBack").onclick=()=>{const r=this.run,w=this.W[r.idx]||this.W[this.W.length-1];let v=w.v;const atStart=w.h===0&&w.i===0;if(atStart&&r.verses.indexOf(v)>0)v=r.verses[r.verses.indexOf(v)-1];else if(atStart&&v>1)v=v-1;this.jumpTo({v,h:0,i:0})};
+  $("#qBack").onclick=()=>{Sheet.close();const r=this.run,w=this.W[r.idx]||this.W[this.W.length-1];let v=w.v;const atStart=w.h===0&&w.i===0;if(atStart&&r.verses.indexOf(v)>0)v=r.verses[r.verses.indexOf(v)-1];else if(atStart&&v>1)v=v-1;this.jumpTo({v,h:0,i:0})};
   $("#qStyle").onclick=()=>{const seq=["shapes","letters","first"];ST.hide=seq[(seq.indexOf(ST.hide)+1)%3];saveSet();$("#mquick").innerHTML=this.quick();this.bindQuick();for(let k=0;k<this.W.length;k++)if(!this.run.st[k])this.setW(k)}},
  applyView(){const v=this.run.view||0,mz=$("#mz");mz.classList.toggle("hint",v===1);mz.classList.toggle("showall",v===2);$$("#vseg [data-view]").forEach(b=>b.classList.toggle("on",+b.dataset.view===v))},
  note(){const n=$("#mnote");if(n){const s=micHelp();n.innerHTML=s?`<div style="margin:8px 0">${s}</div>`:""}const mic=$("#dmic");if(mic)mic.classList.toggle("off",IN_FRAME||micState==="denied"||!(ST.rec||(ST.mode==="voice"&&SR)))},
@@ -1990,10 +2114,11 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
  prog(){const p=$("#mprog");p&&(p.style.width=(this.run.idx/this.W.length*100)+"%")},
  curVerse(){$$("#mz .bayt.cur").forEach(x=>x.classList.remove("cur"));const w=this.W[this.run.idx];if(w){const b=$("#m"+w.v);b&&b.classList.add("cur")}},
  scrollCur(instant){const el=$(`#mz .m[data-k="${this.run.idx}"]`);if(!el)return;const rc=el.getBoundingClientRect();if(rc.top<200||rc.bottom>innerHeight-150)el.scrollIntoView({behavior:instant?"auto":"smooth",block:"center"})},
- advance(){const r=this.run;const old=r.idx;{const s=r.st[old];const el=$(`#mz .m[data-k="${old}"]`);if(s===1||s===4){this.combo=(this.combo||0)+1;addXP(s===1?5:2,el);if(this.combo%10===0&&ST.game)setTimeout(()=>popFx(`${t("combo")} ×${num(this.combo)}`,el,"combo"),200)}else this.combo=0;const w=this.W[old],nx=this.W[old+1];if(w&&(!nx||nx.v!==w.v)){const good=this.W.every((x,k)=>x.v!==w.v||r.st[k]===1||r.st[k]===5);if(good)addXP(20,el)}}r.idx++;this.setW(old);if(r.idx<this.W.length)this.setW(r.idx);this.prog();this.curVerse();this.save();if(r.idx>=this.W.length){this.finish();return}this.scrollCur()},
+ advance(){const r=this.run;const old=r.idx;this.stuck=0;this.trail=[];{const s=r.st[old];const el=$(`#mz .m[data-k="${old}"]`);if(s===1||s===4){this.combo=(this.combo||0)+1;addXP(s===1?5:2,el);if(this.combo%10===0&&ST.game)setTimeout(()=>popFx(`${t("combo")} ×${num(this.combo)}`,el,"combo"),200)}else this.combo=0;const w=this.W[old],nx=this.W[old+1];if(w&&(!nx||nx.v!==w.v)){const good=this.W.every((x,k)=>x.v!==w.v||r.st[k]===1||r.st[k]===5);if(good)addXP(20,el)}}r.idx++;this.setW(old);if(r.idx<this.W.length)this.setW(r.idx);this.prog();this.curVerse();
+  if(r.ret&&r.retDir>0&&r.idx<this.W.length&&gOf(this.W[r.idx])>=gOf(r.ret)){r.ret=null;this.retUI()}this.save();if(r.idx>=this.W.length){this.finish();return}this.scrollCur()},
  mark(s){const r=this.run;if(!r||r.idx>=this.W.length)return;if(s===3)r.peeks++;r.st[r.idx]=s;this.advance()},
  attention(i){const el=$(`#mz .m[data-k="${i}"]`);if(el){el.classList.remove("wring");void el.offsetWidth;el.classList.add("wring");setTimeout(()=>el.classList.remove("wring"),1300)}},
- manualWrong(){const r=this.run;if(!r||r.idx>=this.W.length)return;const i=r.idx;r.tries[i]=(r.tries[i]||0)+1;r.mist++;$("#mmis").textContent=num(r.mist);onWrong();
+ manualWrong(){const r=this.run;if(!r||r.idx>=this.W.length)return;const i=r.idx;r.tries[i]=(r.tries[i]||0)+1;r.mist++;this.misUI();onWrong();
   if(!ST.tries||r.tries[i]>=ST.tries||ST.mode==="manual"){r.st[i]=2;this.advance();if(ST.mode!=="manual")this.offerHint()}else{this.attention(i);this.save()}},
  offerHint(){const n=$("#mhint");if(!n||(this.run&&this.run.view))return;n.innerHTML=`<div class="notice info row"><span style="flex:1;min-width:180px">${t("goOn")}</span><button class="btn sm out" type="button" id="hintOn">${IC.bulb}${t("hint")}</button></div>`;
   $("#hintOn").onclick=()=>{this.run.view=1;this.applyView();this.save();n.innerHTML=""};clearTimeout(this._ht);this._ht=setTimeout(()=>{if($("#mhint"))$("#mhint").innerHTML=""},7000)},
@@ -2001,29 +2126,33 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   if(r.idx<this.W.length)this.setW(r.idx);this.prog();this.curVerse();this.save();if(r.idx>=this.W.length)this.finish();else this.scrollCur()},
  heard(words){const r=this.run;if(!r||this.held)return;for(const raw of words){if(this.held)return;const h=norm(raw);if(r.idx>=this.W.length)return;const W=this.W,i=r.idx,e=W[i];
    if(h){this.hbuf=(this.hbuf||[]).concat([h]).slice(-6)}
-   if(wmatch(h,e.n)){onRight();this.cand=null;r.st[i]=r.tries[i]?4:1;this.advance();continue}
+   if(wnear(h,e.n,this.again())){this.hit();continue}
    if(W[i+1]&&e.n.length<=3&&!r.tries[i]&&wmatch(h,W[i+1].n)){onRight();r.st[i]=1;this.advance();if(this.run&&r.idx<this.W.length){r.st[r.idx]=1;this.advance()}continue}
    if(W[i+2]&&wmatch(h,e.n+W[i+1].n+W[i+2].n)){onRight();for(let k=0;k<3&&this.run&&r.idx<this.W.length;k++){r.st[r.idx]=1;this.advance()}continue}
    if(W[i+1]&&wmatch(h,e.n+W[i+1].n)){onRight();r.st[i]=r.tries[i]?4:1;this.advance();if(this.run&&r.idx<this.W.length){r.st[r.idx]=1;this.advance()}continue}
-   if(h.length<2)continue;if(this.extra(e.v).some(x=>x===h||(h.length>3&&sim(h,x)>=.8)))continue;let rep=false;for(let b=1;b<=4;b++)if(W[i-b]&&wmatch(h,W[i-b].n)){rep=true;break}if(rep)continue;
+   if(h.length<2)continue;if(this.extra(e.v).some(x=>x===h||(h.length>3&&sim(h,x)>=.8)))continue;
    /* Reading on quickly: the word heard is one of the next few, so the words before it were said wrong or skipped. Mark them and keep going. */
    {let j=0;for(let d=1;d<=3&&W[i+d];d++)if((d===1||h.length>3)&&wmatch(h,W[i+d].n)){j=d;break}
     if(j){onRight();this.cand=null;for(let d=0;d<j&&this.run&&r.idx<this.W.length;d++){const k=r.idx;if(!r.tries[k]){r.tries[k]=1;r.mist++;(r.mt=r.mt||{})[k]=Date.now()}r.st[k]=2;this.advance()}
-     const mm=$("#mmis");if(mm)mm.textContent=num(r.mist);if(this.run&&r.idx<this.W.length){r.st[r.idx]=1;this.advance()}this.save();continue}}
-   r.tries[i]=(r.tries[i]||0)+1;r.said[i]=raw;r.mist++;(r.mt=r.mt||{})[i]=Date.now();$("#mmis").textContent=num(r.mist);onWrong();this.attention(i);
-   /* Like Tarteel: if you carry on from another place, follow you there straight away instead of asking. */
-   const c=this.locate();if(c){r.mist=Math.max(0,r.mist-(r.tries[i]||0));delete r.tries[i];delete r.said[i];this.cand=null;const tg=ALLW[c.g];toast(OW("Following you from verse ","أتابعك من البيت ")+num(tg.v));this.jumpTo(tg);return}
-   if(ST.tries&&r.tries[i]>=ST.tries){triedOut();if(this.cand){const g=this.cand.g;this.cand=null;this.save();this.askJump(g,false);return}r.st[i]=2;this.advance();this.offerHint()}else this.save()}},
+     this.misUI();if(this.run&&r.idx<this.W.length){r.st[r.idx]=1;this.advance()}this.save();continue}}
+   /* Nothing moved: after a few words, listen afresh so the phone stops repeating the same wrong guess. */
+   this.stuck=(this.stuck||0)+1;if(this.stuck===3&&this.lis)this.lis.refresh();
+   /* Words from another place: after two in a row, follow you there, back or ahead, anywhere in the poem. */
+   this.trail=(this.trail||[]).concat([h]).slice(-3);if(this.trail.length>=2){const c=this.locate(this.trail);if(c){this.follow(c.g);return}}
+   /* Repeating a word just said (to get going again) is fine. */
+   let rep=false;for(let b=1;b<=8;b++)if(W[i-b]&&wmatch(h,W[i-b].n)){rep=true;break}if(rep)continue;
+   r.tries[i]=(r.tries[i]||0)+1;r.said[i]=raw;r.mist++;(r.mt=r.mt||{})[i]=Date.now();this.undo=(this.undo||[]).concat([i]).slice(-2);this.misUI();onWrong();this.attention(i);
+   if(ST.tries&&r.tries[i]>=ST.tries){triedOut();r.st[i]=2;this.advance();this.offerHint()}else this.save()}},
  async toggleMic(){unlockAudio();if(this.listening){this.stopMic(true);return}if(IN_FRAME||micState==="denied"){this.note();return}
   const r=this.run;let recOK=false;if(ST.rec){r.part=(r.part||0)+1;recOK=await Rec.start(rangeLabel(r.verses)+(r.part>1?" · "+num(r.part):""))}
   let srOK=false;if(ST.mode==="voice"&&SR){this.lis=new Listener(w=>this.heard(w),s=>{if(s==="denied"){this.stopMic(true);this.note()}});this.lis.onPeek=w=>this.peek(w);srOK=this.lis.start()}
   if(!recOK&&!srOK){if(ST.rec||(ST.mode==="voice"&&SR))micState="denied";this.note();return}
   this.listening=true;this.held=false;$("#mhint")&&$("#jYes")&&($("#mhint").innerHTML="");this.micUI();$("#mlive").innerHTML=`<span class="pill live">${srOK?t("listening"):t("recording")}</span>`;this.note();bismillah()},
  stopMic(save){if(this.lis){this.lis.stop();this.lis=null}this.listening=false;Rec.stop(save&&ST.rec);this.micUI();const l=$("#mlive");if(l)l.innerHTML=this.run?`<span class="pill">${t("paused")}</span>`:"";this.save()},
- exit(){this.stopMic(true);clearInterval(this.timer);this.save();this.run=null;document.body.classList.remove("dockpad");this.render();window.scrollTo(0,0)},
- leave(){if(this.run){this.stopMic(true);this.save();clearInterval(this.timer);this.run=null}},
+ exit(){this.stopMic(true);clearInterval(this.timer);this.save();this.run=null;this.retUI();MV.close();document.body.classList.remove("dockpad");this.render();window.scrollTo(0,0)},
+ leave(){if(this.run){this.stopMic(true);this.save();clearInterval(this.timer);this.run=null}this.retUI();MV.close()},
  finish(){const r=this.run,W=this.W;this.stopMic(true);clearInterval(this.timer);ps.del("session");document.body.classList.remove("dockpad");
-  this.run=null;this.showResults(r,W,true)},
+  this.run=null;this.retUI();MV.close();this.showResults(r,W,true)},
  /* Results screen. "I said it right" removes a mistake the website got wrong; accuracy is recalculated and saved. */
  showResults(r,W,first){const rows=[];const per={};let bad=0;W.forEach((w,i)=>{per[w.v]=per[w.v]||[0,0];per[w.v][1]++;const s=r.st[i];if(s===2||s===4){bad++;rows.push({w,i})}else if(s===1||s===5)per[w.v][0]++});
   const accs={};for(const v in per)accs[v]=Math.round(per[v][0]/per[v][1]*100);
@@ -2033,14 +2162,14 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   const mvs=[...new Set(rows.map(x=>x.w.v))].sort((a,b)=>a-b);
   this.root().innerHTML=`<div class="stack"><div class="panel"><h3>${t("done")} · ${rangeLabel(r.verses)}</h3>
    <div class="sum"><div><b>${num(acc)}%</b><span>${t("acc")}</span></div><div><b>${num(r.mist)}</b><span>${t("mistakes")}</span></div><div><b>${fmtT(r.elapsed)}</b><span>${t("time")}</span></div></div></div>
-   <div class="panel"><h3>${t("misTitle")}</h3>${rows.length?`<p class="note" style="margin:0">${t("checkHint")}</p><div class="mlist">
-   ${rows.map(x=>`<div class="mrow"><span class="vtag">${t("verse")} ${num(x.w.v)}</span>
-     ${(()=>{const m=MISL.make(W,[x.i],r.said[x.i]?{[x.i]:r.said[x.i]}:{},MISL.kind(r,x.i),0,x.w.v);return`<b>${MISL.title(m)}</b>`+MISL.lines(m)})()}
-     <div class="row"><button class="btn sm out" type="button" data-play="${x.i}">${IC.play}${t("listenWord")}</button><button class="btn sm right" type="button" data-ok="${x.i}">${IC.ok}${t("iWasRight")}</button></div></div>`).join("")}</div>`:`<p>${t("none")}</p>`}
+   <div class="panel"><h3>${t("misTitle")}</h3>${rows.length?(()=>{const ms=MISL.all().filter(m=>m.t===r.misDate),c={wrong:0,missed:0,extra:0};ms.forEach(m=>c[m.type]++);
+     return`<div class="mcount">${[["wrong","خطأ","Wrong word"],["missed","سقط","Left out"],["extra","زيادة","Added word"]].filter(x=>c[x[0]]).map(x=>`<span class="pill bad">${OW(x[2],x[1])} · ${num(c[x[0]])}</span>`).join("")}</div>
+     <button class="btn pri" type="button" id="fmv" style="width:100%;justify-content:center">${IC.rev}${OW("Go through my mistakes","راجع أخطائي")}<span class="pill" style="margin-inline-start:6px">${num(ms.length)}</span></button>`})():`<p>${t("none")}</p>`}
    <div class="row">${mvs.length?`<button class="btn pri" type="button" id="fm">${t("retryM")}</button>`:""}<button class="btn out" type="button" id="fa">${IC.retry}${t("again")}</button><button class="btn soft" type="button" id="fn">${t("newS")}</button><button class="btn soft" type="button" id="fmis">${OW("Recitation review","مراجعة التسميع")}</button></div>
    ${(()=>{const a=chOf(r.verses[0]),b=chOf(r.verses[r.verses.length-1]);return `<nav class="pgnav">${a>0?`<button type="button" class="pg-prev" id="fprev"><small>${t("prevCh")}</small><b lang="ar">${CH[a-1][2]}</b></button>`:"<span></span>"}${b<CH.length-1?`<button type="button" class="pg-next" id="fnext"><small>${t("nextCh")}</small><b lang="ar">${CH[b+1][2]}</b></button>`:""}</nav>`})()}</div></div>`;
   {const a=chOf(r.verses[0]),b=chOf(r.verses[r.verses.length-1]);const fp=$("#fprev"),fx=$("#fnext");const go=i=>{$("#modal").innerHTML="";this.run={view:r.view||0};this.goChapter(i)};if(fp)fp.onclick=()=>go(a-1);if(fx)fx.onclick=()=>go(b+1)}
   if(mvs.length)$("#fm").onclick=()=>{this.newRun(mvs);this.render();bismillah()};$("#fa").onclick=()=>{this.newRun(r.verses);this.render();bismillah()};$("#fn").onclick=()=>this.render();$("#fmis").onclick=()=>MISL.openSheet();
+  if($("#fmv"))$("#fmv").onclick=()=>MV.open(MISL.all().filter(m=>m.t===r.misDate),0,{del:m=>{MISL.del(m.id);const i=+m.id.split("-")[1];r.mist=Math.max(0,r.mist-(r.tries[i]||1));r.st[i]=5;delete r.said[i];delete r.tries[i];const y=scrollY;this.showResults(r,W,false);scrollTo(0,y)}});
   $$("[data-play]",this.root()).forEach(b=>b.onclick=()=>{unlockAudio();const w=W[+b.dataset.play];Player.playSeg(AUDIO.words[`${w.v}:${w.h}:${w.i}`],1,"word")});
   $$("[data-ok]",this.root()).forEach(b=>b.onclick=()=>{const i=+b.dataset.ok;if(r.misDate)MISL.del(r.misDate.toString(36)+"-"+i);r.mist=Math.max(0,r.mist-(r.tries[i]||1));r.st[i]=5;delete r.said[i];delete r.tries[i];toast(t("undoDone"));const y=scrollY;this.showResults(r,W,false);scrollTo(0,y)});
   if(!first)return;window.scrollTo(0,0);
@@ -2051,7 +2180,7 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   n.innerHTML=`<div class="notice info jumpq"><div class="cmp"><div><small>${t("youSaid")}</small><span class="a said">${r.said[k]?esc(r.said[k]):`<span class="note">${t("byYou")}</span>`}</span></div><div><small>${t("correctW")}</small><span class="a cor">${qh(w.w)}</span></div></div>
    <div class="row"><button class="btn sm right" type="button" id="rvOk">${IC.ok}${t("iWasRight")}</button><button class="btn sm out" type="button" id="rvRedo">${IC.retry}${t("redoHere")}</button><button class="btn sm out" type="button" id="rvPlay">${IC.play}${t("listenWord")}</button><button class="btn sm soft" type="button" id="rvX">${t("cancel")}</button></div></div>`;
   n.scrollIntoView({block:"nearest",behavior:"smooth"});
-  $("#rvOk").onclick=()=>{r.mist=Math.max(0,r.mist-(r.tries[k]||1));r.st[k]=5;delete r.said[k];delete r.tries[k];$("#mmis").textContent=num(r.mist);this.setW(k);this.save();n.innerHTML="";toast(t("undoDone"))};
+  $("#rvOk").onclick=()=>{r.mist=Math.max(0,r.mist-(r.tries[k]||1));r.st[k]=5;delete r.said[k];delete r.tries[k];this.misUI();this.setW(k);this.save();n.innerHTML="";toast(t("undoDone"))};
   $("#rvRedo").onclick=()=>{n.innerHTML="";this.jumpTo({v:w.v,h:w.h,i:w.i})};
   $("#rvPlay").onclick=()=>{unlockAudio();Player.playSeg(AUDIO.words[`${w.v}:${w.h}:${w.i}`],1,"word")};$("#rvX").onclick=()=>{n.innerHTML=""}}
 };
