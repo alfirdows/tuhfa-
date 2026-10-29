@@ -1451,7 +1451,7 @@ main{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
    <button class="tog l-en" type="button" data-opt="tr" aria-pressed="true"><i></i>Translation</button>
    <button class="tog l-en" type="button" data-opt="tl" aria-pressed="true"><i></i>Transliteration</button>
    <button class="tog l-ar" type="button" data-opt="mn" aria-pressed="true"><i></i>المعنى</button>
-   <button class="qk gmode on" type="button" data-game><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span><span class="l-en" lang="en">Game mode</span><span class="l-ar" lang="ar" dir="rtl">وضع اللعب</span></span></button>
+   
    <span class="sizer" role="group" aria-label="Text size"><button type="button" data-fs="-1">A−</button><button type="button" data-fs="1">A+</button></span>
    <select id="jump" aria-label="Chapter"><option value="">Chapter · الباب</option><option value="c1">١ · المقدمة</option><option value="c2">٦ · النون الساكنة والتنوين</option><option value="c3">١٧ · الميم والنون المشددتان</option><option value="c4">١٨ · الميم الساكنة</option><option value="c5">٢٤ · لام أل ولام الفعل</option><option value="c6">٣٠ · المثلان والمتقاربان والمتجانسان</option><option value="c7">٣٥ · أقسام المد</option><option value="c8">٤٢ · أحكام المد</option><option value="c9">٤٨ · أقسام المد اللازم</option><option value="c10">٥٨ · الخاتمة</option></select>
    <button class="btn sm pri" type="button" id="bookPdf"><span class="l-en" lang="en">Save as PDF</span><span class="l-ar" lang="ar" dir="rtl">حفظ PDF</span></button>
@@ -1771,10 +1771,10 @@ function pageWrap(body,name){return `<section class="pg" dir="rtl" lang="ar"><di
  <div class="pb">${body}</div><div class="pf2"><div>${name?`<b>${esc(name)}</b><br>`:""}${BOOK_AR} · <span dir="ltr">${SITE}</span><br>${fmtD(Date.now())}</div><div class="qr">${qrSvg()}</div></div></section>`}
 function printPages(make){if(IN_FRAME){toast(t("printFrame"),"msg",3500);return}
  $("#modal").innerHTML=`<div class="modal"><div class="in"><h3>${t("printNow")}</h3><label class="note" for="pName">${t("nameAsk")}</label>
-  <input id="pName" type="text" value="${esc(P().name||"")}" placeholder="${t("namePh")}" style="border:1px solid var(--line);border-radius:12px;padding:12px;font-size:1.05rem;text-align:center;background:var(--surface)">
+  <input id="pName" type="text" value="${esc(P().name||"")}" style="border:1px solid var(--line);border-radius:12px;padding:12px;font-size:1.05rem;text-align:center;background:var(--surface)">
   <div class="row" style="justify-content:center"><button class="btn soft" type="button" id="pCancel">${t("cancel")}</button><button class="btn pri" type="button" id="pGo">${IC.print}${t("printNow")}</button></div></div></div>`;
  $("#pCancel").onclick=()=>$("#modal").innerHTML="";
- $("#pGo").onclick=()=>{const name=$("#pName").value.trim();$("#modal").innerHTML="";$("#print").innerHTML=make(name).map(b=>pageWrap(b,name)).join("");setTimeout(()=>window.print(),80)}}
+ $("#pGo").onclick=()=>{const name=$("#pName").value.trim();$("#modal").innerHTML="";$("#print").innerHTML=make(name).map(b=>pageWrap(b,name)).join("");window.print()}}
 const verseHTMLPrint=v=>`<div style="padding:4mm 0;border-bottom:1px solid #ccd"><div class="ln"><b style="color:#2b2f33">${AD(v)}<span class="dsh">–</span></b> ${V[v-1][0]}</div><div class="ln" style="padding-right:12mm">${V[v-1][1]}</div>
  <div style="font-size:11pt;color:#333">${G[v].ar}</div><div dir="ltr" style="font-size:10pt;color:#444;text-align:left"><i>${esc(TL[v-1][0])} / ${esc(TL[v-1][1])}</i><br>${esc(G[v].en)}</div></div>`;
 function printVerses(vs){printPages(()=>{const pages=[];for(let i=0;i<vs.length;i+=5)pages.push(vs.slice(i,i+5).map(verseHTMLPrint).join(""));return pages})}
@@ -1787,12 +1787,12 @@ function certHTML(name,title,detail){return `<div class="cert" dir="rtl" lang="a
  <div class="cert-foot"><div><b>${new Date().toLocaleDateString("ar",{year:"numeric",month:"long",day:"numeric"})}</b><br><span dir="ltr">${SITE}</span></div><div class="qr">${qrSvg()||`<span dir="ltr">${SITE}</span>`}<small>${T.ar.scanMe} · Scan</small></div></div>
  <div class="cert-note">${T.ar.certNotice}<br><span dir="ltr">${T.en.certNotice}</span></div></div>`}
 function printCert(title,detail){const draw=(name,err)=>{$("#modal").innerHTML=`<div class="modal"><div class="in" style="width:min(100%,620px)"><h3>${t("certificate")}</h3>
-  <label class="note" for="cName">${t("certName")}</label><input id="cName" type="text" value="${esc(name)}" placeholder="${t("namePh")}" style="border:1px solid var(--line);border-radius:12px;padding:12px;font-size:1.1rem;text-align:center;background:var(--surface)">
+  <label class="note" for="cName">${t("certName")}</label><input id="cName" type="text" value="${esc(name)}" style="border:1px solid var(--line);border-radius:12px;padding:12px;font-size:1.1rem;text-align:center;background:var(--surface)">
   <p class="note" style="margin:0">${t("certOpt")}</p><div id="certBox">${certHTML(name,title,detail)}</div>
   <div class="row" style="justify-content:center"><button class="btn soft" type="button" id="cX">${t("cancel")}</button><button class="btn out" type="button" id="cShow">${t("makeCert")}</button><button class="btn pri" type="button" id="cPrint">${IC.print}${t("printNow")}</button></div></div></div>`;
   const nm=()=>$("#cName").value.trim();$("#cX").onclick=()=>$("#modal").innerHTML="";
   $("#cShow").onclick=()=>{if(nm())P().name=P().name||nm();draw(nm())};
-  $("#cPrint").onclick=()=>{if(IN_FRAME){toast(t("printFrame"),"msg",3500);return}const n=nm();$("#modal").innerHTML="";$("#print").innerHTML=`<section class="pg cpg">${certHTML(n,title,detail)}</section>`;setTimeout(()=>window.print(),80)}};
+  $("#cPrint").onclick=()=>{if(IN_FRAME){toast(t("printFrame"),"msg",3500);return}const n=nm();$("#modal").innerHTML="";$("#print").innerHTML=`<section class="pg cpg">${certHTML(n,title,detail)}</section>`;window.print()}};
  draw(P().name||"",false)}
 function printReport(){const best=bestMap();printPages(name=>[`<h1>${t("report")}</h1>${name?`<div class="big" style="font-weight:800">${esc(name)}</div>`:""}
  <div class="big" style="margin:6mm 0">${t("streak")}: ${num(streak())} · ${t("weekGoal")}: ${num(weekVerses().length)}/${num(goalN())} · ${t("stars")}: ${num(Object.values(best).filter(a=>a>=80).length)}/${num(61)}</div>
@@ -2131,12 +2131,12 @@ function printBook(){if(IN_FRAME){toast(t("printFrame"),"",3500);return}const o=
   <div class="note">${t("pdfEd")}</div><div class="seg" id="pe"><button type="button" data-e="ar" class="${o.ed==="ar"?"on":""}">العربية</button><button type="button" data-e="en" class="${o.ed==="en"?"on":""}">English</button></div>
   <div class="note">${t("pdfInc")}</div><div class="chips" id="pi">${[["mn",t("pdfMn")],["tr",t("pdfTr")],["tl",t("pdfTl")]].map(([k,l])=>`<button type="button" class="chip ${o[k]?"on":""}" data-k="${k}">${o[k]?"✓ ":""}${l}</button>`).join("")}</div>
   <p class="note" style="margin:0">${(o.mn||o.tr||o.tl)?"":t("pdfNone")}</p>
-  <label class="note" for="pName">${t("nameAsk")}</label><input id="pName" type="text" value="${esc(o.name||P().name||"")}" placeholder="${t("namePh")}" style="border:1px solid var(--line);border-radius:12px;padding:10px;font-size:1rem;text-align:center;background:var(--surface)">
+  <label class="note" for="pName">${t("nameAsk")}</label><input id="pName" type="text" value="${esc(o.name||P().name||"")}" style="border:1px solid var(--line);border-radius:12px;padding:10px;font-size:1rem;text-align:center;background:var(--surface)">
   <div class="row" style="justify-content:center"><button class="btn soft" type="button" id="pCancel">${t("cancel")}</button><button class="btn pri" type="button" id="pGo">${IC.print}${t("pdfGo")}</button></div><p class="note" style="margin:0">${t("pdfHow")}</p></div></div>`;
   const keep=()=>{o.name=$("#pName").value.trim()};
   $$("#pe [data-e]").forEach(b=>b.onclick=()=>{keep();o.ed=b.dataset.e;draw()});$$("#pi [data-k]").forEach(b=>b.onclick=()=>{keep();o[b.dataset.k]=!o[b.dataset.k];draw()});
   $("#pCancel").onclick=()=>$("#modal").innerHTML="";
-  $("#pGo").onclick=()=>{keep();ps.set("pdfOpt",o);$("#modal").innerHTML="";$("#print").innerHTML=bookPages(o,o.name);setTimeout(()=>window.print(),120)}};
+  $("#pGo").onclick=()=>{keep();ps.set("pdfOpt",o);$("#modal").innerHTML="";$("#print").innerHTML=bookPages(o,o.name);window.print()}};
  draw()}
 $("#bookPdf").onclick=printBook;$("#bookPdf2").onclick=printBook;
 /* Recite from anywhere (like Tarteel): starts from the verse you are looking at, or carries on your last session,
