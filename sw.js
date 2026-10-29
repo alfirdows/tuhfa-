@@ -1,9 +1,5 @@
 /* Offline support: pages are fetched fresh when online (so updates reach everyone), and saved for offline use. */
-<<<<<<< HEAD
-const CACHE="tuhfa-v34";
-=======
-const CACHE="tuhfa-v32";
->>>>>>> 6dcb04e (Print / Save as PDF works on iPhone (print right on tap); drop the name hint text; remove Game mode from the poem reading tools)
+const CACHE="tuhfa-v35";
 const CORE=["./","index.html","run.js","manifest.webmanifest","icon-180.png","icon-192.png","icon-512.png","audio/ghamdi.mp3","fonts/ScheherazadeNew-Regular.woff","fonts/ScheherazadeNew-Bold.woff","fonts/IBMPlexSansArabic-Regular.woff","fonts/IBMPlexSansArabic-SemiBold.woff","fonts/IBMPlexSansArabic-Bold.woff"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()))});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
