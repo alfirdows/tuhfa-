@@ -237,9 +237,9 @@ html[dir="ltr"] .pg-prev small::before{content:"← "} html[dir="ltr"] .pg-next 
 .tl{direction:ltr;display:grid;grid-template-columns:1fr 1fr;gap:0 18px;margin:0;font-size:.95rem;color:var(--muted);line-height:1.6;font-style:italic}
 .tl span:first-child{order:2;text-align:right}
 @media (max-width:680px){.tl{grid-template-columns:1fr}.tl span:first-child{order:0;text-align:left}}
-.tr{margin:0;font-size:1rem;line-height:1.75;display:flex;gap:8px;align-items:flex-start;cursor:pointer;border-radius:6px}
-.tr svg{flex:none;width:18px;height:18px;margin-top:4px;color:var(--acc)}
-.tr:hover{color:var(--acc)}.tr.on{color:var(--acc);background:color-mix(in srgb,var(--acc) 10%,transparent)}
+.tr{margin:0;font-size:1rem;line-height:1.75;display:flex;gap:8px;align-items:flex-start;cursor:default;border-radius:6px}
+.tr svg{display:none;flex:none;width:18px;height:18px;margin-top:4px;color:var(--acc)}
+.tr.on{color:var(--acc);background:color-mix(in srgb,var(--acc) 10%,transparent)}
 .mn{font-family:var(--text);margin:0;font-size:1.28rem;line-height:1.95;color:var(--muted)}
 html[lang="ar"] .tl,html[lang="ar"] .tr{display:none}
 html[lang="en"] .mn{display:none}
@@ -1990,7 +1990,9 @@ const EN_MALE=/\b(Daniel|Aaron|Arthur|Fred|Gordon|Rishi|Oliver|Alex|Tom|Reed|Roc
 const enVoice=()=>{try{const v=speechSynthesis.getVoices().filter(x=>/^en/i.test(x.lang));return v.find(x=>EN_MALE.test(x.name)&&/en[-_]US/i.test(x.lang))||v.find(x=>EN_MALE.test(x.name))||null}catch(e){return null}};
 let EnOn=null;
 function stopEn(){try{speechSynthesis.cancel()}catch(e){}EnOn=null;$$(".tr.on,#she.on").forEach(x=>x.classList.remove("on"))}
-function sayEn(text,el){const again=EnOn&&EnOn.text===text;stopEn();if(again)return;
+/* The phone's own voices sound bad, so English is never read by them. English audio comes back as pre-made MP3s with a natural man's voice. */
+const EN_AUDIO=false;
+function sayEn(text,el){if(!EN_AUDIO)return;const again=EnOn&&EnOn.text===text;stopEn();if(again)return;
   try{const v=enVoice();if(!v){toast(t("noMaleVoice"));return}
     Player.stop();soloStop(null);const u=new SpeechSynthesisUtterance(text);u.voice=v;u.lang=v.lang;u.rate=.95;EnOn={text,el};if(el)el.classList.add("on");
     u.onend=u.onerror=()=>{if(EnOn&&EnOn.text===text)stopEn()};speechSynthesis.speak(u)}catch(e){}}
@@ -2203,7 +2205,7 @@ const Sheet={
   this.open(`<div class="shd"><span class="t">${t("verse")} ${num(v)} · <a class="chl" lang="ar" href="#poem/c${chOf(v)+1}">${c[2]}</a></span><button class="x" type="button" aria-label="close">${IC.close}</button></div>
    ${hasW?`<div class="wcard"><span class="aw" lang="ar">${w}</span>${ent?`<span class="am" lang="ar">${ent[1]}</span><span class="em" lang="en">${esc(ent[2])}</span>`:`<span class="em">${t("noGloss")}</span>`}</div>`:`<div class="wcard"><span class="aw" lang="ar" style="font-size:1.35rem">${V[v-1][0]}<br>${V[v-1][1]}</span></div>`}
    <div class="acts">${hasW?`<button class="btn sm pri" type="button" id="shw">${IC.play}${t("listenWord")}</button>`:""}<button class="btn sm ${hasW?"out":"pri"}" type="button" id="shv">${IC.play}${t("listenVerse")}</button>
-   ${LANG==="en"?`<button class="btn sm out" type="button" id="she">${IC.play}${t("english")}</button>`:""}
+   ${LANG==="en"&&EN_AUDIO?`<button class="btn sm out" type="button" id="she">${IC.play}${t("english")}</button>`:""}
    <button class="btn sm out" type="button" id="shm">${t("memFrom")}</button><button class="btn sm out" type="button" id="shs">${IC.share}${t("shareV")}</button><button class="btn sm out" type="button" id="shp">${IC.print}${t("printV")}</button></div>
    <span class="note">${LANG==="ar"?R().ar:R().en}</span>
    <div class="vmean">${LANG==="ar"?arB+enB:enB+arB}</div>${(()=>{const ex=document.querySelector(`#v${v} .ex`);return ex?`<details class="ex" open>${ex.innerHTML.replace(/^<summary>/,"<summary>")}</details>`:""})()}<div class="note" style="font-weight:700">${t("wordsIn")}</div>
