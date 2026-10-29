@@ -239,7 +239,7 @@ html[dir="ltr"] .pg-prev small::before{content:"← "} html[dir="ltr"] .pg-next 
 @media (max-width:680px){.tl{grid-template-columns:1fr}.tl span:first-child{order:0;text-align:left}}
 .tr{margin:0;font-size:1rem;line-height:1.75;display:flex;gap:8px;align-items:flex-start;cursor:pointer;border-radius:6px}
 .tr svg{flex:none;width:18px;height:18px;margin-top:4px;color:var(--acc)}
-.tr:hover{color:var(--acc)}
+.tr:hover{color:var(--acc)}.tr.on{color:var(--acc);background:color-mix(in srgb,var(--acc) 10%,transparent)}
 .mn{font-family:var(--text);margin:0;font-size:1.28rem;line-height:1.95;color:var(--muted)}
 html[lang="ar"] .tl,html[lang="ar"] .tr{display:none}
 html[lang="en"] .mn{display:none}
@@ -1574,7 +1574,7 @@ en:{repeat:"repeat",crushHow_:"Tap the words of the line in order.",gCrush:"Word
  right:"Correct.",wrong:"Not quite. The answer:",heard:"Heard",score:"Score",review:"Verses to review",question:"Question",typeHere:"Type here…",
  listenWord:"Listen",listenVerse:"Listen to the verse",audioSoon:"Recitation audio is coming soon.",memFrom:"Memorize from here",
  noGloss:"This word is explained in the meaning of the verse.",verseMeaning:"Meaning",translation:"Translation",wordsIn:"Words in this verse",
- shareV:"Share",printV:"Print / PDF",english:"English audio",
+ shareV:"Share",printV:"Print / PDF",english:"English audio",noMaleVoice:"No male English voice on this device yet.",
  bism:"In the name of Allah",istain:"Seek Allah’s help",
  streak:"days in a row",weekGoal:"this week",stars:"verses mastered",
  goalTitle:"Weekly goal",goalSub:"How many verses to memorize each week",easy:"Easy · 5",medium:"Medium · 10",fast:"Fast · 20",custom:"Custom",
@@ -1619,7 +1619,7 @@ ar:{repeat:"تكرار",crushHow_:"اضغط كلمات البيت بالترتي
  right:"إجابة صحيحة.",wrong:"ليست صحيحة. الإجابة:",heard:"ما سُمع",score:"النتيجة",review:"أبيات للمراجعة",question:"السؤال",typeHere:"اكتب هنا…",
  listenWord:"استمع",listenVerse:"استمع إلى البيت",audioSoon:"سيُضاف صوت التلاوة قريبًا.",memFrom:"احفظ من هنا",
  noGloss:"معنى هذه الكلمة داخل في معنى البيت.",verseMeaning:"المعنى",translation:"الترجمة",wordsIn:"كلمات هذا البيت",
- shareV:"مشاركة",printV:"طباعة / PDF",english:"صوت إنجليزي",
+ shareV:"مشاركة",printV:"طباعة / PDF",english:"صوت إنجليزي",noMaleVoice:"لا يوجد صوت رجل بالإنجليزية على هذا الجهاز بعد.",
  streak:"أيام متتالية",weekGoal:"هذا الأسبوع",stars:"بيتًا متقنًا",
  goalTitle:"الهدف الأسبوعي",goalSub:"كم بيتًا تحفظ كل أسبوع",easy:"سهل · ٥",medium:"متوسط · ١٠",fast:"سريع · ٢٠",custom:"مخصص",
  continueBtn:"متابعة",certificate:"شهادة",printCert:"اطبع الشهادة",
@@ -1972,7 +1972,15 @@ class Listener{constructor(onWords,onState){this.onWords=onWords;this.onState=on
   try{r.start()}catch(e){this.active=false;clearInterval(this.dog);micState="denied";this.onState("denied")}}
  stop(){this.active=false;clearInterval(this.dog);clearTimeout(this.ft);try{this.r&&this.r.stop()}catch(e){}}
  transcript(){return (this.finalText+" "+this.text).trim()}}
-function sayEn(text){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="en-US";u.rate=.95;speechSynthesis.speak(u)}catch(e){}}
+/* English read-aloud: a man's voice only (never a woman's). Tap the same line or button again to stop; any other audio stops it too. */
+const EN_MALE=/\b(Daniel|Aaron|Arthur|Fred|Gordon|Rishi|Oliver|Alex|Tom|Reed|Rocko|Eddy|Grandpa|Ralph|Albert|Junior|Lee|Thomas|Guy|Ryan|Christopher|Eric|Roger|Brian|George|David|Mark|James|Male)\b/i;
+const enVoice=()=>{try{const v=speechSynthesis.getVoices().filter(x=>/^en/i.test(x.lang));return v.find(x=>EN_MALE.test(x.name)&&/en[-_]US/i.test(x.lang))||v.find(x=>EN_MALE.test(x.name))||null}catch(e){return null}};
+let EnOn=null;
+function stopEn(){try{speechSynthesis.cancel()}catch(e){}EnOn=null;$$(".tr.on,#she.on").forEach(x=>x.classList.remove("on"))}
+function sayEn(text,el){const again=EnOn&&EnOn.text===text;stopEn();if(again)return;
+  try{const v=enVoice();if(!v){toast(t("noMaleVoice"));return}
+    Player.stop();const u=new SpeechSynthesisUtterance(text);u.voice=v;u.lang=v.lang;u.rate=.95;EnOn={text,el};if(el)el.classList.add("on");
+    u.onend=u.onerror=()=>{if(EnOn&&EnOn.text===text)stopEn()};speechSynthesis.speak(u)}catch(e){}}
 const RECITERS=[{id:"ghamdi",ar:"الشيخ سعد الغامدي",en:"Shaykh Saʿd al-Ghāmidī",src:"audio/ghamdi.mp3",map:GHAMDI}];
 const R=()=>RECITERS.find(r=>r.id===ST.reciter)||RECITERS[0];
 const AUDIO=R().map;
@@ -1984,7 +1992,7 @@ const Player={a:null,queue:[],qi:0,left:0,seg:null,raf:0,onWord:null,playing:fal
  /* "Your turn": after each verse the player waits about as long as the verse took, so the learner can say it back. */
  wait(ms,fn){clearTimeout(this.gapT);const gap=ms>1000;this.turn=gap;if(gap){this.playing=true;PBar.sync()}this.gapT=setTimeout(()=>{this.turn=false;fn()},ms)},
  gapFor(it){return it.kind==="verse"&&ST.turn?Math.max(1500,(it.seg[1]-it.seg[0])/(ST.speed||1)*1100+600):0},
- go(){clearTimeout(this.gapT);this.turn=false;const it=this.queue[this.qi];if(!it){this.stop();return}const a=this.el();this.seg=it.seg;a.currentTime=it.seg[0];this.playing=true;a.play().catch(()=>{this.playing=false;PBar.sync()});PBar.sync();cancelAnimationFrame(this.raf);
+ go(){clearTimeout(this.gapT);this.turn=false;if(EnOn)stopEn();const it=this.queue[this.qi];if(!it){this.stop();return}const a=this.el();this.seg=it.seg;a.currentTime=it.seg[0];this.playing=true;a.play().catch(()=>{this.playing=false;PBar.sync()});PBar.sync();cancelAnimationFrame(this.raf);
   const loop=()=>{if(!this.playing)return;const t=a.currentTime;if(t>=this.seg[1]-0.02){this.next();return}if(it.kind==="verse")markPlaying(it.key,t);this.raf=requestAnimationFrame(loop)};this.raf=requestAnimationFrame(loop)},
  next(){const a=this.el();a.pause();cancelAnimationFrame(this.raf);const it=this.queue[this.qi];if(!it)return this.stop();
   const gap=this.gapFor(it);
@@ -2031,7 +2039,7 @@ function route(){if(location.hash==="#owner-tasnim"){LS.set("owner",true);locati
  if(!sub&&R==="memorize"&&!Mem.run)setTimeout(()=>toast(t("tapToStart"),"",3500),350);if(!sub&&R==="quiz"&&!Quiz.qs)setTimeout(()=>toast(t("tapToStart"),"",3500),350);if(!sub&&R==="games"&&!Games.cur&&!Games.game)setTimeout(()=>toast(t("chooseGame"),"",3000),350);
  if(R==="poem"&&Book.on()){let ci=Book.i;if(sub&&/^c\d+$/.test(sub))ci=+sub.slice(1)-1;else if(sub&&/^v\d+$/.test(sub))ci=chOf(+sub.slice(1));Book.show(ci,true)}
  const target=sub&&document.getElementById(sub);if(target)setTimeout(()=>target.scrollIntoView({block:"start"}),40);else window.scrollTo(0,0)}
-window.addEventListener("hashchange",route);
+window.addEventListener("hashchange",()=>{stopEn();route()});
 $("#fab").onclick=()=>reciteNow(null);
 /* Leaving the website (another app, locked screen) pauses reciting; your place is kept until you tap Continue. */
 document.addEventListener("visibilitychange",()=>{if(document.hidden){if(Mem.run&&Mem.listening){Mem.stopMic(true);Mem.away=true}}else if(Mem.away&&Mem.run){Mem.away=false;toast(t("autoPaused"),"",4000)}});
@@ -2121,7 +2129,7 @@ function verseInView(){const el=$$(".poem [id^='v']").find(e=>e.offsetParent&&e.
 $("#pbRecite").onclick=()=>reciteNow(verseInView()||(Book.on()?CH[Book.i][0]:PBar.v||1));
 $("#listenAll").onclick=()=>{unlockAudio();Player.playVerses(range(PBar.v||1,61))};
 poemEl.addEventListener("click",e=>{const w=e.target.closest(".w");if(w){const [v,h,i]=w.dataset.k.split(":").map(Number);Sheet.word(v,h,i,w.dataset.g);return}
- const n=e.target.closest("[data-verse]");if(n){Sheet.word(+n.dataset.verse,-1,-1,null);return}const tr=e.target.closest(".tr");if(tr)sayEn(tr.dataset.say)});
+ const n=e.target.closest("[data-verse]");if(n){Sheet.word(+n.dataset.verse,-1,-1,null);return}const tr=e.target.closest(".tr");if(tr)sayEn(tr.dataset.say,tr)});
 
 /* ================= zoom fits the screen: all lines grow together and shrink just enough to fit, words never move ================= */
 function fitLines(){const roots=[$("#poemText"),$("#mz")].filter(x=>x&&x.offsetParent);for(const root of roots){root.style.setProperty("--fit",1);
@@ -2181,7 +2189,7 @@ const Sheet={
    <span class="note">${LANG==="ar"?R().ar:R().en}</span>
    <div class="vmean">${LANG==="ar"?arB+enB:enB+arB}</div>${(()=>{const ex=document.querySelector(`#v${v} .ex`);return ex?`<details class="ex" open>${ex.innerHTML.replace(/^<summary>/,"<summary>")}</details>`:""})()}<div class="note" style="font-weight:700">${t("wordsIn")}</div>
    <div class="gl">${G[v].w.map((e2,gi)=>`<button type="button" data-gi="${gi}" class="${ent===e2?"on":""}"><span class="gw" lang="ar">${e2[0]}</span><span class="ga" lang="ar">${e2[1]}</span><span class="ge" lang="en">${esc(e2[2])}</span></button>`).join("")}</div>`);
-  const sw2=$("#shw");if(sw2)sw2.onclick=()=>{unlockAudio();Player.playSeg(seg,1,"word")};$("#shv").onclick=()=>{unlockAudio();PBar.v=v;Player.playSeg(AUDIO.verses[v],ST.rep||1,"verse",v)};const se=$("#she");if(se)se.onclick=()=>sayEn(G[v].en);
+  const sw2=$("#shw");if(sw2)sw2.onclick=()=>{unlockAudio();Player.playSeg(seg,1,"word")};$("#shv").onclick=()=>{unlockAudio();PBar.v=v;Player.playSeg(AUDIO.verses[v],ST.rep||1,"verse",v)};const se=$("#she");if(se)se.onclick=()=>sayEn(G[v].en,se);
   $("#shm").onclick=()=>{Mem.setup={from:v,to:c[1]};ps.set("memRange",Mem.setup);Mem.run=null;location.hash="#memorize"};$("#shs").onclick=()=>shareVerse(v);$("#shp").onclick=()=>printVerses([v]);
   $("#sheet .gl").onclick=e=>{const b=e.target.closest("[data-gi]");if(!b)return;const gi=+b.dataset.gi;const k=$(`#v${v} .w[data-g="${gi}"]`);if(k){const [vv,hh,ii]=k.dataset.k.split(":").map(Number);this.word(vv,hh,ii,gi)}}}
 };
