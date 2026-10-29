@@ -287,7 +287,7 @@ html[lang="en"] .mn{display:none}
 .toast{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:95;background:color-mix(in srgb,var(--surface) 94%,transparent);color:var(--muted);border:1px solid var(--line);padding:5px 14px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.08);text-align:center;font-weight:600;font-size:.88rem;line-height:1.6;max-width:min(92vw,520px);animation:tin .25s ease-out;pointer-events:none}
 .toast [lang="ar"]{font-family:var(--text);font-size:1.08rem;color:var(--ink)}
 .toast small{font-size:.8rem;font-weight:500;color:var(--muted)}
-body.dockpad .toast,body.pbon .toast{bottom:calc(132px + env(safe-area-inset-bottom,0px))}
+body.dockpad .toast,body.pbon .toast{bottom:calc(160px + env(safe-area-inset-bottom,0px))}
 @keyframes tin{from{opacity:0;transform:translate(-50%,6px)}to{opacity:1;transform:translateX(-50%)}}
 
 /* ---------- chips / settings ---------- */
@@ -496,13 +496,20 @@ body.pbon .pbar{display:block}
 .pbar .in{pointer-events:auto;max-width:720px;margin:0 auto;background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,.16);display:flex;align-items:center;gap:8px;padding:8px 10px;overflow-x:auto;scrollbar-width:none}
 .pbar .in::-webkit-scrollbar{display:none}
 .pbar .in>*{flex:none}
+/* two rows so every control shows on a phone: play controls on top, repeat / speed / your turn / loop below */
+.pbar .in{flex-wrap:wrap;overflow:visible;row-gap:6px}
+.pbar .pbi{flex:1 1 0;min-width:0}.pbar .pbi>*{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pbar .pbbr{flex-basis:100%;height:0}.pbar .in{justify-content:center}
+html body.pbon .toast{bottom:calc(var(--pbh,160px) + 8px)!important}
+.pbar .in .chip,.pbar .in .tog{min-height:32px;padding-block:4px;font-size:.8rem}
+.pbar .in .tog i{width:26px;height:16px}.pbar .in .tog i::after{width:10px;height:10px}
 .pbb{width:40px;height:40px;border-radius:50%;border:0;background:var(--surface-2);display:grid;place-items:center;color:var(--ink)}
 .pbb svg{width:20px;height:20px}
 .pbb.main{width:52px;height:52px;background:var(--acc);color:var(--acc-ink)}
 .pbb.main svg{width:24px;height:24px}
 .pbi{display:grid;line-height:1.3;min-width:90px}
 .pbi b{font-size:.92rem} .pbi span{font-size:.75rem;color:var(--muted)}
-body.pbon footer{padding-bottom:90px}
+body.pbon footer{padding-bottom:calc(var(--pbh,160px) + 16px)}
 
 html[dir="rtl"] .pbb:not(.main) svg{transform:scaleX(-1)}
 
@@ -1469,7 +1476,7 @@ main{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
  <button class="pbb main" type="button" id="pbPlay" aria-label="Play"></button>
  <button class="pbb" type="button" id="pbNext" aria-label="Next"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 6h2v12h-2zM4 6v12l9-6z"/></svg></button>
  <div class="pbi"><b id="pbV"></b><span id="pbRec"></span></div>
- <button class="chip" type="button" id="pbRep"></button><button class="chip" type="button" id="pbSpd"></button>
+ <span class="pbbr" aria-hidden="true"></span><button class="chip" type="button" id="pbRep"></button><button class="chip" type="button" id="pbSpd"></button>
  <button class="tog" type="button" id="pbCont" aria-pressed="true"><i></i><span class="l-en" lang="en">Keep going</span><span class="l-ar" lang="ar" dir="rtl">تابع</span></button>
  <button class="tog" type="button" id="pbTurn" aria-pressed="false"><i></i><span class="l-en" lang="en">Your turn</span><span class="l-ar" lang="ar" dir="rtl">دورك</span></button>
  <button class="tog" type="button" id="pbLoop" aria-pressed="false"><i></i><span class="l-en" lang="en">Loop chapter</span><span class="l-ar" lang="ar" dir="rtl">كرّر الباب</span></button>
@@ -2017,6 +2024,8 @@ document.addEventListener("solo",e=>{const k=e.detail;
   if(k&&EnOn){EnOn=null;$$(".tr.on,#she.on").forEach(x=>x.classList.remove("on"))}
   if(Player.a&&Player.a!==k&&(Player.playing||Player.turn))Player.stop();
   if(MISL.audio&&MISL.audio!==k){MISL.audio=null;$$(".misc .pl.on").forEach(x=>x.classList.remove("on"))}});
+/* keep toasts above the play bar, whatever its height */
+try{new ResizeObserver(()=>{const b=document.getElementById("pbarAudio");if(b)document.documentElement.style.setProperty("--pbh",b.offsetHeight+"px")}).observe(document.getElementById("pbarAudio"))}catch(e){}
 const PBar={sync(){const bar=$("#pbarAudio");if(!bar)return;const v=Player.cur()||PBar.v||1;PBar.v=v;$("#pbV").textContent=Player.turn?t("yourTurn"):t("verse")+" "+num(v);bar.classList.toggle("turn",!!Player.turn);
   $("#pbTurn").setAttribute("aria-pressed",!!ST.turn);$("#pbLoop").setAttribute("aria-pressed",!!ST.loop);
   $("#pbPlay").innerHTML=Player.playing?IC.pause:IC.play;$("#pbPlay").setAttribute("aria-label",Player.playing?"Pause":"Play");
