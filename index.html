@@ -1297,9 +1297,9 @@ body:not(.dockpad) .mv{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
 .hctl>.hbtn,.hctl>.lsw{height:auto!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;margin:0!important;padding:0 11px!important;min-width:40px;justify-content:center}
 .hctl>*+*{border-inline-start:1px solid var(--line)!important}
 .hctl>.hbtn:active,.hctl .lsw button:active{background:var(--surface-2)!important}
-.hctl .lsw{padding:0!important;display:inline-flex}
-.hctl .lsw button.on{display:none}
-.hctl .lsw button{background:none!important;color:var(--ink)!important;padding:0 11px!important;border-radius:0!important;font-size:.84rem!important}
+.hctl .lsw{padding:3px!important;display:inline-flex;gap:2px}
+.hctl .lsw button.on{background:var(--acc)!important;color:var(--acc-ink)!important}
+.hctl .lsw button{background:none!important;color:var(--ink)!important;padding:0 10px!important;border:0;border-radius:999px!important;font:inherit;font-weight:600;font-size:.84rem!important;cursor:pointer}
 .hctl #pfBtn{padding:0 7px!important}
 @media (max-width:430px){.xpchip{display:none!important}.hctl #lang svg{display:none}}
 .menu{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr));gap:0!important;overflow:visible!important;padding:0!important}
@@ -1352,6 +1352,8 @@ main{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 /* "ways to learn" on a phone: compact rows, icon beside the words */
 @media (max-width:560px){.tile{grid-template-columns:auto 1fr;column-gap:14px!important;row-gap:2px!important;align-items:center;padding:14px 16px!important}.tile .ic{grid-row:span 2;width:44px!important;height:44px!important}.tile b{align-self:end}.tile>span:last-child{align-self:start;font-size:.88rem!important;line-height:1.6!important}}
 @media (max-width:360px){.menu a{font-size:.62rem!important;letter-spacing:-.01em}html[lang="ar"] .menu a{font-size:.7rem!important}.hctl>.hbtn,.hctl .lsw button{padding:0 8px!important}}
+/* Both languages always visible (2026-10-29) */
+@media (max-width:360px){.hctl .lsw button{padding:0 7px!important;font-size:.76rem!important}.hctl>.hbtn{padding:0 7px!important;min-width:34px}}
 .runb{display:flex;align-items:center;gap:14px;width:100%;border:0;border-radius:20px;padding:16px 18px;margin:14px 0;cursor:pointer;text-align:start;color:#fff;font:inherit;background:linear-gradient(120deg,#1b1640,#3b2a6b 55%,#e07a3f);box-shadow:0 6px 18px rgba(40,20,80,.25)}
 .runb .lt{font-size:2.2rem;animation:runsw 1.6s ease-in-out infinite;transform-origin:50% 0}@keyframes runsw{50%{transform:rotate(8deg)}}
 .runb b{display:block;font-size:1.15rem;color:#ffe08a}.runb span.d{font-size:.88rem;opacity:.9}.runb .go{margin-inline-start:auto;background:#ffd56b;color:#3a2600;border-radius:99px;padding:8px 16px;font-weight:800;white-space:nowrap;display:inline-flex;gap:6px;align-items:center}
@@ -1364,7 +1366,7 @@ main{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
   <button class="xpchip" id="xpChip" type="button" hidden onclick="location.hash='#progress'"></button>
   <div class="hctl">
   <button class="hbtn pfchip" id="pfBtn" type="button" aria-label="Learner"></button>
-  <button class="hbtn" id="lang" type="button"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:18px;height:18px"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18"/></svg><span class="l-ar" lang="en">English</span><span class="l-en" lang="ar">العربية</span></button>
+  <div class="lsw" id="langSw" role="group" aria-label="Language · اللغة"><button type="button" data-lg="ar" lang="ar">عربي</button><button type="button" data-lg="en" lang="en">English</button></div>
   <a class="hbtn icon" href="#settings" aria-label="Settings"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></a>
   </div>
  </div>
@@ -2010,8 +2012,9 @@ const PBar={sync(){const bar=$("#pbarAudio");if(!bar)return;const v=Player.cur()
 
 /* ================= routing + language ================= */
 let ROUTE="",readGreeted=false;
-function setLang(l){LANG=l;LS.set("lang",l);document.documentElement.lang=l;document.documentElement.dir=l==="ar"?"rtl":"ltr";Sheet.close();renderRoute()}
-$("#lang").onclick=()=>setLang(LANG==="ar"?"en":"ar");
+function setLang(l){LANG=l;LS.set("lang",l);document.documentElement.lang=l;document.documentElement.dir=l==="ar"?"rtl":"ltr";Sheet.close();syncLang();renderRoute()}
+function syncLang(){$$("#langSw button").forEach(b=>{const on=b.dataset.lg===LANG;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on)})}
+$$("#langSw button").forEach(b=>b.onclick=()=>{if(LANG!==b.dataset.lg)setLang(b.dataset.lg)});syncLang();
 $("#pfBtn").onclick=()=>Learners.sheet();
 function renderRoute(){({home:()=>Home.render(),memorize:()=>Mem.render(),quiz:()=>Quiz.render(),games:()=>Games.render(),progress:()=>Prog.render(),settings:()=>Settings.render()}[ROUTE]||(()=>{}))()}
 function route(){if(location.hash==="#owner-tasnim"){LS.set("owner",true);location.replace("#settings");return}const h=(location.hash||"#home").slice(1);const [r,sub,sub2]=h.split("/");const R=["home","poem","memorize","games","quiz","progress","settings"].includes(r)?r:"home";
