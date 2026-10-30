@@ -1364,12 +1364,33 @@ main{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .runb{display:flex;align-items:center;gap:14px;width:100%;border:0;border-radius:20px;padding:16px 18px;margin:14px 0;cursor:pointer;text-align:start;color:#fff;font:inherit;background:linear-gradient(120deg,#1b1640,#3b2a6b 55%,#e07a3f);box-shadow:0 6px 18px rgba(40,20,80,.25)}
 .runb .lt{font-size:2.2rem;animation:runsw 1.6s ease-in-out infinite;transform-origin:50% 0}@keyframes runsw{50%{transform:rotate(8deg)}}
 .runb b{display:block;font-size:1.15rem;color:#ffe08a}.runb span.d{font-size:.88rem;opacity:.9}.runb .go{margin-inline-start:auto;background:#ffd56b;color:#3a2600;border-radius:99px;padding:8px 16px;font-weight:800;white-space:nowrap;display:inline-flex;gap:6px;align-items:center}
+/* Phone tidy (2026-10-30): full title, calm tools box, one-row play bar that doesn't cover the page */
+@media (max-width:430px){.brand .bm{display:none}}
+.brand b{overflow:visible!important;text-overflow:clip!important}
+.pbar .in{display:grid!important;grid-template-columns:1fr auto auto auto 1fr;grid-template-areas:"i i i i i" "r p m n o";align-items:center;column-gap:8px;row-gap:4px!important;padding:8px 12px!important}
+.pbar .pbi{grid-area:i;display:flex!important;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:0 8px;text-align:center;min-width:0}
+.pbar .pbi>*{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;display:inline!important}
+.pbar .pbi b{font-size:.9rem}.pbar .pbi span{font-size:.78rem}
+.pbar #pbRecite{grid-area:r;justify-self:start}.pbar #pbPrev{grid-area:p}.pbar #pbPlay{grid-area:m}.pbar #pbNext{grid-area:n}.pbar #pbMore{grid-area:o;justify-self:end}
+.pbb.more.on{background:var(--acc-soft,#e3efe7);color:var(--acc)}
+.pbopt{grid-column:1/-1;display:flex;flex-wrap:wrap;justify-content:center;gap:6px;padding-top:6px;border-top:1px solid var(--line)}
+.pbopt[hidden]{display:none!important}
+@media (max-width:820px){
+ #pbar{display:grid!important;grid-template-columns:1fr 1fr;gap:8px!important;padding:10px!important}
+ #pbar>*{width:100%;min-width:0!important;max-width:none!important;min-height:42px!important;height:42px;margin:0!important;justify-content:center;font-size:.9rem!important}
+ #pbar>.tog{padding-inline:10px!important}
+ #pbar>.tog.l-ar{grid-column:1/-1}
+ #pbar>.sizer{display:flex}#pbar>.sizer button{flex:1;min-height:40px!important;font-size:.95rem!important}
+ #pbar>#jump{padding-inline:12px}
+ .vmrow{display:grid!important;grid-template-columns:auto 1fr;gap:10px!important}
+ .vmrow .seg{display:flex;width:100%}.vmrow .seg button{flex:1;justify-content:center}
+}
 </style>
 </head>
 <body>
 <header class="top"><div class="wrap">
  <div class="bar1">
-  <a class="brand" href="#home"><b class="l-ar" lang="ar">متن تحفة الأطفال</b><b class="l-en ebrand" lang="en">Matn Tuḥfat al-Aṭfāl</b></a>
+  <a class="brand" href="#home"><b class="l-ar" lang="ar">متن تحفة الأطفال</b><b class="l-en ebrand" lang="en"><span class="bm">Matn </span>Tuḥfat al-Aṭfāl</b></a>
   <button class="xpchip" id="xpChip" type="button" hidden onclick="location.hash='#progress'"></button>
   <div class="hctl">
   <button class="hbtn pfchip" id="pfBtn" type="button" aria-label="Learner"></button>
@@ -1471,15 +1492,16 @@ main{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 
 <button class="fab" id="fab" type="button" aria-label="Recite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></button>
 <div class="pbar" id="pbarAudio"><div class="in">
+ <div class="pbi"><b id="pbV"></b><span id="pbRec"></span></div>
  <button class="btn sm pri" type="button" id="pbRecite"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg><span class="l-en" lang="en">Recite</span><span class="l-ar" lang="ar" dir="rtl">سمّع</span></button>
  <button class="pbb" type="button" id="pbPrev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 6h2v12H7zM20 6v12l-9-6z"/></svg></button>
  <button class="pbb main" type="button" id="pbPlay" aria-label="Play"></button>
  <button class="pbb" type="button" id="pbNext" aria-label="Next"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 6h2v12h-2zM4 6v12l9-6z"/></svg></button>
- <div class="pbi"><b id="pbV"></b><span id="pbRec"></span></div>
- <span class="pbbr" aria-hidden="true"></span><button class="chip" type="button" id="pbRep"></button><button class="chip" type="button" id="pbSpd"></button>
+ <button class="pbb more" type="button" id="pbMore" aria-expanded="false" aria-controls="pbOpt" aria-label="More options"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
+ <div class="pbopt" id="pbOpt" hidden><button class="chip" type="button" id="pbRep"></button><button class="chip" type="button" id="pbSpd"></button>
  <button class="tog" type="button" id="pbCont" aria-pressed="true"><i></i><span class="l-en" lang="en">Keep going</span><span class="l-ar" lang="ar" dir="rtl">تابع</span></button>
  <button class="tog" type="button" id="pbTurn" aria-pressed="false"><i></i><span class="l-en" lang="en">Your turn</span><span class="l-ar" lang="ar" dir="rtl">دورك</span></button>
- <button class="tog" type="button" id="pbLoop" aria-pressed="false"><i></i><span class="l-en" lang="en">Loop chapter</span><span class="l-ar" lang="ar" dir="rtl">كرّر الباب</span></button>
+ <button class="tog" type="button" id="pbLoop" aria-pressed="false"><i></i><span class="l-en" lang="en">Loop chapter</span><span class="l-ar" lang="ar" dir="rtl">كرّر الباب</span></button></div>
 </div></div>
 <div class="view" id="view-memorize" hidden><section class="sec" style="padding-top:22px"><div class="wrap narrow" id="memRoot"></div></section></div>
 <div class="view" id="view-games" hidden><section class="sec" style="padding-top:22px"><div class="wrap narrow" id="gameRoot"></div></section></div>
@@ -2031,8 +2053,12 @@ try{new ResizeObserver(()=>{const b=document.getElementById("pbarAudio");if(b)do
 const PBar={sync(){const bar=$("#pbarAudio");if(!bar)return;const v=Player.cur()||PBar.v||1;PBar.v=v;$("#pbV").textContent=Player.turn?t("yourTurn"):t("verse")+" "+num(v);bar.classList.toggle("turn",!!Player.turn);
   $("#pbTurn").setAttribute("aria-pressed",!!ST.turn);$("#pbLoop").setAttribute("aria-pressed",!!ST.loop);
   $("#pbPlay").innerHTML=Player.playing?IC.pause:IC.play;$("#pbPlay").setAttribute("aria-label",Player.playing?"Pause":"Play");
-  $("#pbRep").textContent=(ST.rep?num(ST.rep)+"×":"∞")+" "+t("repeat");$("#pbSpd").textContent=num(ST.speed||1)+"×";$("#pbCont").setAttribute("aria-pressed",!!ST.cont);$("#pbRec").textContent=LANG==="ar"?R().ar:R().en},
- init(){$("#pbPlay").onclick=()=>{unlockAudio();if(Player.playing)Player.pause();else if(Player.queue.length&&Player.queue[Player.qi])Player.resume();else Player.playVerses(range(PBar.v||1,61))};
+  $("#pbRep").textContent=(LANG==="ar"?t("repeat"):"Repeat")+" "+(ST.rep?num(ST.rep)+"×":"∞");$("#pbSpd").textContent=t("speed")+" "+num(ST.speed||1)+"×";$("#pbCont").setAttribute("aria-pressed",!!ST.cont);$("#pbRec").textContent=LANG==="ar"?R().ar:R().en},
+ init(){/* Repeat, speed, keep going, your turn and loop sit behind one button so the bar stays one row and doesn't cover the page. */
+  const opt=$("#pbOpt"),more=$("#pbMore"),showOpt=on=>{opt.hidden=!on;more.setAttribute("aria-expanded",on);more.classList.toggle("on",on);try{localStorage.setItem("pbOpt",on?"1":"")}catch(e){}};
+  try{showOpt(localStorage.getItem("pbOpt")==="1")}catch(e){}
+  more.onclick=()=>showOpt(opt.hidden);
+  $("#pbPlay").onclick=()=>{unlockAudio();if(Player.playing)Player.pause();else if(Player.queue.length&&Player.queue[Player.qi])Player.resume();else Player.playVerses(range(PBar.v||1,61))};
   $("#pbPrev").onclick=()=>{PBar.v=Math.max(1,(Player.cur()||PBar.v||1)-1);Player.playVerses(range(PBar.v,61))};
   $("#pbNext").onclick=()=>{PBar.v=Math.min(61,(Player.cur()||PBar.v||1)+1);Player.playVerses(range(PBar.v,61))};
   $("#pbRep").onclick=()=>{const seq=[1,3,5,10,0];ST.rep=seq[(seq.indexOf(ST.rep)+1)%seq.length];saveSet();Player.left=ST.rep;PBar.sync()};
@@ -2044,7 +2070,7 @@ const PBar={sync(){const bar=$("#pbarAudio");if(!bar)return;const v=Player.cur()
 /* ================= routing + language ================= */
 let ROUTE="",readGreeted=false;
 function setLang(l){LANG=l;LS.set("lang",l);document.documentElement.lang=l;document.documentElement.dir=l==="ar"?"rtl":"ltr";Sheet.close();syncLang();renderRoute()}
-function syncLang(){$$("#langSw button").forEach(b=>{const on=b.dataset.lg===LANG;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on)})}
+function syncLang(){$$("#langSw button").forEach(b=>{const on=b.dataset.lg===LANG;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on)});const j=document.querySelector("#jump option[value='']");if(j)j.textContent=LANG==="ar"?"الباب":"Chapter"}
 $$("#langSw button").forEach(b=>b.onclick=()=>{if(LANG!==b.dataset.lg)setLang(b.dataset.lg)});syncLang();
 $("#pfBtn").onclick=()=>Learners.sheet();
 function renderRoute(){({home:()=>Home.render(),memorize:()=>Mem.render(),quiz:()=>Quiz.render(),games:()=>Games.render(),progress:()=>Prog.render(),settings:()=>Settings.render()}[ROUTE]||(()=>{}))()}
