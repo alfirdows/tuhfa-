@@ -1364,6 +1364,20 @@ main{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .runb{display:flex;align-items:center;gap:14px;width:100%;border:0;border-radius:20px;padding:16px 18px;margin:14px 0;cursor:pointer;text-align:start;color:#fff;font:inherit;background:linear-gradient(120deg,#1b1640,#3b2a6b 55%,#e07a3f);box-shadow:0 6px 18px rgba(40,20,80,.25)}
 .runb .lt{font-size:2.2rem;animation:runsw 1.6s ease-in-out infinite;transform-origin:50% 0}@keyframes runsw{50%{transform:rotate(8deg)}}
 .runb b{display:block;font-size:1.15rem;color:#ffe08a}.runb span.d{font-size:.88rem;opacity:.9}.runb .go{margin-inline-start:auto;background:#ffd56b;color:#3a2600;border-radius:99px;padding:8px 16px;font-weight:800;white-space:nowrap;display:inline-flex;gap:6px;align-items:center}
+/* Compact bars (2026-11-01): on phones the reading tools and the play bar each stay ONE row; the other buttons open with ⋯ More. Nothing removed. */
+.cmore{display:none}
+@media (max-width:600px){
+.cmore{display:inline-flex;align-items:center;gap:6px}
+.pbar .pbb.cmore{display:grid;width:36px;height:36px}
+.tools:not(.open)>.tog,.tools:not(.open)>.sizer,.tools:not(.open)>#bookPdf{display:none!important}
+.tools{flex-wrap:nowrap!important;justify-content:center;gap:6px!important;padding:6px!important}
+.tools.open{flex-wrap:wrap!important}
+.tools #jump{flex:1 1 auto;min-width:0;max-width:200px}
+.tools .cmore{min-height:36px;padding-inline:12px}
+.tools.open .cmore,.pbar .in.open .cmore{background:var(--acc-soft,var(--surface-2));color:var(--acc)}
+.pbar .in:not(.open) .pbbr,.pbar .in:not(.open) .pbbr~*{display:none!important}
+.pbar .in{flex-wrap:nowrap}.pbar .in.open{flex-wrap:wrap}
+}
 </style>
 </head>
 <body>
@@ -1456,6 +1470,7 @@ main{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
    <select id="jump" aria-label="Chapter"><option value="">Chapter · الباب</option><option value="c1">١ · المقدمة</option><option value="c2">٦ · النون الساكنة والتنوين</option><option value="c3">١٧ · الميم والنون المشددتان</option><option value="c4">١٨ · الميم الساكنة</option><option value="c5">٢٤ · لام أل ولام الفعل</option><option value="c6">٣٠ · المثلان والمتقاربان والمتجانسان</option><option value="c7">٣٥ · أقسام المد</option><option value="c8">٤٢ · أحكام المد</option><option value="c9">٤٨ · أقسام المد اللازم</option><option value="c10">٥٨ · الخاتمة</option></select>
    <button class="btn sm pri" type="button" id="bookPdf"><span class="l-en" lang="en">Save as PDF</span><span class="l-ar" lang="ar" dir="rtl">حفظ PDF</span></button>
    <button class="btn sm pri" type="button" id="listenAll"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg><span class="l-en" lang="en">Listen</span><span class="l-ar" lang="ar" dir="rtl">استمع</span></button>
+   <button class="chip cmore" type="button" id="pbarMore" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg><span class="l-en" lang="en">More</span><span class="l-ar" lang="ar" dir="rtl">المزيد</span></button>
   </div>
   <div class="vmrow"><span class="note"><span class="l-en" lang="en">Reading</span><span class="l-ar" lang="ar" dir="rtl">طريقة القراءة</span></span><span class="seg vmode" role="group"><button type="button" data-vm="book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" width="18" height="18"><path d="M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5zM12 6.5V19"/></svg><span class="l-en" lang="en">Flip pages</span><span class="l-ar" lang="ar" dir="rtl">تقليب الصفحات</span></button><button type="button" data-vm="scroll"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M12 4v16M7 9l5-5 5 5M7 15l5 5 5-5"/></svg><span class="l-en" lang="en">Scroll</span><span class="l-ar" lang="ar" dir="rtl">تمرير</span></button></span></div>
   <nav aria-label="Contents" id="toc"><p class="toc-h"><span class="l-en" lang="en">Contents</span><span class="l-ar" lang="ar" dir="rtl">الفهرس</span></p><ol class="toc"><li><a href="#poem/c1"><span><span class="l-en" lang="en">1–5</span><span class="l-ar" lang="ar" dir="rtl">١–٥</span></span><b lang="ar">المقدمة</b></a></li><li><a href="#poem/c2"><span><span class="l-en" lang="en">6–16</span><span class="l-ar" lang="ar" dir="rtl">٦–١٦</span></span><b lang="ar">النون الساكنة والتنوين</b></a></li><li><a href="#poem/c3"><span><span class="l-en" lang="en">17</span><span class="l-ar" lang="ar" dir="rtl">١٧</span></span><b lang="ar">الميم والنون المشددتان</b></a></li><li><a href="#poem/c4"><span><span class="l-en" lang="en">18–23</span><span class="l-ar" lang="ar" dir="rtl">١٨–٢٣</span></span><b lang="ar">الميم الساكنة</b></a></li><li><a href="#poem/c5"><span><span class="l-en" lang="en">24–29</span><span class="l-ar" lang="ar" dir="rtl">٢٤–٢٩</span></span><b lang="ar">لام أل ولام الفعل</b></a></li><li><a href="#poem/c6"><span><span class="l-en" lang="en">30–34</span><span class="l-ar" lang="ar" dir="rtl">٣٠–٣٤</span></span><b lang="ar">المثلان والمتقاربان والمتجانسان</b></a></li><li><a href="#poem/c7"><span><span class="l-en" lang="en">35–41</span><span class="l-ar" lang="ar" dir="rtl">٣٥–٤١</span></span><b lang="ar">أقسام المد</b></a></li><li><a href="#poem/c8"><span><span class="l-en" lang="en">42–47</span><span class="l-ar" lang="ar" dir="rtl">٤٢–٤٧</span></span><b lang="ar">أحكام المد</b></a></li><li><a href="#poem/c9"><span><span class="l-en" lang="en">48–57</span><span class="l-ar" lang="ar" dir="rtl">٤٨–٥٧</span></span><b lang="ar">أقسام المد اللازم</b></a></li><li><a href="#poem/c10"><span><span class="l-en" lang="en">58–61</span><span class="l-ar" lang="ar" dir="rtl">٥٨–٦١</span></span><b lang="ar">الخاتمة</b></a></li></ol></nav>
@@ -1476,6 +1491,7 @@ main{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
  <button class="pbb main" type="button" id="pbPlay" aria-label="Play"></button>
  <button class="pbb" type="button" id="pbNext" aria-label="Next"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 6h2v12h-2zM4 6v12l9-6z"/></svg></button>
  <div class="pbi"><b id="pbV"></b><span id="pbRec"></span></div>
+ <button class="pbb cmore" type="button" id="pbMore" aria-expanded="false" aria-label="More"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>
  <span class="pbbr" aria-hidden="true"></span><button class="chip" type="button" id="pbRep"></button><button class="chip" type="button" id="pbSpd"></button>
  <button class="tog" type="button" id="pbCont" aria-pressed="true"><i></i><span class="l-en" lang="en">Keep going</span><span class="l-ar" lang="ar" dir="rtl">تابع</span></button>
  <button class="tog" type="button" id="pbTurn" aria-pressed="false"><i></i><span class="l-en" lang="en">Your turn</span><span class="l-ar" lang="ar" dir="rtl">دورك</span></button>
@@ -2813,6 +2829,9 @@ applyTheme();renderPf();applyPoemOpts();PBar.init();Book.apply();xpHUD();$$("[da
 /* the round mic steps aside while the page's own Start buttons are on screen (Home's hero, a Start bar), so there is one clear button */
 function tuckFab(){const f=document.getElementById("fab");if(!f)return;const on=[...document.querySelectorAll(".hero .cta,.startbar")].some(c=>{if(!c.offsetParent&&getComputedStyle(c).position!=="fixed")return false;const r=c.getBoundingClientRect();return r.width>0&&r.bottom>0&&r.top<innerHeight});f.classList.toggle("tuck",on)}
 addEventListener("scroll",tuckFab,{passive:true});addEventListener("hashchange",()=>setTimeout(tuckFab,80));addEventListener("click",()=>setTimeout(tuckFab,120));setTimeout(tuckFab,300);
+
+/* Compact bars: ⋯ More opens the rest of the buttons */
+["pbarMore","pbMore"].forEach(id=>{const b=document.getElementById(id);if(!b)return;b.addEventListener("click",e=>{e.stopPropagation();const box=id==="pbMore"?b.closest(".in"):document.getElementById("pbar");const o=box.classList.toggle("open");b.setAttribute("aria-expanded",o)})});
 </script>
 
 </body>
