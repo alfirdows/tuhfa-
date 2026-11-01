@@ -2332,6 +2332,7 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   r.st[i]=r.tries[i]?4:this.ok(i);this.advance();this.misUI()},
  peek(raw){const r=this.run;if(!r||this.held||r.idx>=this.W.length)return false;const h=norm(raw),e=this.W[r.idx];
   if(h&&wnear(h,e.n,this.again())){this.hbuf=(this.hbuf||[]).concat([h]).slice(-6);this.hit();return true}return false},
+ titleW(v){const ci=chOf(v);return toks("باب "+(CHH[ci]||"")).map(norm).filter(Boolean)},
  extra(v){/* chapter-heading words and the basmala: if a student reads them it is fine, and skipping them is fine too */
   const ci=chOf(v);const k="x"+ci;this._x=this._x||{};if(!this._x[k]){const ws=[CHH[ci],ci>0?CHH[ci-1]:"",ci<CH.length-1?CHH[ci+1]:"","بسم الله الرحمن الرحيم باب فصل أحكام"].join(" ");this._x[k]=toks(ws).map(norm).filter(Boolean)}return this._x[k]},
  micUI(){const b=$("#dmic");if(!b)return;const paused=!this.listening&&this.run&&this.run.part;
@@ -2454,6 +2455,10 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   if(r.idx<this.W.length)this.setW(r.idx);this.prog();this.curVerse();this.save();if(r.idx>=this.W.length)this.finish();else this.scrollCur()},
  heard(words){const r=this.run;if(!r||this.held)return;for(const raw of words){if(this.held)return;const h=norm(raw);if(r.idx>=this.W.length)return;const W=this.W,i=r.idx,e=W[i];
    if(h){this.hbuf=(this.hbuf||[]).concat([h]).slice(-6)}
+   /* A chapter title said before the chapter's first verse (e.g. أحكام الميم الساكنة): taken as the title, never as a mistake,
+      and never matched to the verse's own words. Skipping the title is fine too. */
+   if(h&&r.ttl&&r.ttl.i===i){const k=r.ttl.w.findIndex(x=>x===h||(h.length>3&&sim(h,x)>=.75));if(k>=0){r.ttl.w=r.ttl.w.slice(k+1);if(!r.ttl.w.length)r.ttl=null;continue}r.ttl=null}
+   if(h&&(i===0||W[i-1].v!==e.v)&&CH.some(c=>c[0]===e.v)&&!wmatch(h,e.n)){const tw=this.titleW(e.v),k=tw.findIndex(x=>x===h||(h.length>3&&sim(h,x)>=.75));if(k>=0){r.ttl={i,w:tw.slice(k+1)};continue}}
    if(wnear(h,e.n,this.again())){this.hit();continue}
    if(W[i+1]&&e.n.length<=3&&!r.tries[i]&&wmatch(h,W[i+1].n)){onRight();r.st[i]=this.ok(i);this.advance();if(this.run&&r.idx<this.W.length){r.st[r.idx]=this.ok(r.idx);this.advance()}continue}
    if(W[i+2]&&wmatch(h,e.n+W[i+1].n+W[i+2].n)){onRight();for(let k=0;k<3&&this.run&&r.idx<this.W.length;k++){r.st[r.idx]=this.ok(r.idx);this.advance()}continue}
