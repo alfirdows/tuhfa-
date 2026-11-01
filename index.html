@@ -529,7 +529,7 @@ html[dir="rtl"] .pbb:not(.main) svg{transform:scaleX(-1)}
 .cert{--ci:#1b3a30;--cg:#a8843a;--cp:#fffaf0;position:relative;aspect-ratio:297/210;width:100%;background:var(--cp);color:var(--ci);font-family:var(--font);font-size:1.55cqw;line-height:1.35;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.12);-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .cert .cframe{position:absolute;inset:0;width:100%;height:100%}
 .cert .cin{position:absolute;inset:8.5% 9.5% 8%;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center}
-.cert .ctop{font-size:1.05em;font-weight:700;letter-spacing:.06em;opacity:.85}
+.cert .ctop{font-size:1.1em;font-weight:700;letter-spacing:.08em;color:var(--cg)}
 .cert .ch1{font-family:var(--text);font-size:3.3em;font-weight:700;line-height:1.15;color:var(--ci)}
 .cert[lang=en] .ch1{font-family:Georgia,"Times New Roman",serif;font-size:2.7em;font-weight:400;letter-spacing:.14em;text-transform:uppercase}
 .cert[lang=en] .ch1 small{display:block;font-size:.42em;letter-spacing:.08em;text-transform:none;font-style:italic;margin-top:.15em}
@@ -540,7 +540,7 @@ html[dir="rtl"] .pbb:not(.main) svg{transform:scaleX(-1)}
 .cert[lang=ar] .cname{font-family:var(--text)}.cert[lang=en] .cname{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-weight:400}
 .cert .cline{font-size:1.2em;line-height:1.5}.cert .cline b{display:block;font-size:1.45em;margin:.1em 0}.cert .cline small{opacity:.8;font-size:.85em}
 .cert .cdua{font-family:var(--text);color:var(--cg);font-size:1.55em;font-weight:700}
-.cert .cfoot{display:grid;grid-template-columns:1fr 7.5em 1fr;align-items:end;width:100%;gap:1.5em}
+.cert .cfoot{display:flex;justify-content:space-between;align-items:flex-end;width:100%;gap:1.5em}.cert .cfoot .csig{width:38%}.cert .cqr2{display:grid;justify-items:center;gap:.3em;font-size:.8em}.cert .cqr2 svg{width:7.2em;height:7.2em;border:1px solid var(--cg);padding:.25em;background:#fff}
 .cert .csig{display:grid;gap:.25em;font-size:.95em}.cert .csig b{display:block;min-height:1.3em;border-bottom:1px solid var(--ci);font-weight:700}
 .cert .cseal{width:7.5em;height:7.5em;color:var(--cg)}
 .cert .cqr{position:absolute;bottom:0;inset-inline-start:0;display:none}
@@ -1869,7 +1869,7 @@ function printVerses(vs){printPages(()=>{const pages=[];for(let i=0;i<vs.length;
 /* Certificate (same on every site): shown in the language of the page; wording never says he/she. */
 /* Certificate (same on every site): landscape, in the language of the page; wording never says he/she. No stars of any kind (Tasnim's rule). */
 const CERTX={title:["Certificate","شهادة إتمام التدريب"],sub:["of Practice Completion",""],to:["This certificate is presented to","تُمنَح هذه الشهادة إلى"],
- line:["for completing the memorization practice of","لإتمام التدريب على حفظ"],date:["Date","التاريخ"],sign:["Signature","التوقيع"],
+ line:["for completing the memorization practice of","لإتمام التدريب على حفظ"],date:["Date","التاريخ"],scan:["Scan to visit the site","امسح لزيارة الموقع"],
  note:["This certificate records practice on this website. It is not an ijāzah or an official qualification.","تُوثّق هذه الشهادة التدريب على هذا الموقع، وليست إجازةً ولا مؤهِّلًا رسميًّا."]};
 function certFrame(){const g="#a8843a",corner=(x,y,sx,sy)=>`<g transform="translate(${x} ${y}) scale(${sx} ${sy})"><rect x="0" y="0" width="22" height="22" fill="#fffaf0" stroke="${g}" stroke-width=".6"/><rect x="1.6" y="1.6" width="18.8" height="18.8" fill="none" stroke="${g}" stroke-width=".25"/><circle cx="11" cy="11" r="7" fill="none" stroke="${g}" stroke-width=".5"/><circle cx="11" cy="11" r="5.2" fill="none" stroke="${g}" stroke-width=".3" stroke-dasharray=".5 .8"/><circle cx="11" cy="11" r="3.2" fill="none" stroke="${g}" stroke-width=".45"/><circle cx="11" cy="11" r="1.2" fill="${g}"/><path d="M1.6 11h2.2M18.4 11h2M11 1.6v2.2M11 18.4v2" stroke="${g}" stroke-width=".4"/></g>`;
  return `<svg class="cframe" viewBox="0 0 297 210" preserveAspectRatio="none" aria-hidden="true"><defs><pattern id="cbd" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M0 2.5 2.5 0 5 2.5 2.5 5z" fill="none" stroke="${g}" stroke-width=".3"/><circle cx="2.5" cy="2.5" r=".55" fill="${g}"/></pattern></defs>
@@ -1889,7 +1889,7 @@ function certHTML(name,title,detail){const ar=LANG==="ar",L=k=>(ar?CERTX[k][1]:C
  <div class="cname">${name?esc(name):""}</div>
  <div class="cline">${L("line")}<b>${title}</b>${detail?`<small>${detail}</small>`:""}</div>
  <div class="cdua" lang="ar">${d[0]}</div>
- <div class="cfoot"><div class="csig"><b>${new Date().toLocaleDateString(ar?"ar":"en-GB",{year:"numeric",month:"long",day:"numeric"})}</b>${L("date")}</div>${certSeal(ar)}<div class="csig"><b></b>${L("sign")}</div></div>
+ <div class="cfoot"><div class="csig"><b>${new Date().toLocaleDateString(ar?"ar":"en-GB",{year:"numeric",month:"long",day:"numeric"})}</b>${L("date")}</div><div class="cqr2">${qrSvg()}<small>${L("scan")}</small></div></div>
  <div class="cnote">${L("note")} · <span dir="ltr">${CERT_URL}</span></div></div></div></div>`}
 function certPrint(){let st=document.getElementById("certPg");if(!st){st=document.createElement("style");st.id="certPg";document.head.appendChild(st)}st.textContent="@page{size:A4 landscape;margin:0}";const off=()=>{st.textContent="";removeEventListener("afterprint",off)};addEventListener("afterprint",off);window.print()}
 const CERT_URL="alfirdows.github.io/tuhfa-";
