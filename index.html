@@ -2072,14 +2072,22 @@ document.addEventListener("solo",e=>{const k=e.detail;
   if(MISL.audio&&MISL.audio!==k){MISL.audio=null;$$(".misc .pl.on").forEach(x=>x.classList.remove("on"))}});
 /* keep toasts above the play bar, whatever its height */
 try{new ResizeObserver(()=>{const b=document.getElementById("pbarAudio");if(b)document.documentElement.style.setProperty("--pbh",b.offsetHeight+"px")}).observe(document.getElementById("pbarAudio"))}catch(e){}
+/* Where Play starts: the page (or the verses) on screen now, not verse 1. Flip pages: the open page; Scroll: the first verse showing.
+   If the last verse played is on screen, start from it. */
+function versesOnScreen(){if(ROUTE!=="poem")return[];if(Book.on()){const c=CH[Book.i];return c?range(c[0],c[1]):[]}
+ const top=(($("header")||{}).getBoundingClientRect?$("header").getBoundingClientRect().bottom:0)+8,bot=innerHeight-((($("#pbarAudio")||{}).offsetHeight)||0);
+ return $$("#poemText .bayt[id^=v]").filter(b=>{const r=b.getBoundingClientRect();return r.height&&r.bottom>top+20&&r.top<bot-20}).map(b=>+b.id.slice(1))}
+function hereV(){const vs=versesOnScreen();if(!vs.length)return PBar.v||1;return vs.includes(PBar.v)?PBar.v:vs[0]}
 const PBar={sync(){const bar=$("#pbarAudio");if(!bar)return;const v=Player.cur()||PBar.v||1;PBar.v=v;const hd=Player.queue[Player.qi];$("#pbV").textContent=Player.turn?t("yourTurn"):hd&&hd.kind==="head"&&CH[chOf(hd.key)]?CH[chOf(hd.key)][LANG==="ar"?2:3]:t("verse")+" "+num(v);bar.classList.toggle("turn",!!Player.turn);
   $("#pbTurn").setAttribute("aria-pressed",!!ST.turn);$("#pbLoop").setAttribute("aria-pressed",!!ST.loop);
   $("#pbPlay").innerHTML=Player.playing?IC.pause:IC.play;$("#pbPlay").setAttribute("aria-label",t(Player.playing?"auPause":"auPlay"));$("#pbStop").setAttribute("aria-label",t("auStop"));$("#pbStop").disabled=!(Player.playing||Player.turn||Player.afterGap||(Player.queue.length&&Player.queue[Player.qi]));
   $("#pbRep").textContent=(ST.rep?num(ST.rep)+"×":"∞")+" "+t("repeat");$("#pbSpd").textContent=num(ST.speed||1)+"×";$("#pbCont").setAttribute("aria-pressed",!!ST.cont);$("#pbRec").textContent=LANG==="ar"?R().ar:R().en},
- init(){$("#pbPlay").onclick=()=>{unlockAudio();if(Player.playing)Player.pause();else if(Player.queue.length&&Player.queue[Player.qi])Player.resume();else Player.playVerses(range(PBar.v||1,61))};
+ init(){$("#pbPlay").onclick=()=>{unlockAudio();if(Player.playing)return Player.pause();const it=Player.queue[Player.qi],vs=versesOnScreen();
+   /* paused: carry on from the same place, unless you have moved to another page since */
+   if(it&&it.kind!=="word"&&(!vs.length||vs.includes(it.key)))return Player.resume();PBar.v=hereV();Player.playVerses(range(PBar.v,61))};
   $("#pbStop").onclick=()=>{const v=Player.cur()||PBar.v||1;Player.stop();PBar.v=v;PBar.sync()};
-  $("#pbPrev").onclick=()=>{PBar.v=Math.max(1,(Player.cur()||PBar.v||1)-1);Player.playVerses(range(PBar.v,61))};
-  $("#pbNext").onclick=()=>{PBar.v=Math.min(61,(Player.cur()||PBar.v||1)+1);Player.playVerses(range(PBar.v,61))};
+  $("#pbPrev").onclick=()=>{PBar.v=Math.max(1,(Player.cur()||hereV())-1);Player.playVerses(range(PBar.v,61))};
+  $("#pbNext").onclick=()=>{PBar.v=Math.min(61,(Player.cur()||hereV())+1);Player.playVerses(range(PBar.v,61))};
   $("#pbRep").onclick=()=>{const seq=[1,3,5,10,0];ST.rep=seq[(seq.indexOf(ST.rep)+1)%seq.length];saveSet();Player.left=ST.rep;PBar.sync()};
   $("#pbSpd").onclick=()=>{const seq=[.5,.75,1,1.25,1.5,1.75,2];ST.speed=seq[(seq.indexOf(ST.speed||1)+1)%seq.length];saveSet();if(Player.a)Player.a.playbackRate=ST.speed;PBar.sync()};
   $("#pbCont").onclick=()=>{ST.cont=!ST.cont;saveSet();PBar.sync()};
@@ -2193,7 +2201,7 @@ function reciteNow(v){unlockAudio();Player.stop();const saved=v==null?ps.get("se
  Mem.save();history.pushState(null,"","#memorize/run");route();window.scrollTo(0,0);if(Mem.run&&!Mem.listening)Mem.toggleMic()}
 function verseInView(){const el=$$(".poem [id^='v']").find(e=>e.offsetParent&&e.getBoundingClientRect().bottom>140);return el?+el.id.slice(1):null}
 $("#pbRecite").onclick=()=>reciteNow(verseInView()||(Book.on()?CH[Book.i][0]:PBar.v||1));
-$("#listenAll").onclick=()=>{unlockAudio();Player.playVerses(range(PBar.v||1,61))};
+$("#listenAll").onclick=()=>{unlockAudio();PBar.v=hereV();Player.playVerses(range(PBar.v,61))};
 poemEl.addEventListener("click",e=>{const w=e.target.closest(".w");if(w){const [v,h,i]=w.dataset.k.split(":").map(Number);Sheet.word(v,h,i,w.dataset.g);return}
  const n=e.target.closest("[data-verse]");if(n){Sheet.word(+n.dataset.verse,-1,-1,null);return}const tr=e.target.closest(".tr");if(tr)sayEn(tr.dataset.say,tr)});
 
