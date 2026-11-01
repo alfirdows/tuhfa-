@@ -526,10 +526,10 @@ html[dir="rtl"] .pbb:not(.main) svg{transform:scaleX(-1)}
 .arch-em{display:block;width:min(78%,300px);height:auto;margin:-6px auto 6px;color:var(--acc)}
 /* certificate (same design on every site): cream paper, double gold frame, 8-point star corners and seal; one language at a time */
 .cert{--ci:#173f33;--cg:#a8843a;--cp:#fffcf3;position:relative;background:var(--cp);color:var(--ci);margin:6px;padding:7% 7% 3.4em;text-align:center;display:grid;gap:.7em;font-family:var(--font);font-size:clamp(11px,3.4vw,16px);border:1px solid var(--cg);box-shadow:0 0 0 4px var(--cp),0 0 0 5px var(--cg),inset 0 0 0 5px var(--cp),inset 0 0 0 6px var(--cg);container-type:inline-size;overflow:hidden}
-.cert::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill='none' stroke='%23173f33' stroke-width='1'%3E%3Crect x='12' y='12' width='16' height='16'/%3E%3Crect x='12' y='12' width='16' height='16' transform='rotate(45 20 20)'/%3E%3C/g%3E%3C/svg%3E")}
+.cert::before{content:none}
 .cert>*{position:relative}
 .cert .cc{position:absolute;width:2.6em;height:2.6em;color:var(--cg)}
-.cert .cc.a{top:.5em;inset-inline-start:.5em}.cert .cc.b{top:.5em;inset-inline-end:.5em}.cert .cc.c{bottom:.5em;inset-inline-start:.5em}.cert .cc.d{bottom:.5em;inset-inline-end:.5em}
+.cert .cc.a{top:.5em;left:.5em}.cert .cc.b{top:.5em;right:.5em;transform:scaleX(-1)}.cert .cc.c{bottom:.5em;left:.5em;transform:scaleY(-1)}.cert .cc.d{bottom:.5em;right:.5em;transform:scale(-1)}
 .cert .crown{width:4.2em;height:4.2em;margin:0 auto -.2em;color:var(--cg)}
 .cert-top{font-weight:700;font-size:.95em;letter-spacing:.04em;color:var(--ci);opacity:.85}
 .cert-h{font-size:2.15em;font-weight:800;line-height:1.25;color:var(--ci)}
@@ -1541,7 +1541,7 @@ main{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
  <p><span class="l-en" lang="en">The Arabic text follows the printed edition used in class. Meanings, translation and transliteration follow the classical commentaries, including the author’s own <i>Fatḥ al-Aqfāl</i>. Please review them with your teacher. Progress and recordings stay on your own device.</span><span class="l-ar" lang="ar" dir="rtl">النص العربي على الطبعة المعتمدة في الدرس، والمعاني والترجمة على ما في الشروح المعروفة، ومنها «فتح الأقفال» للناظم. يُرجى مراجعتها مع الشيخ. تقدّمك وتسجيلاتك محفوظة على جهازك فقط.</span></p>
 </div></footer>
 <div id="sheet"></div><div id="modal"></div><div id="print"></div>
-<script src="run.js?v=6" defer></script>
+<script src="run.js?v=7" defer></script>
 <script>
 /* One audio at a time (same on every site): whenever any sound starts (lesson audio, a word, a recording, English),
    every other sound stops first, and each player is told so it can reset its buttons. */
@@ -1841,11 +1841,12 @@ const verseHTMLPrint=v=>`<div style="padding:4mm 0;border-bottom:1px solid #ccd"
  <div style="font-size:11pt;color:#333">${G[v].ar}</div><div dir="ltr" style="font-size:10pt;color:#444;text-align:left"><i>${esc(TL[v-1][0])} / ${esc(TL[v-1][1])}</i><br>${esc(G[v].en)}</div></div>`;
 function printVerses(vs){printPages(()=>{const pages=[];for(let i=0;i<vs.length;i+=5)pages.push(vs.slice(i,i+5).map(verseHTMLPrint).join(""));return pages})}
 /* Certificate (same on every site): shown in the language of the page; wording never says he/she. */
+/* No stars anywhere (Tasnim's rule): plain corner frames, a hanging lantern, a round seal. */
 const CERT_IC={
- star:'<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="10" y="10" width="20" height="20"/><rect x="10" y="10" width="20" height="20" transform="rotate(45 20 20)"/><circle cx="20" cy="20" r="4" fill="currentColor"/></svg>',
- crown:'<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="30" cy="30" r="27"/><circle cx="30" cy="30" r="23" stroke-dasharray="2 3"/><rect x="16" y="16" width="28" height="28"/><rect x="16" y="16" width="28" height="28" transform="rotate(45 30 30)"/><rect x="22" y="22" width="16" height="16" transform="rotate(22.5 30 30)"/><rect x="22" y="22" width="16" height="16" transform="rotate(67.5 30 30)"/><circle cx="30" cy="30" r="3.5" fill="currentColor"/></svg>',
- dot:'<svg viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><path d="M5 0 6.2 3.8 10 5 6.2 6.2 5 10 3.8 6.2 0 5 3.8 3.8z"/></svg>',
- seal:'<svg viewBox="0 0 80 80" fill="none" stroke="currentColor" aria-hidden="true"><g stroke-width="1.2">'+Array.from({length:16},(_,k)=>`<path d="M40 3 44 12 36 12z" fill="currentColor" stroke="none" transform="rotate(${k*22.5} 40 40)"/>`).join("")+'<circle cx="40" cy="40" r="28"/><circle cx="40" cy="40" r="24"/><rect x="27" y="27" width="26" height="26"/><rect x="27" y="27" width="26" height="26" transform="rotate(45 40 40)"/></g><path d="M33 40.5l5 5 9-10" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>'};
+ star:'<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 30V10a6 6 0 0 1 6-6h20"/><path d="M10 30V16a6 6 0 0 1 6-6h14"/><circle cx="16" cy="16" r="2.2" fill="currentColor" stroke="none"/></svg>',
+ crown:'<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M30 2v6"/><circle cx="30" cy="10" r="2.2"/><path d="M22 18h16l-3-6H25z"/><path d="M21 18c-3 5-4 12-4 18s2 10 6 12h14c4-2 6-6 6-12s-1-13-4-18z"/><path d="M30 18v30M24 22c-1.5 4-2 9-2 14M36 22c1.5 4 2 9 2 14"/><path d="M23 48h14l-2 5H25z"/><path d="M27 53v4h6v-4"/></svg>',
+ dot:'<svg viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><path d="M5 1 9 5 5 9 1 5z"/></svg>',
+ seal:'<svg viewBox="0 0 80 80" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="40" cy="40" r="36" stroke-width="2"/><circle cx="40" cy="40" r="31" stroke-width="1" stroke-dasharray="1.5 3"/><circle cx="40" cy="40" r="25" stroke-width="1.6"/><path d="M29 41l8 8 15-17" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>'};
 function certHTML(name,title,detail){const ar=LANG==="ar",L=k=>(ar?CERTX[k][1]:CERTX[k][0]),d=pick(DUAS),cc=k=>`<span class="cc ${k}">${CERT_IC.star}</span>`;
  return `<div class="cert" dir="${ar?"rtl":"ltr"}" lang="${ar?"ar":"en"}">${cc("a")}${cc("b")}${cc("c")}${cc("d")}
  <div class="crown">${CERT_IC.crown}</div>
