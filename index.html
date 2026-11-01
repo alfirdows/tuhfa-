@@ -524,33 +524,28 @@ html[dir="rtl"] .pbb:not(.main) svg{transform:scaleX(-1)}
 .chh .up:hover{color:var(--acc)}
 /* andalusian arch emblem */
 .arch-em{display:block;width:min(78%,300px);height:auto;margin:-6px auto 6px;color:var(--acc)}
-/* certificate (same design on every site): cream paper, double gold frame, 8-point star corners and seal; one language at a time */
-.cert{--ci:#173f33;--cg:#a8843a;--cp:#fffcf3;position:relative;background:var(--cp);color:var(--ci);margin:6px;padding:7% 7% 3.4em;text-align:center;display:grid;gap:.7em;font-family:var(--font);font-size:clamp(11px,3.4vw,16px);border:1px solid var(--cg);box-shadow:0 0 0 4px var(--cp),0 0 0 5px var(--cg),inset 0 0 0 5px var(--cp),inset 0 0 0 6px var(--cg);container-type:inline-size;overflow:hidden}
-.cert::before{content:none}
-.cert>*{position:relative}
-.cert .cc{position:absolute;width:2.6em;height:2.6em;color:var(--cg)}
-.cert .cc.a{top:.5em;left:.5em}.cert .cc.b{top:.5em;right:.5em;transform:scaleX(-1)}.cert .cc.c{bottom:.5em;left:.5em;transform:scaleY(-1)}.cert .cc.d{bottom:.5em;right:.5em;transform:scale(-1)}
-.cert .crown{width:4.2em;height:4.2em;margin:0 auto -.2em;color:var(--cg)}
-.cert-top{font-weight:700;font-size:.95em;letter-spacing:.04em;color:var(--ci);opacity:.85}
-.cert-h{font-size:2.15em;font-weight:800;line-height:1.25;color:var(--ci)}
-.cert[lang=en] .cert-h{font-family:Georgia,"Times New Roman",serif;font-weight:700;letter-spacing:.02em}
-.cert-rule{display:flex;align-items:center;gap:.6em;color:var(--cg);margin:.1em 12%}.cert-rule::before,.cert-rule::after{content:"";flex:1;height:1px;background:currentColor}
-.cert-rule svg{width:.9em;height:.9em}
-.cert-to{font-size:1em;opacity:.8}
-.cert-name{font-size:2.3em;font-weight:800;color:var(--ci);line-height:1.35;min-height:1.35em;border-bottom:1px solid var(--cg);margin:0 10%;padding-bottom:.1em}
-.cert[lang=ar] .cert-name{font-family:var(--text)}
-.cert-blank{display:inline-block;width:70%}
-.cert-line{font-size:1.05em;line-height:1.8}
-.cert-line b{display:block;font-size:1.3em;color:var(--ci)}
-.cert-line small{display:block;opacity:.8}
-.cert-dua{font-family:var(--text);font-size:1.6em;color:var(--cg);font-weight:700;line-height:1.5}
-.cert-dua small{display:block;font-family:var(--font);font-size:.5em;color:var(--ci);font-weight:500;opacity:.8}
-.cert-foot{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:.8em;margin-top:.3em;font-size:.82em}
-.cert-foot .dt{text-align:start}.cert-foot .dt b{display:block;font-size:1.1em;border-top:1px solid var(--cg);padding-top:.3em}
-.cert-seal{width:5.4em;height:5.4em;color:var(--cg)}
-.cert .qr{display:grid;justify-items:end;gap:2px;text-align:end}.cert .qr svg{width:4.6em;height:4.6em}
-.cert-note{font-size:.68em;opacity:.7;line-height:1.5}
-@media print{.cpg{border:0!important;outline:0!important;padding:0!important}.cpg .cert{margin:12mm;padding:16mm 14mm;font-size:13pt;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+/* certificate (same design on every site): landscape A4, cream paper, gold ornamental border, round seal. No stars of any kind. One language at a time. */
+.certw{container-type:inline-size;width:100%}
+.cert{--ci:#1b3a30;--cg:#a8843a;--cp:#fffaf0;position:relative;aspect-ratio:297/210;width:100%;background:var(--cp);color:var(--ci);font-family:var(--font);font-size:1.55cqw;line-height:1.35;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.12);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.cert .cframe{position:absolute;inset:0;width:100%;height:100%}
+.cert .cin{position:absolute;inset:8.5% 9.5% 8%;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center}
+.cert .ctop{font-size:1.05em;font-weight:700;letter-spacing:.06em;opacity:.85}
+.cert .ch1{font-family:var(--text);font-size:3.3em;font-weight:700;line-height:1.15;color:var(--ci)}
+.cert[lang=en] .ch1{font-family:Georgia,"Times New Roman",serif;font-size:2.7em;font-weight:400;letter-spacing:.14em;text-transform:uppercase}
+.cert[lang=en] .ch1 small{display:block;font-size:.42em;letter-spacing:.08em;text-transform:none;font-style:italic;margin-top:.15em}
+.cert .crule{display:flex;align-items:center;gap:.6em;width:46%;color:var(--cg)}.cert .crule::before,.cert .crule::after{content:"";flex:1;height:1px;background:currentColor}
+.cert .crule i{width:.55em;height:.55em;background:currentColor;transform:rotate(45deg)}
+.cert .cto{font-size:1.15em;opacity:.8}
+.cert .cname{font-size:2.7em;font-weight:700;min-width:55%;padding:0 .4em .05em;border-bottom:1.5px solid var(--cg);min-height:1.35em;line-height:1.3}
+.cert[lang=ar] .cname{font-family:var(--text)}.cert[lang=en] .cname{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-weight:400}
+.cert .cline{font-size:1.2em;line-height:1.5}.cert .cline b{display:block;font-size:1.45em;margin:.1em 0}.cert .cline small{opacity:.8;font-size:.85em}
+.cert .cdua{font-family:var(--text);color:var(--cg);font-size:1.55em;font-weight:700}
+.cert .cfoot{display:grid;grid-template-columns:1fr 7.5em 1fr;align-items:end;width:100%;gap:1.5em}
+.cert .csig{display:grid;gap:.25em;font-size:.95em}.cert .csig b{display:block;min-height:1.3em;border-bottom:1px solid var(--ci);font-weight:700}
+.cert .cseal{width:7.5em;height:7.5em;color:var(--cg)}
+.cert .cqr{position:absolute;bottom:0;inset-inline-start:0;display:none}
+.cert .cnote{font-size:.7em;opacity:.65;margin-top:.5em}
+@media print{.cpg{width:297mm;height:210mm;min-height:0!important;overflow:hidden;page-break-after:auto}.cpg .certw{width:297mm}.cpg .cert{box-shadow:none;font-size:4.6mm}}
 
 .micw{display:grid;justify-items:center;gap:2px;font-size:.74rem;font-weight:600;color:var(--muted)}
 .db.endb svg{color:var(--bad)}
@@ -1112,9 +1107,6 @@ html body.dockpad .toast{bottom:calc(214px + env(safe-area-inset-bottom,0px))!im
 .cert-blank{display:inline-block;width:60%;border-bottom:1.5px dotted #888;height:1.2em}
 .modal .in{overflow-x:hidden}
 .modal .in input[type=text]{width:100%;box-sizing:border-box}
-.modal .cert{margin:8px 4px!important;max-width:calc(100% - 8px);padding:22px 16px 3.4em!important}
-.modal .cert .qr svg{width:64px!important;height:64px!important}
-.modal .cert-foot{font-size:.7rem}
 
 .chen{font-family:"Site",sans-serif;font-weight:700}
 .char{display:block;font-family:var(--text);font-size:.78em;font-weight:400;color:var(--muted);line-height:1.4}
@@ -1841,27 +1833,32 @@ const verseHTMLPrint=v=>`<div style="padding:4mm 0;border-bottom:1px solid #ccd"
  <div style="font-size:11pt;color:#333">${G[v].ar}</div><div dir="ltr" style="font-size:10pt;color:#444;text-align:left"><i>${esc(TL[v-1][0])} / ${esc(TL[v-1][1])}</i><br>${esc(G[v].en)}</div></div>`;
 function printVerses(vs){printPages(()=>{const pages=[];for(let i=0;i<vs.length;i+=5)pages.push(vs.slice(i,i+5).map(verseHTMLPrint).join(""));return pages})}
 /* Certificate (same on every site): shown in the language of the page; wording never says he/she. */
-/* No stars anywhere (Tasnim's rule): plain corner frames, a hanging lantern, a round seal. */
-const CERT_IC={
- star:'<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 30V10a6 6 0 0 1 6-6h20"/><path d="M10 30V16a6 6 0 0 1 6-6h14"/><circle cx="16" cy="16" r="2.2" fill="currentColor" stroke="none"/></svg>',
- crown:'<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M30 2v6"/><circle cx="30" cy="10" r="2.2"/><path d="M22 18h16l-3-6H25z"/><path d="M21 18c-3 5-4 12-4 18s2 10 6 12h14c4-2 6-6 6-12s-1-13-4-18z"/><path d="M30 18v30M24 22c-1.5 4-2 9-2 14M36 22c1.5 4 2 9 2 14"/><path d="M23 48h14l-2 5H25z"/><path d="M27 53v4h6v-4"/></svg>',
- dot:'<svg viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><path d="M5 1 9 5 5 9 1 5z"/></svg>',
- seal:'<svg viewBox="0 0 80 80" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="40" cy="40" r="36" stroke-width="2"/><circle cx="40" cy="40" r="31" stroke-width="1" stroke-dasharray="1.5 3"/><circle cx="40" cy="40" r="25" stroke-width="1.6"/><path d="M29 41l8 8 15-17" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>'};
-function certHTML(name,title,detail){const ar=LANG==="ar",L=k=>(ar?CERTX[k][1]:CERTX[k][0]),d=pick(DUAS),cc=k=>`<span class="cc ${k}">${CERT_IC.star}</span>`;
- return `<div class="cert" dir="${ar?"rtl":"ltr"}" lang="${ar?"ar":"en"}">${cc("a")}${cc("b")}${cc("c")}${cc("d")}
- <div class="crown">${CERT_IC.crown}</div>
- <div class="cert-top">${ar?CERT_SITE[1]:CERT_SITE[0]}</div>
- <div class="cert-h">${L("title")}</div>
- <div class="cert-rule">${CERT_IC.dot}</div>
- <div class="cert-to">${L("to")}</div>
- <div class="cert-name">${name?esc(name):`<span class="cert-blank"></span>`}</div>
- <div class="cert-line">${L("line")}<b>${title}</b>${detail?`<small>${detail}</small>`:""}</div>
- <div class="cert-dua" lang="ar">${d[0]}${ar?"":`<small lang="en">${d[1]}</small>`}</div>
- <div class="cert-foot"><div class="dt"><b>${new Date().toLocaleDateString(ar?"ar":"en-GB",{year:"numeric",month:"long",day:"numeric"})}</b>${L("date")}</div><div class="cert-seal">${CERT_IC.seal}</div><div class="qr">${qrSvg()||""}<small>${L("scan")}</small></div></div>
- <div class="cert-note">${L("note")}</div></div>`}
-const CERTX={title:["Certificate of Practice Completion","شهادة إتمام التدريب"],to:["This certificate is presented to","تُمنَح هذه الشهادة إلى"],
- line:["for completing the memorization practice of","لإتمام التدريب على حفظ"],date:["Date","التاريخ"],scan:["Scan to visit the site","امسح لزيارة الموقع"],
+/* Certificate (same on every site): landscape, in the language of the page; wording never says he/she. No stars of any kind (Tasnim's rule). */
+const CERTX={title:["Certificate","شهادة إتمام التدريب"],sub:["of Practice Completion",""],to:["This certificate is presented to","تُمنَح هذه الشهادة إلى"],
+ line:["for completing the memorization practice of","لإتمام التدريب على حفظ"],date:["Date","التاريخ"],sign:["Signature","التوقيع"],
  note:["This certificate records practice on this website. It is not an ijāzah or an official qualification.","تُوثّق هذه الشهادة التدريب على هذا الموقع، وليست إجازةً ولا مؤهِّلًا رسميًّا."]};
+function certFrame(){const g="#a8843a",corner=(x,y,sx,sy)=>`<g transform="translate(${x} ${y}) scale(${sx} ${sy})"><rect x="0" y="0" width="22" height="22" fill="#fffaf0" stroke="${g}" stroke-width=".6"/><rect x="1.6" y="1.6" width="18.8" height="18.8" fill="none" stroke="${g}" stroke-width=".25"/><circle cx="11" cy="11" r="7" fill="none" stroke="${g}" stroke-width=".5"/><circle cx="11" cy="11" r="5.2" fill="none" stroke="${g}" stroke-width=".3" stroke-dasharray=".5 .8"/><circle cx="11" cy="11" r="3.2" fill="none" stroke="${g}" stroke-width=".45"/><circle cx="11" cy="11" r="1.2" fill="${g}"/><path d="M1.6 11h2.2M18.4 11h2M11 1.6v2.2M11 18.4v2" stroke="${g}" stroke-width=".4"/></g>`;
+ return `<svg class="cframe" viewBox="0 0 297 210" preserveAspectRatio="none" aria-hidden="true"><defs><pattern id="cbd" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M0 2.5 2.5 0 5 2.5 2.5 5z" fill="none" stroke="${g}" stroke-width=".3"/><circle cx="2.5" cy="2.5" r=".55" fill="${g}"/></pattern></defs>
+ <rect x="5" y="5" width="287" height="200" fill="none" stroke="${g}" stroke-width="1.2"/><path d="M8 8h281v194H8zM14 14v182h269V14z" fill="url(#cbd)" fill-rule="evenodd"/><rect x="8" y="8" width="281" height="194" fill="none" stroke="${g}" stroke-width=".35"/><rect x="14" y="14" width="269" height="182" fill="none" stroke="${g}" stroke-width=".35"/><rect x="16.5" y="16.5" width="264" height="177" fill="none" stroke="${g}" stroke-width=".2"/>
+ ${corner(2,2,1,1)}${corner(295,2,-1,1)}${corner(2,208,1,-1)}${corner(295,208,-1,-1)}</svg>`}
+function certSeal(ar){const ring=ar?CERT_SITE[1]+" ● "+CERTX.title[1]+" ● ":(CERT_SITE[0]+" ● Certificate ● ").toUpperCase(),id="cs"+(Math.random()*1e6|0);
+ return `<svg class="cseal" viewBox="0 0 100 100" aria-hidden="true"><defs><path id="${id}" d="M50 50m-36 0a36 36 0 1 1 72 0a36 36 0 1 1 -72 0"/></defs>
+ <circle cx="50" cy="50" r="47" fill="#fbf1d8" stroke="currentColor" stroke-width="1.6"/>${Array.from({length:48},(_,k)=>{const a=k*Math.PI/24;return `<circle cx="${(50+Math.cos(a)*44).toFixed(2)}" cy="${(50+Math.sin(a)*44).toFixed(2)}" r=".9" fill="currentColor"/>`}).join("")}
+ <circle cx="50" cy="50" r="41" fill="none" stroke="currentColor" stroke-width=".6"/><circle cx="50" cy="50" r="30" fill="none" stroke="currentColor" stroke-width="1"/>
+ <g transform="translate(50 50)" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M0-21v4"/><circle cx="0" cy="-15.5" r="1.6"/><path d="M-6-11h12l-2-3.5h-8z"/><path d="M-6.5-11c-2 4-3 8.5-3 12.5s1.5 7 4 8.5h11c2.5-1.5 4-4.5 4-8.5s-1-8.5-3-12.5z"/><path d="M0-11v21M-3.5-8c-1 3-1.5 6-1.5 9.5M3.5-8c1 3 1.5 6 1.5 9.5"/><path d="M-5 10h10l-1.5 3.5h-7z"/></g></svg>`}
+function certHTML(name,title,detail){const ar=LANG==="ar",L=k=>(ar?CERTX[k][1]:CERTX[k][0]),d=pick(DUAS);
+ return `<div class="certw"><div class="cert" dir="${ar?"rtl":"ltr"}" lang="${ar?"ar":"en"}">${certFrame()}<div class="cin">
+ <div class="ctop">${ar?CERT_SITE[1]:CERT_SITE[0]}</div>
+ <div class="ch1">${L("title")}${ar?"":`<small>${CERTX.sub[0]}</small>`}</div>
+ <div class="crule"><i></i></div>
+ <div class="cto">${L("to")}</div>
+ <div class="cname">${name?esc(name):""}</div>
+ <div class="cline">${L("line")}<b>${title}</b>${detail?`<small>${detail}</small>`:""}</div>
+ <div class="cdua" lang="ar">${d[0]}</div>
+ <div class="cfoot"><div class="csig"><b>${new Date().toLocaleDateString(ar?"ar":"en-GB",{year:"numeric",month:"long",day:"numeric"})}</b>${L("date")}</div>${certSeal(ar)}<div class="csig"><b></b>${L("sign")}</div></div>
+ <div class="cnote">${L("note")} · <span dir="ltr">${CERT_URL}</span></div></div></div></div>`}
+function certPrint(){let st=document.getElementById("certPg");if(!st){st=document.createElement("style");st.id="certPg";document.head.appendChild(st)}st.textContent="@page{size:A4 landscape;margin:0}";const off=()=>{st.textContent="";removeEventListener("afterprint",off)};addEventListener("afterprint",off);window.print()}
+const CERT_URL="alfirdows.github.io/tuhfa-";
 const CERT_SITE=[BOOK_EN,BOOK_AR];
 function printCert(title,detail){const draw=(name,err)=>{$("#modal").innerHTML=`<div class="modal"><div class="in" style="width:min(100%,620px)"><h3>${t("certificate")}</h3>
   <label class="note" for="cName">${t("certName")}</label><input id="cName" type="text" value="${esc(name)}" style="border:1px solid var(--line);border-radius:12px;padding:12px;font-size:1.1rem;text-align:center;background:var(--surface)">
@@ -1869,7 +1866,7 @@ function printCert(title,detail){const draw=(name,err)=>{$("#modal").innerHTML=`
   <div class="row" style="justify-content:center"><button class="btn soft" type="button" id="cX">${t("cancel")}</button><button class="btn out" type="button" id="cShow">${t("makeCert")}</button><button class="btn pri" type="button" id="cPrint">${IC.print}${t("printNow")}</button></div></div></div>`;
   const nm=()=>$("#cName").value.trim();$("#cX").onclick=()=>$("#modal").innerHTML="";
   $("#cShow").onclick=()=>{if(nm())P().name=P().name||nm();draw(nm())};
-  $("#cPrint").onclick=()=>{if(IN_FRAME){toast(t("printFrame"),"msg",3500);return}const n=nm();$("#modal").innerHTML="";$("#print").innerHTML=`<section class="pg cpg">${certHTML(n,title,detail)}</section>`;window.print()}};
+  $("#cPrint").onclick=()=>{if(IN_FRAME){toast(t("printFrame"),"msg",3500);return}const n=nm();$("#modal").innerHTML="";$("#print").innerHTML=`<section class="pg cpg">${certHTML(n,title,detail)}</section>`;certPrint()}};
  draw(P().name||"",false)}
 function printReport(){const best=bestMap();printPages(name=>[`<h1>${t("report")}</h1>${name?`<div class="big" style="font-weight:800">${esc(name)}</div>`:""}
  <div class="big" style="margin:6mm 0">${t("streak")}: ${num(streak())} · ${t("weekGoal")}: ${num(weekVerses().length)}/${num(goalN())} · ${t("stars")}: ${num(Object.values(best).filter(a=>a>=80).length)}/${num(61)}</div>
