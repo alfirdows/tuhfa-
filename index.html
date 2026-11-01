@@ -1097,7 +1097,7 @@ html[lang="en"] .facts b{font-size:.6rem!important}html[lang="en"] .facts li>spa
 .rq .rs.tr{color:var(--bad)}.rq .rs.tr i{background:var(--bad)}
 .rq button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:5px 9px;font:inherit;font-size:.74rem;font-weight:700;display:inline-flex;align-items:center;gap:4px;cursor:pointer;white-space:nowrap;min-height:0}
 .rq button svg{width:15px;height:15px}
-body.dockpad .spacer{min-height:150px}
+body.dockpad .spacer{min-height:230px}
 .dock.calm .db.endb svg rect{fill:#fff}
 html body.dockpad .toast{bottom:calc(214px + env(safe-area-inset-bottom,0px))!important}
 .dock.calm .db.endb svg{flex:none;aspect-ratio:1}
@@ -1392,9 +1392,18 @@ main{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .list .it .aup{flex-basis:100%}
 #pbStop:disabled{opacity:.35}
 @media (max-width:520px){.pbar .in{gap:5px!important;padding:6px 8px!important}.pbar .pbb:not(.main){width:34px!important;height:34px!important}.pbar .pbb:not(.main) svg{width:17px;height:17px}.pbar #pbRecite{padding-inline:10px}.pbar .pbi{min-width:58px}}
-.rq .hrd{flex-basis:100%;text-align:center;font-size:.8rem;font-weight:600;color:var(--muted);padding:4px 10px;margin:2px 0;border-radius:12px;background:color-mix(in srgb,var(--ink) 6%,transparent);max-width:88vw;line-height:1.8;max-height:6.2em;overflow-y:auto;overscroll-behavior:contain}
-.rq .hrd:empty{display:none}.rq .hrd span{color:var(--ink);font-size:1.12rem;font-weight:700}.rq .hrd b{color:#2e9d5b;font-size:1.3rem}.rq .hrd.hq{color:#b5650f;white-space:normal}
-.rq .hrd button{display:inline-flex!important;width:auto!important;flex:none;vertical-align:middle;padding:2px 8px;font-size:.72rem;margin-inline-start:4px}
+.rq .rqtop{flex-basis:100%;display:flex;justify-content:center;align-items:center;gap:8px;min-width:0;max-width:88vw;margin:0 auto}
+.rq .rqtop .rs{flex:none;flex-basis:auto}
+.rq .hrd{flex:0 1 auto;min-width:0;font-size:.8rem;font-weight:600;color:var(--muted);white-space:nowrap;overflow:hidden;line-height:1.5}
+.rq .hrd:empty{display:none}.rq .hrd span{color:var(--ink)}.rq .hrd b{color:#2e9d5b}.rq .hrd.hq{color:#b5650f}
+.rq .hrd button{display:inline!important;width:auto!important;border:0!important;background:none!important;padding:0!important;margin-inline-start:4px;font-size:.78rem;color:#2e6db5!important;text-decoration:underline;min-height:0}
+/* Compact recite row (Tasnim: nothing should cover the verse): one thin line with what the phone hears and three small round helper buttons. */
+.dock .rq,.mdock .rq,.rbar .rq{flex-wrap:nowrap!important;width:min(560px,94vw)!important;max-width:94vw!important;padding:3px 5px!important;gap:5px!important;margin-bottom:6px!important;border-radius:999px!important}
+.rq .rqtop{flex:1 1 auto!important;flex-basis:auto!important;max-width:none!important;justify-content:center;padding:0 6px;overflow:hidden}
+.rq .rqtop .rs{display:none!important}.rq .rqtop .rs.tr{display:flex!important;font-size:.74rem}
+.rq .hrd{font-size:.82rem}
+.rq button[data-rq]{font-size:0!important;width:30px;height:30px;padding:0!important;justify-content:center;flex:none;border-radius:50%!important}
+.rq button[data-rq] svg{width:16px!important;height:16px!important}
 .hhov{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:18px}
 .hhbox{background:var(--surface,#fff);color:var(--ink,#222);border-radius:18px;padding:18px 18px 14px;max-width:420px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.3);font-size:1rem;line-height:1.6}
 .hhbox ol{margin:10px 0 14px;padding-inline-start:22px}.hhbox li{margin:0 0 8px}
@@ -2076,11 +2085,11 @@ class Listener{constructor(onWords,onState){this.onWords=onWords;this.onState=on
 /* What the phone heard, and help when it hears nothing (the same on every site). New languages: add a block to HEAR. */
 const IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
 const HEAR={
- ar:{heard:"سمعتُ:",quiet:"لا يصلني صوتك بعد",help:"مساعدة",title:"إذا لم يسمعك الهاتف",ok:"حسنًا",steps:[
+ ar:{heard:"سمعتُ:",quiet:"لا أسمعك",help:"مساعدة",title:"إذا لم يسمعك الهاتف",ok:"حسنًا",steps:[
   "افتح «الإعدادات» ← «عام» ← «لوحة المفاتيح»، وشغّل «تفعيل الإملاء».",
   "في Safari اضغط «aA» بجانب العنوان ← «إعدادات موقع الويب» ← «الميكروفون» ← «سماح».",
   "افتح الموقع من Safari نفسه (لا من أيقونة الشاشة الرئيسية)، ثم اضغط زر الميكروفون."]},
- en:{heard:"Heard:",quiet:"I can't hear you yet",help:"Help",title:"If the phone does not hear you",ok:"OK",steps:[
+ en:{heard:"Heard:",quiet:"Can't hear you",help:"Help",title:"If the phone does not hear you",ok:"OK",steps:[
   "Open Settings › General › Keyboard and turn on “Enable Dictation”.",
   "In Safari tap “aA” next to the address › Website Settings › Microphone › Allow.",
   "Open the site in Safari itself (not from the Home Screen icon), then tap the mic."]}};
@@ -2092,7 +2101,7 @@ function heardLine(el,txt,quiet){if(!el)return;const T=HT();
  if(txt==null){el.className="hrd";el.innerHTML="";return}
  const a=String(txt).trim().split(/\s+/).filter(Boolean).slice(-80),last=a.pop();el.className="hrd";
  /* the newest word stands out, so you can follow along word by word */
- el.innerHTML=last?`${hesc(T.heard)} <span lang="ar" dir="rtl">${hesc(a.join(" "))} <b>${hesc(last)}</b></span>`:"";el.scrollTop=el.scrollHeight}
+ el.innerHTML=last?`<span lang="ar" dir="rtl">${hesc(a.slice(-3).join(" "))} <b>${hesc(last)}</b></span>`:""}
 function hearHelp(){const T=HT();let o=document.getElementById("hearhelp");if(o)o.remove();o=document.createElement("div");o.id="hearhelp";o.className="hhov";
  o.innerHTML=`<div class="hhbox" role="dialog" dir="${LANG==="ar"?"rtl":"ltr"}"><b>${hesc(T.title)}</b><ol>${T.steps.map(s=>`<li>${hesc(s)}</li>`).join("")}</ol><button type="button" class="hhok">${hesc(T.ok)}</button></div>`;
  o.onclick=e=>{if(e.target===o||e.target.closest(".hhok"))o.remove()};document.body.appendChild(o)}
@@ -2411,7 +2420,7 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   b.innerHTML=this.listening?`${IC.pause}<b>${t("pauseL")}</b>`:paused?`${IC.play}<b>${t("resumeL")}</b>`:`${IC.mic}<b>${t("startL")}</b>`;
   const l=$("#micl");l.className="mst "+(this.listening?"live":paused?"pz":"");l.innerHTML=this.listening?`<i></i>${t("listening")}`:paused?`${IC.pause}${t("paused")}`:t("startL");this.tryUI()},
  /* The slim row above the buttons: what is happening now, and three helpers (one word back, skip a word, start again). */
- rqHTML(){return `<div class="rq" id="rq"><span class="rs" id="rqS"></span><span class="hrd" id="rqH"></span><button type="button" data-rq="back">${IC.wback}${t("wBack")}</button><button type="button" data-rq="skip">${IC.wskip}${t("wSkip")}</button><button type="button" data-rq="again">${IC.wagain}${t("wAgain")}</button></div>`},
+ rqHTML(){return `<div class="rq" id="rq"><span class="rqtop"><span class="rs" id="rqS"></span><span class="hrd" id="rqH"></span></span><button type="button" data-rq="back" aria-label="${t("wBack")}" title="${t("wBack")}">${IC.wback}${t("wBack")}</button><button type="button" data-rq="skip" aria-label="${t("wSkip")}" title="${t("wSkip")}">${IC.wskip}${t("wSkip")}</button><button type="button" data-rq="again" aria-label="${t("wAgain")}" title="${t("wAgain")}">${IC.wagain}${t("wAgain")}</button></div>`},
  rqBind(){const q=$("#rq");if(!q)return;q.onclick=e=>{const b=e.target.closest("[data-rq]");if(!b||!this.run)return;const k=b.dataset.rq;if(k==="back")this.wordBack();else if(k==="skip")this.skipWord();else this.again2()};this.tryUI()},
  tryUI(){const s=$("#rqS"),r=this.run;if(!s||!r)return;if(!this.listening)heardLine($("#rqH"),null);const n=r.tries[r.idx]||0,paused=!this.listening&&r.part;
   s.className="rs"+(n&&this.listening?" tr":this.listening?"":paused?" ps":" off");
@@ -2513,14 +2522,17 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
  setW(k){const el=$(`#mz .m[data-k="${k}"]`);if(el)el.outerHTML=this.wordHTML(k)},
  prog(){const p=$("#mprog");p&&(p.style.width=(this.run.idx/this.W.length*100)+"%")},
  curVerse(){$$("#mz .bayt.cur").forEach(x=>x.classList.remove("cur"));const w=this.W[this.run.idx];if(w){const b=$("#m"+w.v);b&&b.classList.add("cur")}},
- scrollCur(instant){const el=$(`#mz .m[data-k="${this.run.idx}"]`);if(!el)return;const rc=el.getBoundingClientRect();if(rc.top<200||rc.bottom>innerHeight-150)el.scrollIntoView({behavior:instant?"auto":"smooth",block:"center"})},
+ scrollCur(instant){const el=$(`#mz .m[data-k="${this.run.idx}"]`);if(!el)return;const rc=el.getBoundingClientRect(),d=$(".dock .rq")||$(".dock"),lim=d?d.getBoundingClientRect().top-24:innerHeight-150;
+  /* keep the word you are on above the buttons at the bottom, never under them */
+  if(rc.top<200||rc.bottom>lim)window.scrollBy({top:rc.top-Math.max(200,(lim-200)/2),behavior:instant?"auto":"smooth"})},
  advance(){const r=this.run;const old=r.idx;this.stuck=0;this.trail=[];{const s=r.st[old];const el=$(`#mz .m[data-k="${old}"]`);if(s===1||s===4){this.combo=(this.combo||0)+1;addXP(s===1?5:2,el);if(this.combo%10===0&&ST.game)setTimeout(()=>popFx(`${t("combo")} ×${num(this.combo)}`,el,"combo"),200)}else this.combo=0;const w=this.W[old],nx=this.W[old+1];if(w&&(!nx||nx.v!==w.v)){const good=this.W.every((x,k)=>x.v!==w.v||r.st[k]===1||r.st[k]===5);if(good)addXP(20,el)}}r.idx++;this.setW(old);if(r.idx<this.W.length)this.setW(r.idx);this.prog();this.curVerse();this.tryUI();
   if(r.ret&&r.retDir>0&&r.idx<this.W.length&&gOf(this.W[r.idx])>=gOf(r.ret)){r.ret=null;this.retUI()}this.save();if(r.idx>=this.W.length){this.finish();return}this.scrollCur()},
  mark(s){const r=this.run;if(!r||r.idx>=this.W.length)return;if(s===3)r.peeks++;r.st[r.idx]=s;this.advance()},
  attention(i){const el=$(`#mz .m[data-k="${i}"]`);if(el){el.classList.remove("wring");void el.offsetWidth;el.classList.add("wring");setTimeout(()=>el.classList.remove("wring"),1300)}},
  manualWrong(){const r=this.run;if(!r||r.idx>=this.W.length)return;const i=r.idx;r.tries[i]=(r.tries[i]||0)+1;r.mist++;this.misUI();onWrong();
   if(!ST.tries||r.tries[i]>=ST.tries||ST.mode==="manual"){r.st[i]=2;this.advance();if(ST.mode!=="manual")this.offerHint()}else{this.attention(i);this.save()}},
- offerHint(){const n=$("#mhint");if(!n||(this.run&&this.run.view))return;n.innerHTML=`<div class="notice info row"><span style="flex:1;min-width:180px">${t("goOn")}</span><button class="btn sm out" type="button" id="hintOn">${IC.bulb}${t("hint")}</button></div>`;
+ /* No notice here any more (Tasnim: it took space); the Hint view stays in Tools. */
+ offerHint(){return;const n=$("#mhint");if(!n||(this.run&&this.run.view))return;n.innerHTML=`<div class="notice info row"><span style="flex:1;min-width:180px">${t("goOn")}</span><button class="btn sm out" type="button" id="hintOn">${IC.bulb}${t("hint")}</button></div>`;
   $("#hintOn").onclick=()=>{this.run.view=1;this.applyView();this.save();n.innerHTML=""};clearTimeout(this._ht);this._ht=setTimeout(()=>{if($("#mhint"))$("#mhint").innerHTML=""},7000)},
  revealVerse(){const r=this.run;const v=this.W[r.idx]&&this.W[r.idx].v;while(r.idx<this.W.length&&this.W[r.idx].v===v){r.st[r.idx]=3;r.peeks++;this.setW(r.idx);r.idx++}
   if(r.idx<this.W.length)this.setW(r.idx);this.prog();this.curVerse();this.save();if(r.idx>=this.W.length)this.finish();else this.scrollCur()},
