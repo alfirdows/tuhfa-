@@ -1416,12 +1416,20 @@ main{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .hhbox{background:var(--surface,#fff);color:var(--ink,#222);border-radius:18px;padding:18px 18px 14px;max-width:420px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.3);font-size:1rem;line-height:1.6}
 .hhbox ol{margin:10px 0 14px;padding-inline-start:22px}.hhbox li{margin:0 0 8px}
 .hhok{display:block;margin:0 auto;border:0;border-radius:999px;padding:8px 26px;font:inherit;font-weight:700;background:#2e9d5b;color:#fff;cursor:pointer}
+/* Phone tidy (2026-11-01): full title, and the verse + full reciter name on one line above the play buttons (never cut off) */
+@media (max-width:430px){.brand .bm{display:none}.brand b{overflow:visible!important;text-overflow:clip!important}}
+@media (max-width:600px){
+.pbar .in{flex-wrap:wrap!important;justify-content:center;row-gap:4px!important}
+.pbar .pbi{order:-1;flex:1 1 100%!important;min-width:0!important;display:flex!important;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:0 8px;text-align:center}
+.pbar .pbi>*{display:inline!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
+.pbar .pbi span{font-size:.78rem}
+}
 </style>
 </head>
 <body>
 <header class="top"><div class="wrap">
  <div class="bar1">
-  <a class="brand" href="#home"><b class="l-ar" lang="ar">متن تحفة الأطفال</b><b class="l-en ebrand" lang="en">Matn Tuḥfat al-Aṭfāl</b></a>
+  <a class="brand" href="#home"><b class="l-ar" lang="ar">متن تحفة الأطفال</b><b class="l-en ebrand" lang="en"><span class="bm">Matn </span>Tuḥfat al-Aṭfāl</b></a>
   <button class="xpchip" id="xpChip" type="button" hidden onclick="location.hash='#progress'"></button>
   <div class="hctl">
   <button class="hbtn pfchip" id="pfBtn" type="button" aria-label="Learner"></button>
@@ -2176,7 +2184,7 @@ function hereV(){const vs=versesOnScreen();if(!vs.length)return PBar.v||1;return
 const PBar={sync(){const bar=$("#pbarAudio");if(!bar)return;const v=Player.cur()||PBar.v||1;PBar.v=v;const hd=Player.queue[Player.qi];$("#pbV").textContent=Player.turn?t("yourTurn"):hd&&hd.kind==="head"&&CH[chOf(hd.key)]?CH[chOf(hd.key)][LANG==="ar"?2:3]:t("verse")+" "+num(v);bar.classList.toggle("turn",!!Player.turn);
   $("#pbTurn").setAttribute("aria-pressed",!!ST.turn);$("#pbLoop").setAttribute("aria-pressed",!!ST.loop);
   $("#pbPlay").innerHTML=Player.playing?IC.pause:IC.play;$("#pbPlay").setAttribute("aria-label",t(Player.playing?"auPause":"auPlay"));$("#pbStop").setAttribute("aria-label",t("auStop"));$("#pbStop").disabled=!(Player.playing||Player.turn||Player.afterGap||(Player.queue.length&&Player.queue[Player.qi]));
-  $("#pbRep").textContent=(ST.rep?num(ST.rep)+"×":"∞")+" "+t("repeat");$("#pbSpd").textContent=num(ST.speed||1)+"×";$("#pbCont").setAttribute("aria-pressed",!!ST.cont);$("#pbRec").textContent=LANG==="ar"?R().ar:R().en},
+  $("#pbRep").textContent=(LANG==="ar"?t("repeat"):"Repeat")+" "+(ST.rep?num(ST.rep)+"×":"∞");$("#pbSpd").textContent=t("speed")+" "+num(ST.speed||1)+"×";$("#pbCont").setAttribute("aria-pressed",!!ST.cont);$("#pbRec").textContent=LANG==="ar"?R().ar:R().en},
  init(){$("#pbPlay").onclick=()=>{unlockAudio();if(Player.playing)return Player.pause();const it=Player.queue[Player.qi],vs=versesOnScreen();
    /* paused: carry on from the same place, unless you have moved to another page since */
    if(it&&it.kind!=="word"&&(!vs.length||vs.includes(it.key)))return Player.resume();PBar.v=hereV();Player.playVerses(range(PBar.v,61))};
@@ -2192,7 +2200,7 @@ const PBar={sync(){const bar=$("#pbarAudio");if(!bar)return;const v=Player.cur()
 /* ================= routing + language ================= */
 let ROUTE="",readGreeted=false;
 function setLang(l){LANG=l;LS.set("lang",l);document.documentElement.lang=l;document.documentElement.dir=l==="ar"?"rtl":"ltr";Sheet.close();syncLang();renderRoute()}
-function syncLang(){$$("#langSw button").forEach(b=>{const on=b.dataset.lg===LANG;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on)})}
+function syncLang(){$$("#langSw button").forEach(b=>{const on=b.dataset.lg===LANG;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on)});const j=document.querySelector("#jump option[value='']");if(j)j.textContent=LANG==="ar"?"الباب":"Chapter"}
 $$("#langSw button").forEach(b=>b.onclick=()=>{if(LANG!==b.dataset.lg)setLang(b.dataset.lg)});syncLang();
 $("#pfBtn").onclick=()=>Learners.sheet();
 function renderRoute(){({home:()=>Home.render(),memorize:()=>Mem.render(),quiz:()=>Quiz.render(),games:()=>Games.render(),progress:()=>Prog.render(),settings:()=>Settings.render()}[ROUTE]||(()=>{}))()}
