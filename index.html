@@ -1580,11 +1580,13 @@ function wmatch(h,e){if(!h||!e)return false;if(h===e)return true;const need=L=>L
  const ok=(a,b)=>{const L=Math.max(a.length,b.length);return L<=3?a===b:sim(a,b)>=need(L)};if(ok(h,e))return true;
  const h2=h.replace(/^[وف]/,""),e2=e.replace(/^[وف]/,"");if(h2.length>1&&e2.length>1&&(h2!==h||e2!==e)&&ok(h2,e2))return true;
  const a=h.replace(/^ال/,""),b=e.replace(/^ال/,"");return a.length>2&&b.length>2&&ok(a,b)}
-/* Sounds the phone often mixes up (ص/س, ض/د, ط/ت, ق/ك, ح/ه, ذ/ظ/ز, ث/س, ع and alif) count as one, and "ال" is ignored. */
-const fold=s=>s.replace(/^[وف]?ال/,"").replace(/[صث]/g,"س").replace(/ض/g,"د").replace(/[ذظ]/g,"ز").replace(/ط/g,"ت").replace(/ق/g,"ك").replace(/ح/g,"ه").replace(/غ/g,"خ").replace(/[عا]/g,"").replace(/(.)\1+/g,"$1");
+/* Sounds the phone often mixes up (ص/س, ض/د, ط/ت, ق/ك, ح/ه, ذ/ظ/ز, ث/س, ع and alif) count as one, and "ال" (with و ف ب ك ل before it) is ignored. */
+const fold=s=>s.replace(/^[وف]?[بكل]?ال/,"").replace(/[صث]/g,"س").replace(/ض/g,"د").replace(/[ذظ]/g,"ز").replace(/ط/g,"ت").replace(/ق/g,"ك").replace(/ح/g,"ه").replace(/غ/g,"خ").replace(/[عا]/g,"").replace(/(.)\1+/g,"$1");
 /* Kinder check: the same word as the phone usually mishears it. "again" = you are already trying this word, so a close word is enough. */
-function wnear(h,e,again){if(wmatch(h,e))return true;if(!h||!e)return false;const a=fold(h),b=fold(e);if(!a||!b)return false;if(a===b)return true;if(!again)return false;
- const L=Math.max(a.length,b.length);return L<=2?false:L<=4?lev(a,b)<=1:sim(a,b)>=.6}
+function wnear(h,e,again){if(wmatch(h,e))return true;if(!h||!e)return false;const t=(a,b)=>{if(!a||!b)return false;if(a===b)return true;if(!again)return false;
+  const L=Math.max(a.length,b.length);return L<=2?false:L<=4?lev(a,b)<=1:sim(a,b)>=.6};
+ /* checked twice: with "ال" dropped, and as it is (in واله the و and ا are part of the word, not "و" + "ال") */
+ return t(fold(h),fold(e))||t(fold("-"+h).slice(1),fold("-"+e).slice(1))}
 const toks=s=>s.replace(/ـ«/g,"ـ «").split(/\s+/).filter(Boolean);
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 const pick=a=>a[Math.random()*a.length|0];
@@ -2031,8 +2033,11 @@ class Listener{constructor(onWords,onState){this.onWords=onWords;this.onState=on
     the same wrong word however many times it is repeated. A fresh start clears that. */
  refresh(){if(!this.active||Date.now()-(this.ref||0)<2500)return;this.ref=this.last=Date.now();const old=this.r;clearTimeout(this.ft);
   if(old){old.onresult=old.onend=old.onerror=null;try{old.abort()}catch(e){try{old.stop()}catch(e){}}}
-  this.finalText+=" "+this.text;this.text="";setTimeout(()=>{if(this.active&&this.r===old)try{this._spin()}catch(e){}},250)}
- _spin(){const r=new SR();this.r=r;r.lang="ar-SA";r.continuous=true;r.interimResults=true;this.prev=[];
+  this.finalText+=" "+this.text;this.text="";setTimeout(()=>{if(this.active&&this.r===old)this._spin(1)},250)}
+ /* again = a restart while already listening. The iPhone sometimes refuses a quick restart; then try again a moment later
+    instead of giving up (giving up used to make the mic look dead: "it is not listening"). */
+ _spin(again){let r;try{r=new SR()}catch(e){if(again)return this._retry();this.active=false;clearInterval(this.dog);micState="denied";this.onState("denied");return}
+  this.r=r;r.lang="ar-SA";r.continuous=true;r.interimResults=true;try{r.maxAlternatives=3}catch(e){}this.prev=[];
   /* Words are used as soon as they appear. The newest word (still being heard) is only used if it is the expected word,
      so a half-heard word never counts as a mistake. */
   r.onresult=e=>{if(this.r!==r)return;lastAct=this.last=Date.now();let ws=[],full="",tail=null;for(let i=0;i<e.results.length;i++){const res=e.results[i];const w=toks(res[0].transcript);full+=" "+res[0].transcript;
@@ -2042,14 +2047,20 @@ class Listener{constructor(onWords,onState){this.onWords=onWords;this.onState=on
       far back is not passed on again (that used to look like going back and caused false mistakes). */
    this.text=full;const P=this.prev||[];let k=0;while(k<P.length&&k<ws.length&&norm(P[k])===norm(ws[k]))k++;
    const fresh=k===0&&P.length&&ws.length&&norm(ws[0])!==norm(P[0])&&ws.length<=P.length;const from=fresh?0:Math.max(k,Math.min(ws.length,P.length-2));
-   this.prev=ws.slice();if(ws.length>from)this.onWords(ws.slice(from));
-   clearTimeout(this.ft);if(tail&&this.onPeek&&this.onPeek(tail))this.prev.push(tail);
+   /* rev = how many of the words passed on are only the phone rewriting words it already gave (it often fixes the last
+      word or two as you go on). Those may still complete the word you are on, but never count as a mistake. */
+   const rev=fresh?0:Math.max(0,Math.min(P.length,ws.length)-from);
+   this.prev=ws.slice();if(ws.length>from)this.onWords(ws.slice(from),rev);
+   /* The phone's other guesses for the newest word (where it gives them) are tried too. */
+   const alts=[];if(tail){const L=e.results[e.results.length-1];for(let a=1;a<(L.length||1);a++){const w=toks(L[a].transcript||"");if(w.length)alts.push(w[w.length-1])}}
+   clearTimeout(this.ft);if(tail&&this.onPeek&&[tail].concat(alts).some(w=>this.onPeek(w)))this.prev.push(tail);
    /* The newest word is still being heard. If you stop on it, use it after a short pause anyway, so a word said on its own
       (or the second word of a jump back) is not left waiting. */
-   else if(tail)this.ft=setTimeout(()=>{if(this.r===r&&this.prev.length===ws.length){this.prev.push(tail);this.onWords([tail])}},800)};
+   else if(tail){const tr=ws.length<P.length?1:0;this.ft=setTimeout(()=>{if(this.r===r&&this.prev.length===ws.length){this.prev.push(tail);this.onWords([tail],tr)}},800)}};
   r.onerror=e=>{if(["not-allowed","service-not-allowed","audio-capture"].includes(e.error)){this.active=false;clearInterval(this.dog);micState="denied";this.onState("denied")}};
-  r.onend=()=>{if(this.r!==r)return;if(this.active){this.finalText+=" "+this.text;this.text="";setTimeout(()=>{if(this.active&&this.r===r)try{this._spin()}catch(e){}},0)}else this.onState("stopped")};
-  try{r.start()}catch(e){this.active=false;clearInterval(this.dog);micState="denied";this.onState("denied")}}
+  r.onend=()=>{if(this.r!==r)return;if(this.active){this.finalText+=" "+this.text;this.text="";setTimeout(()=>{if(this.active&&this.r===r)this._spin(1)},0)}else this.onState("stopped")};
+  try{r.start();this.tries=0}catch(e){if(again)return this._retry();this.active=false;clearInterval(this.dog);micState="denied";this.onState("denied")}}
+ _retry(){this.tries=(this.tries||0)+1;const r=this.r;setTimeout(()=>{if(this.active&&this.r===r)this._spin(1)},Math.min(2000,300*this.tries))}
  stop(){this.active=false;clearInterval(this.dog);clearTimeout(this.ft);try{this.r&&this.r.stop()}catch(e){}}
  transcript(){return (this.finalText+" "+this.text).trim()}}
 /* English read-aloud: a man's voice only (never a woman's). Tap the same line or button again to stop; any other audio stops it too. */
@@ -2356,7 +2367,7 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   if(r.tries[i]&&r.said[i]&&wnear(norm(r.said[i]),e.n,true)){r.mist=Math.max(0,r.mist-r.tries[i]);delete r.tries[i];delete r.said[i]}
   r.st[i]=r.tries[i]?4:this.ok(i);this.advance();this.misUI()},
  peek(raw){const r=this.run;if(!r||this.held||r.idx>=this.W.length)return false;const h=norm(raw),e=this.W[r.idx];
-  if(h&&wnear(h,e.n,this.again())){this.hbuf=(this.hbuf||[]).concat([h]).slice(-6);this.hit();return true}return false},
+  if(h&&(wnear(h,e.n,true)||(this.frag&&wnear(this.frag+h,e.n,true)))){this.frag=null;this.hbuf=(this.hbuf||[]).concat([h]).slice(-6);this.hit();return true}return false},
  titleW(v){const ci=chOf(v);return toks("باب "+(CHH[ci]||"")).map(norm).filter(Boolean)},
  extra(v){/* chapter-heading words and the basmala: if a student reads them it is fine, and skipping them is fine too */
   const ci=chOf(v);const k="x"+ci;this._x=this._x||{};if(!this._x[k]){const ws=[CHH[ci],ci>0?CHH[ci-1]:"",ci<CH.length-1?CHH[ci+1]:"","بسم الله الرحمن الرحيم باب فصل أحكام"].join(" ");this._x[k]=toks(ws).map(norm).filter(Boolean)}return this._x[k]},
@@ -2478,21 +2489,32 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   $("#hintOn").onclick=()=>{this.run.view=1;this.applyView();this.save();n.innerHTML=""};clearTimeout(this._ht);this._ht=setTimeout(()=>{if($("#mhint"))$("#mhint").innerHTML=""},7000)},
  revealVerse(){const r=this.run;const v=this.W[r.idx]&&this.W[r.idx].v;while(r.idx<this.W.length&&this.W[r.idx].v===v){r.st[r.idx]=3;r.peeks++;this.setW(r.idx);r.idx++}
   if(r.idx<this.W.length)this.setW(r.idx);this.prog();this.curVerse();this.save();if(r.idx>=this.W.length)this.finish();else this.scrollCur()},
- heard(words){const r=this.run;if(!r||this.held)return;for(const raw of words){if(this.held)return;const h=norm(raw);if(r.idx>=this.W.length)return;const W=this.W,i=r.idx,e=W[i];
+ heard(words,rev){rev=rev||0;const r=this.run;if(!r||this.held)return;for(let wi=0;wi<words.length;wi++){const raw=words[wi];if(this.held)return;const h=norm(raw);if(r.idx>=this.W.length)return;const W=this.W,i=r.idx,e=W[i];
    if(h){this.hbuf=(this.hbuf||[]).concat([h]).slice(-6)}
    /* A chapter title said before the chapter's first verse (e.g. أحكام الميم الساكنة): taken as the title, never as a mistake,
       and never matched to the verse's own words. Skipping the title is fine too. */
    if(h&&r.ttl&&r.ttl.i===i){const k=r.ttl.w.findIndex(x=>x===h||(h.length>3&&sim(h,x)>=.75));if(k>=0){r.ttl.w=r.ttl.w.slice(k+1);if(!r.ttl.w.length)r.ttl=null;continue}r.ttl=null}
    if(h&&(i===0||W[i-1].v!==e.v)&&CH.some(c=>c[0]===e.v)&&!wmatch(h,e.n)){const tw=this.titleW(e.v),k=tw.findIndex(x=>x===h||(h.length>3&&sim(h,x)>=.75));if(k>=0){r.ttl={i,w:tw.slice(k+1)};continue}}
-   if(wnear(h,e.n,this.again())){this.hit();continue}
-   if(W[i+1]&&e.n.length<=3&&!r.tries[i]&&wmatch(h,W[i+1].n)){onRight();r.st[i]=this.ok(i);this.advance();if(this.run&&r.idx<this.W.length){r.st[r.idx]=this.ok(r.idx);this.advance()}continue}
-   if(W[i+2]&&wmatch(h,e.n+W[i+1].n+W[i+2].n)){onRight();for(let k=0;k<3&&this.run&&r.idx<this.W.length;k++){r.st[r.idx]=this.ok(r.idx);this.advance()}continue}
-   if(W[i+1]&&wmatch(h,e.n+W[i+1].n)){onRight();r.st[i]=r.tries[i]?4:this.ok(i);this.advance();if(this.run&&r.idx<this.W.length){r.st[r.idx]=this.ok(r.idx);this.advance()}continue}
+   /* The word you are on is checked kindly every time (the phone rarely writes a recited word exactly), so it works at
+      a normal reading speed, not only when you go slowly and repeat. */
+   if(wnear(h,e.n,true)){this.frag=null;this.hit();continue}
+   /* The phone split one word in two (e.g. "بال سكون"): put the pieces back together. */
+   if(this.frag){const f=this.frag;this.frag=null;if(wnear(f+h,e.n,true)){this.hit();continue}}
+   /* The phone only rewrote a word it had already given: it may finish the word you are on (above), nothing more. */
+   /* The phone joined the word just said to this one (e.g. "ارجوبه"): that is this word. */
+   if(i>0&&W[i-1].v===e.v&&wnear(h,W[i-1].n+e.n,true)){this.hit();continue}
+   if(wi<rev)continue;
+   if(W[i+1]&&e.n.length<=3&&!r.tries[i]&&wnear(h,W[i+1].n,true)){onRight();r.st[i]=this.ok(i);this.advance();if(this.run&&r.idx<this.W.length){r.st[r.idx]=this.ok(r.idx);this.advance()}continue}
+   if(W[i+2]&&wnear(h,e.n+W[i+1].n+W[i+2].n,true)){onRight();for(let k=0;k<3&&this.run&&r.idx<this.W.length;k++){r.st[r.idx]=this.ok(r.idx);this.advance()}continue}
+   if(W[i+1]&&wnear(h,e.n+W[i+1].n,true)){onRight();r.st[i]=r.tries[i]?4:this.ok(i);this.advance();if(this.run&&r.idx<this.W.length){r.st[r.idx]=this.ok(r.idx);this.advance()}continue}
    if(h.length<2)continue;if(this.extra(e.v).some(x=>x===h||(h.length>3&&sim(h,x)>=.8)))continue;
+   /* The start of the word you are on: wait for the rest instead of calling it a mistake. */
+   {const a=fold(h),b=fold(e.n);if(a.length>=2&&b.length>a.length&&b.startsWith(a)){this.frag=h;continue}}
    /* Reading on quickly: the word heard is one of the next few, so the words before it were said wrong or skipped. Mark them and keep going. */
-   {let j=0;for(let d=1;d<=3&&W[i+d];d++)if((d===1||h.length>3)&&wmatch(h,W[i+d].n)){j=d;break}
+   {let j=0,jn=1;for(let d=1;d<=3&&W[i+d];d++){if(d===1?wnear(h,W[i+1].n,h.length>2):h.length>3&&wnear(h,W[i+d].n,false)){j=d;break}
+     if(d===1&&W[i+2]&&h.length>4&&wnear(h,W[i+1].n+W[i+2].n,true)){j=1;jn=2;break}}
     if(j){onRight();this.cand=null;for(let d=0;d<j&&this.run&&r.idx<this.W.length;d++){const k=r.idx;if(!r.tries[k]){r.tries[k]=1;r.mist++;(r.mt=r.mt||{})[k]=Date.now()}r.st[k]=2;this.advance()}
-     this.misUI();if(this.run&&r.idx<this.W.length){r.st[r.idx]=this.ok(r.idx);this.advance()}this.save();continue}}
+     this.misUI();for(let q=0;q<jn&&this.run&&r.idx<this.W.length;q++){r.st[r.idx]=this.ok(r.idx);this.advance()}if(this.run)this.save();continue}}
    /* Nothing moved: after a few words, listen afresh so the phone stops repeating the same wrong guess. */
    this.stuck=(this.stuck||0)+1;if(this.stuck===3&&this.lis)this.lis.refresh();
    /* Words from another place: after two in a row, follow you there, back or ahead, anywhere in the poem. */
@@ -2503,7 +2525,7 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
    if(ST.tries&&r.tries[i]>=ST.tries){triedOut();r.st[i]=2;this.advance();this.offerHint()}else this.save()}},
  async toggleMic(){unlockAudio();if(this.listening){this.stopMic(true);return}if(IN_FRAME||micState==="denied"){this.note();return}
   const r=this.run;let recOK=false;if(ST.rec){r.part=(r.part||0)+1;recOK=await Rec.start(rangeLabel(r.verses)+(r.part>1?" · "+num(r.part):""))}
-  let srOK=false;if(ST.mode==="voice"&&SR){this.lis=new Listener(w=>this.heard(w),s=>{if(s==="denied"){this.stopMic(true);this.note()}});this.lis.onPeek=w=>this.peek(w);srOK=this.lis.start()}
+  let srOK=false;if(ST.mode==="voice"&&SR){this.lis=new Listener((w,rev)=>this.heard(w,rev),s=>{if(s==="denied"){this.stopMic(true);this.note()}});this.lis.onPeek=w=>this.peek(w);srOK=this.lis.start()}
   if(!recOK&&!srOK){if(ST.rec||(ST.mode==="voice"&&SR))micState="denied";this.note();return}
   this.listening=true;this.held=false;$("#mhint")&&$("#jYes")&&($("#mhint").innerHTML="");this.micUI();$("#mlive").innerHTML=`<span class="pill live">${srOK?t("listening"):t("recording")}</span>`;this.note();bismillah()},
  stopMic(save){if(this.lis){this.lis.stop();this.lis=null}this.listening=false;Rec.stop(save&&ST.rec);this.micUI();const l=$("#mlive");if(l)l.innerHTML=this.run?`<span class="pill">${t("paused")}</span>`:"";this.save()},
