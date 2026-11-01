@@ -1404,6 +1404,14 @@ main{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .rq .hrd{font-size:.82rem}
 .rq button[data-rq]{font-size:0!important;width:30px;height:30px;padding:0!important;justify-content:center;flex:none;border-radius:50%!important}
 .rq button[data-rq] svg{width:16px!important;height:16px!important}
+
+/* Hint: a small round lamp right beside Peek; it glows while first letters are shown */
+.pkw{position:relative;display:flex;align-items:flex-start;gap:0;min-width:0;justify-content:center}.pkw[hidden]{display:none!important}
+.dock.calm .pkw .hintb,.mdock .pkw .hintb,.pkw .hintb{position:relative!important;align-self:flex-start;margin:6px 0 0 0!important;margin-inline-end:-10px!important;order:-1;width:26px!important;height:26px!important;min-height:0!important;max-height:26px!important;min-width:0!important;flex:none!important;padding:0!important;border-radius:50%!important;
+ display:grid!important;place-items:center!important;background:var(--surface,#fff)!important;border:1px solid var(--line)!important;box-shadow:0 1px 4px rgba(0,0,0,.15);color:var(--muted)!important;z-index:2}
+.pkw .hintb svg{width:15px!important;height:15px!important;margin:0!important}.pkw .hintb span{display:none!important}
+.dock.calm .pkw .hintb.on,.mdock .pkw .hintb.on,.pkw .hintb.on{background:#fff4d6!important;border-color:#e6b84a!important;color:#b9790c!important}
+.pkw .hintb.on svg{color:#b9790c!important;filter:drop-shadow(0 0 4px rgba(240,180,40,.8))}
 .hhov{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:18px}
 .hhbox{background:var(--surface,#fff);color:var(--ink,#222);border-radius:18px;padding:18px 18px 14px;max-width:420px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.3);font-size:1rem;line-height:1.6}
 .hhbox ol{margin:10px 0 14px;padding-inline-start:22px}.hhbox li{margin:0 0 8px}
@@ -1580,7 +1588,8 @@ const RUN_HEAD="مَتْنُ تُحْفَةِ الأَطْفَالِ";
 const qh=s=>s.replace(/«/g,'<span class="qm">«</span>').replace(/»/g,'<span class="qm">»</span>');
 const DIAC=/[ؐ-ًؚ-ٰٟۖ-ۭـ]/g;
 const strip=s=>s.replace(DIAC,"");
-function norm(s){return strip(s).replace(/[«»"'(),.،؟?!:؛\[\]\-–]/g,"").replace(/[أإآٱ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه").replace(/ؤ/g,"و").replace(/ئ/g,"ي").replace(/ء/g,"").trim()}
+/* (.)\1{2,}: a sound held long when reciting with a melody comes out as the same letter many times (شددااا): keep one. */
+function norm(s){return strip(s).replace(/(.)\1{2,}/g,"$1").replace(/[«»"'(),.،؟?!:؛\[\]\-–]/g,"").replace(/[أإآٱ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه").replace(/ؤ/g,"و").replace(/ئ/g,"ي").replace(/ء/g,"").trim()}
 function lev(a,b){const m=a.length,n=b.length;if(!m)return n;if(!n)return m;let p=Array.from({length:n+1},(_,i)=>i);for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[n]}
 function sim(a,b){if(!a||!b)return 0;if(a===b)return 1;return 1-lev(a,b)/Math.max(a.length,b.length)}
 /* Stricter matching: short words must match exactly; longer words may differ by at most about one letter in four. */
@@ -1595,6 +1604,12 @@ function wnear(h,e,again){if(wmatch(h,e))return true;if(!h||!e)return false;cons
   const L=Math.max(a.length,b.length);return L<=2?false:L<=4?lev(a,b)<=1:sim(a,b)>=.6};
  /* checked twice: with "ال" dropped, and as it is (in واله the و and ا are part of the word, not "و" + "ال") */
  return t(fold(h),fold(e))||t(fold("-"+h).slice(1),fold("-"+e).slice(1))}
+/* Reading on without stopping: do the last words heard match words a little further on? Then you are there.
+   Two words in a row are enough (kindly checked), or one long word heard exactly. anch = how many heard words matched. */
+function catchUp(S,W,i){const L=S.length;if(!L)return null;const end=Math.min(W.length,i+11);
+ if(L>=2)for(let j=i+1;j<end;j++)if(wnear(S[L-1],W[j].n,true)&&wnear(S[L-2],W[j-1].n,true)&&(S[L-1]+S[L-2]).length>=5)return{to:j+1,anch:2};
+ if(S[L-1].length>3)for(let j=i+1;j<Math.min(W.length,i+6);j++)if(wmatch(S[L-1],W[j].n))return{to:j+1,anch:1};
+ return null}
 const toks=s=>s.replace(/ـ«/g,"ـ «").split(/\s+/).filter(Boolean);
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 const pick=a=>a[Math.random()*a.length|0];
@@ -2484,14 +2499,16 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
    <div class="prog"><i id="mprog"></i></div></div>
    <div id="mnote"></div><div id="mhint" style="margin-bottom:8px"></div><div class="mtext" id="mz">${body}</div><div class="spacer"></div>
    <div class="dock calm">${manual?"":this.rqHTML()}<div class="in">
-    ${manual?`<button class="db bad" type="button" id="dbad">${IC.x}<span>${t("mistake")}</span></button>`:`<button class="db" type="button" id="vBtn">${vw===2?IC.eyeoff:IC.eye}<span>${vw===2?OW("Hide words","أخفِ الكلمات"):OW("Show words","أظهر الكلمات")}</span></button><button class="db" type="button" id="pkBtn" ${vw===2?"hidden":""}>${IC.peek}<span>${OW("Peek","لمحة")}</span></button>`}
+    ${manual?`<button class="db bad" type="button" id="dbad">${IC.x}<span>${t("mistake")}</span></button>`:`<button class="db" type="button" id="vBtn">${vw===2?IC.eyeoff:IC.eye}<span>${vw===2?OW("Hide words","أخفِ الكلمات"):OW("Show words","أظهر الكلمات")}</span></button><span class="pkw" id="pkW" ${vw===2?"hidden":""}><button class="db" type="button" id="pkBtn">${IC.peek}<span>${OW("Peek","لمحة")}</span></button>`}<button class="db hintb ${vw===1?"on":""}" type="button" id="hintBtn" aria-pressed="${vw===1}" aria-label="${t("hint")}" title="${t("hint")}">${IC.bulb}<span>${t("hint")}</span></button></span>
     <div class="micw"><button class="mic" type="button" id="dmic" aria-label="${t("mic")}">${IC.mic}</button><span id="micl">${t("startL")}</span></div>
     ${manual?`<button class="db ok" type="button" id="dok">${IC.ok}<span>${t("correct")}</span></button>`:`<button class="db" type="button" id="mvOpen">${IC.rev}<span>${OW("Review","مراجعة")}</span><b class="cnt" id="mmis" hidden></b></button>`}
     <button class="db endb" type="button" id="dend"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg><span>${t("endL")}</span></button></div></div>`;
   this.applyView();this.prog();this.note();this.curVerse();this.micUI();this.misUI();this.retUI();refit();this.rqBind();
   if(!IN_FRAME&&!micGranted&&micState!=="denied"&&(ST.rec||ST.mode==="voice"))askMic().then(()=>this.note());
-  const setView=v=>{if(v===(r.view||0))return;r.view=v;if(v)r.peeks++;ps.set("lastView",v);this.applyView();this.save();toast([t("vHidden"),t("vHint"),t("vShown")][v],"",3000);const b=$("#vBtn");if(b)b.innerHTML=`${v===2?IC.eyeoff:IC.eye}<span>${v===2?OW("Hide words","أخفِ الكلمات"):OW("Show words","أظهر الكلمات")}</span>`;const pb=$("#pkBtn");if(pb)pb.hidden=v===2};
+  const setView=(v,quiet)=>{if(v===(r.view||0))return;r.view=v;if(v)r.peeks++;ps.set("lastView",v);this.applyView();this.save();if(!quiet)toast([t("vHidden"),t("vHint"),t("vShown")][v],"",3000);const b=$("#vBtn");if(b)b.innerHTML=`${v===2?IC.eyeoff:IC.eye}<span>${v===2?OW("Hide words","أخفِ الكلمات"):OW("Show words","أظهر الكلمات")}</span>`;const pb=$("#pkW");if(pb)pb.hidden=v===2;const hb=$("#hintBtn");if(hb){hb.classList.toggle("on",v===1);hb.setAttribute("aria-pressed",v===1)}};
   if($("#pkBtn"))$("#pkBtn").onclick=()=>this.peekCur();
+  /* Hint lamp: first letters on / off (only while the words are hidden) */
+  if($("#hintBtn"))$("#hintBtn").onclick=()=>setView((r.view||0)===1?0:1,true);
   if($("#vBtn"))$("#vBtn").onclick=()=>{const v=r.view||0;if(v!==2)r.hideV=v;setView(v===2?(r.hideV||0):2)};
   if($("#mvOpen"))$("#mvOpen").onclick=()=>this.openReview(null);
   $("#dend").onclick=()=>{const old=$("#endpop");if(old){old.remove();return}const d=document.createElement("div");d.id="endpop";d.className="endpop";
@@ -2525,7 +2542,7 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
  scrollCur(instant){const el=$(`#mz .m[data-k="${this.run.idx}"]`);if(!el)return;const rc=el.getBoundingClientRect(),d=$(".dock .rq")||$(".dock"),lim=d?d.getBoundingClientRect().top-24:innerHeight-150;
   /* keep the word you are on above the buttons at the bottom, never under them */
   if(rc.top<200||rc.bottom>lim)window.scrollBy({top:rc.top-Math.max(200,(lim-200)/2),behavior:instant?"auto":"smooth"})},
- advance(){const r=this.run;const old=r.idx;this.stuck=0;this.trail=[];{const s=r.st[old];const el=$(`#mz .m[data-k="${old}"]`);if(s===1||s===4){this.combo=(this.combo||0)+1;addXP(s===1?5:2,el);if(this.combo%10===0&&ST.game)setTimeout(()=>popFx(`${t("combo")} ×${num(this.combo)}`,el,"combo"),200)}else this.combo=0;const w=this.W[old],nx=this.W[old+1];if(w&&(!nx||nx.v!==w.v)){const good=this.W.every((x,k)=>x.v!==w.v||r.st[k]===1||r.st[k]===5);if(good)addXP(20,el)}}r.idx++;this.setW(old);if(r.idx<this.W.length)this.setW(r.idx);this.prog();this.curVerse();this.tryUI();
+ advance(){const r=this.run;const old=r.idx;this.stuck=0;this.trail=[];this.since=[];{const s=r.st[old];const el=$(`#mz .m[data-k="${old}"]`);if(s===1||s===4){this.combo=(this.combo||0)+1;addXP(s===1?5:2,el);if(this.combo%10===0&&ST.game)setTimeout(()=>popFx(`${t("combo")} ×${num(this.combo)}`,el,"combo"),200)}else this.combo=0;const w=this.W[old],nx=this.W[old+1];if(w&&(!nx||nx.v!==w.v)){const good=this.W.every((x,k)=>x.v!==w.v||r.st[k]===1||r.st[k]===5);if(good)addXP(20,el)}}r.idx++;this.setW(old);if(r.idx<this.W.length)this.setW(r.idx);this.prog();this.curVerse();this.tryUI();
   if(r.ret&&r.retDir>0&&r.idx<this.W.length&&gOf(this.W[r.idx])>=gOf(r.ret)){r.ret=null;this.retUI()}this.save();if(r.idx>=this.W.length){this.finish();return}this.scrollCur()},
  mark(s){const r=this.run;if(!r||r.idx>=this.W.length)return;if(s===3)r.peeks++;r.st[r.idx]=s;this.advance()},
  attention(i){const el=$(`#mz .m[data-k="${i}"]`);if(el){el.classList.remove("wring");void el.offsetWidth;el.classList.add("wring");setTimeout(()=>el.classList.remove("wring"),1300)}},
@@ -2554,7 +2571,8 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
    if(W[i+1]&&e.n.length<=3&&!r.tries[i]&&wnear(h,W[i+1].n,true)){onRight();r.st[i]=this.ok(i);this.advance();if(this.run&&r.idx<this.W.length){r.st[r.idx]=this.ok(r.idx);this.advance()}continue}
    if(W[i+2]&&wnear(h,e.n+W[i+1].n+W[i+2].n,true)){onRight();for(let k=0;k<3&&this.run&&r.idx<this.W.length;k++){r.st[r.idx]=this.ok(r.idx);this.advance()}continue}
    if(W[i+1]&&wnear(h,e.n+W[i+1].n,true)){onRight();r.st[i]=r.tries[i]?4:this.ok(i);this.advance();if(this.run&&r.idx<this.W.length){r.st[r.idx]=this.ok(r.idx);this.advance()}continue}
-   if(h.length<2)continue;if(this.extra(e.v).some(x=>x===h||(h.length>3&&sim(h,x)>=.8)))continue;
+   /* A held sound on its own (آه، اا) when reciting with a melody is not a word: ignore it. */
+   if(h.length<2||fold(h).length<=1)continue;if(this.extra(e.v).some(x=>x===h||(h.length>3&&sim(h,x)>=.8)))continue;
    /* The start of the word you are on: wait for the rest instead of calling it a mistake. */
    {const a=fold(h),b=fold(e.n);if(a.length>=2&&b.length>a.length&&b.startsWith(a)){this.frag=h;continue}}
    /* Reading on quickly: the word heard is one of the next few, so the words before it were said wrong or skipped. Mark them and keep going. */
@@ -2562,13 +2580,24 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
      if(d===1&&W[i+2]&&h.length>4&&wnear(h,W[i+1].n+W[i+2].n,true)){j=1;jn=2;break}}
     if(j){onRight();this.cand=null;for(let d=0;d<j&&this.run&&r.idx<this.W.length;d++){const k=r.idx;if(!r.tries[k]){r.tries[k]=1;r.mist++;(r.mt=r.mt||{})[k]=Date.now()}r.st[k]=2;this.advance()}
      this.misUI();for(let q=0;q<jn&&this.run&&r.idx<this.W.length;q++){r.st[r.idx]=this.ok(r.idx);this.advance()}if(this.run)this.save();continue}}
+   /* You read on without stopping and the phone wrote some words down differently: catch up with you. Words you said
+      in between count as said; only words with nothing said for them are missed. No need to read word by word. */
+   {const S=(this.since||[]).concat([h]);const c=catchUp(S,W,i);
+    if(c){onRight();this.cand=null;const sk=c.to-i-c.anch,said=S.length-c.anch;
+     if(r.tries[i]){r.mist=Math.max(0,r.mist-r.tries[i]);delete r.tries[i];delete r.said[i]}
+     for(let q=0;q<c.to-i&&this.run&&r.idx<this.W.length;q++){const k=r.idx;/* one spare for two words the phone joined into one; small words the phone drops are never missed */
+      if(q<sk&&q>=said+1&&this.W[k].n.length>3){r.tries[k]=1;r.mist++;(r.mt=r.mt||{})[k]=Date.now();r.st[k]=2}else r.st[k]=this.ok(k);this.advance()}
+     this.misUI();if(this.run)this.save();continue}
+    this.since=S.slice(-6)}
    /* Nothing moved: after a few words, listen afresh so the phone stops repeating the same wrong guess. */
    this.stuck=(this.stuck||0)+1;if(this.stuck===3&&this.lis)this.lis.refresh();
    /* Words from another place: after two in a row, follow you there, back or ahead, anywhere in the poem. */
    this.trail=(this.trail||[]).concat([h]).slice(-3);if(this.trail.length>=2){const c=this.locate(this.trail);if(c){this.follow(c.g);return}}
    /* Repeating a word just said (to get going again) is fine. */
    let rep=false;for(let b=1;b<=8;b++)if(W[i-b]&&wmatch(h,W[i-b].n)){rep=true;break}if(rep)continue;
-   r.tries[i]=(r.tries[i]||0)+1;r.said[i]=raw;r.mist++;(r.mt=r.mt||{})[i]=Date.now();this.undo=(this.undo||[]).concat([i]).slice(-2);this.misUI();onWrong();this.attention(i);this.tryUI();
+   r.tries[i]=(r.tries[i]||0)+1;r.said[i]=raw;r.mist++;(r.mt=r.mt||{})[i]=Date.now();this.undo=(this.undo||[]).concat([i]).slice(-2);this.misUI();
+   /* no beep for the first word that does not fit: you may simply be reading on (see catchUp) */
+   if((this.since||[]).length>=2){onWrong();this.attention(i)}this.tryUI();
    if(ST.tries&&r.tries[i]>=ST.tries){triedOut();r.st[i]=2;this.advance();this.offerHint()}else this.save()}},
  async toggleMic(){unlockAudio();if(this.listening){this.stopMic(true);return}if(IN_FRAME||micState==="denied"){this.note();return}
   const r=this.run;r.part=(r.part||0)+1;let srOK=false;if(ST.mode==="voice"&&SR){this.lis=new Listener((w,rev)=>this.heard(w,rev),s=>{if(s==="denied"){this.stopMic(true);this.note()}});this.lis.onPeek=w=>this.peek(w);this.lis.onHear=(x,q)=>heardLine($("#rqH"),x,q);srOK=this.lis.start()}
