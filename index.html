@@ -1398,7 +1398,7 @@ main{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .rq .hrd:empty{display:none}.rq .hrd span{color:var(--ink)}.rq .hrd b{color:#2e9d5b}.rq .hrd.hq{color:#b5650f}
 .rq .hrd button{display:inline!important;width:auto!important;border:0!important;background:none!important;padding:0!important;margin-inline-start:4px;font-size:.78rem;color:#2e6db5!important;text-decoration:underline;min-height:0}
 /* Compact recite row (Tasnim: nothing should cover the verse): one thin line with what the phone hears and three small round helper buttons. */
-.dock .rq,.mdock .rq,.rbar .rq{flex-wrap:nowrap!important;width:min(560px,94vw)!important;max-width:94vw!important;padding:3px 5px!important;gap:5px!important;margin-bottom:6px!important;border-radius:999px!important}
+.dock .rq,.mdock .rq,.rbar .rq{flex-wrap:nowrap!important;width:min(560px,calc(100% - 8px))!important;max-width:calc(100% - 8px)!important;padding:3px 5px!important;gap:5px!important;margin-bottom:6px!important;border-radius:999px!important}
 .rq .rqtop{flex:1 1 auto!important;flex-basis:auto!important;max-width:none!important;justify-content:center;padding:0 6px;overflow:hidden}
 .rq .rqtop .rs{display:none!important}.rq .rqtop .rs.tr{display:flex!important;font-size:.74rem}
 .rq .hrd{font-size:.82rem}
@@ -1412,6 +1412,8 @@ main{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .pkw .hintb svg{width:15px!important;height:15px!important;margin:0!important}.pkw .hintb span{display:none!important}
 .dock.calm .pkw .hintb.on,.mdock .pkw .hintb.on,.pkw .hintb.on{background:#fff4d6!important;border-color:#e6b84a!important;color:#b9790c!important}
 .pkw .hintb.on svg{color:#b9790c!important;filter:drop-shadow(0 0 4px rgba(240,180,40,.8))}
+.rq[hidden]{display:none!important}
+html,body{overflow-x:clip}
 .hhov{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:18px}
 .hhbox{background:var(--surface,#fff);color:var(--ink,#222);border-radius:18px;padding:18px 18px 14px;max-width:420px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.3);font-size:1rem;line-height:1.6}
 .hhbox ol{margin:10px 0 14px;padding-inline-start:22px}.hhbox li{margin:0 0 8px}
@@ -2438,7 +2440,7 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
  titleW(v){const ci=chOf(v);return toks("باب "+(CHH[ci]||"")).map(norm).filter(Boolean)},
  extra(v){/* chapter-heading words and the basmala: if a student reads them it is fine, and skipping them is fine too */
   const ci=chOf(v);const k="x"+ci;this._x=this._x||{};if(!this._x[k]){const ws=[CHH[ci],ci>0?CHH[ci-1]:"",ci<CH.length-1?CHH[ci+1]:"","بسم الله الرحمن الرحيم باب فصل أحكام"].join(" ");this._x[k]=toks(ws).map(norm).filter(Boolean)}return this._x[k]},
- micUI(){const b=$("#dmic");if(!b)return;const paused=!this.listening&&this.run&&this.run.part;
+ micUI(){const b=$("#dmic");if(!b)return;{/* the thin row appears once you start */const q=$("#rq");if(q)q.hidden=!this.listening&&!(this.run&&this.run.part)}const paused=!this.listening&&this.run&&this.run.part;
   b.classList.toggle("on",this.listening);b.classList.toggle("paused",!!paused);
   b.innerHTML=this.listening?`${IC.pause}<b>${t("pauseL")}</b>`:paused?`${IC.play}<b>${t("resumeL")}</b>`:`${IC.mic}<b>${t("startL")}</b>`;
   const l=$("#micl");l.className="mst "+(this.listening?"live":paused?"pz":"");l.innerHTML=this.listening?`<i></i>${t("listening")}`:paused?`${IC.pause}${t("paused")}`:t("startL");this.tryUI()},
@@ -2538,7 +2540,7 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
    $("#xv").onclick=()=>{Sheet.close();this.revealVerse()};if($("#hbad"))$("#hbad").onclick=()=>{this.manualWrong()};if($("#hok"))$("#hok").onclick=()=>{onRight();this.mark(1)};
    $("#xs").onclick=()=>{Sheet.close();this.exit()};$("#xf").onclick=()=>{Sheet.close();this.finish()};$("#xr").onclick=()=>{Sheet.close();this.stopMic(false);this.newRun(r.verses);this.render()}};
   $("#mz").onclick=e=>{const mv=e.target.closest("[data-mv]");if(mv){const v=+mv.dataset.mv;this.askJump(ALLW.findIndex(x=>x.v===v),true);return}const el=e.target.closest(".m");if(!el)return;const k=+el.dataset.k;if(r.st[k]===2||r.st[k]===4||r.st[k]===6){this.openReview(k);return}if(k===r.idx)this.peekCur()};
-  clearInterval(this.timer);this.timer=setInterval(()=>{if(document.hidden||!this.run)return;if(this.listening&&Date.now()-lastAct>SILENCE){this.stopMic(true);toast(t("silent"),"msg",5000)}r.elapsed++;const tm=$("#mtime");tm&&(tm.textContent=fmtT(r.elapsed));if(r.elapsed%5===0)this.save()},1000);this.scrollCur(true)},
+  clearInterval(this.timer);this.timer=setInterval(()=>{if(document.hidden||!this.run)return;if(this.listening&&Date.now()-lastAct>SILENCE){this.stopMic(true);toast(t("silent"),"msg",5000)}/* the clock only runs while the mic is on */if(this.listening)r.elapsed++;const tm=$("#mtime");tm&&(tm.textContent=fmtT(r.elapsed));if(r.elapsed%5===0)this.save()},1000);this.scrollCur(true)},
  bindQuick(){$("#qTries").onclick=()=>{const seq=[1,2,3,0];ST.tries=seq[(seq.indexOf(ST.tries)+1)%4];saveSet();$("#mquick").innerHTML=this.quick();this.bindQuick()};
   $("#qBack").onclick=()=>{Sheet.close();const r=this.run,w=this.W[r.idx]||this.W[this.W.length-1];let v=w.v;const atStart=w.h===0&&w.i===0;if(atStart&&r.verses.indexOf(v)>0)v=r.verses[r.verses.indexOf(v)-1];else if(atStart&&v>1)v=v-1;this.jumpTo({v,h:0,i:0})};
   $("#qStyle").onclick=()=>{const seq=["shapes","letters","first"];ST.hide=seq[(seq.indexOf(ST.hide)+1)%3];saveSet();$("#mquick").innerHTML=this.quick();this.bindQuick();for(let k=0;k<this.W.length;k++)if(!this.run.st[k])this.setW(k)}},
