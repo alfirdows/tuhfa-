@@ -1400,6 +1400,13 @@ main{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .list .it .aup{flex-basis:100%}
 #pbStop:disabled{opacity:.35}
 @media (max-width:520px){.pbar .in{gap:5px!important;padding:6px 8px!important}.pbar .pbb:not(.main){width:34px!important;height:34px!important}.pbar .pbb:not(.main) svg{width:17px;height:17px}.pbar #pbRecite{padding-inline:10px}.pbar .pbi{min-width:58px}}
+.rq .hrd{flex-basis:100%;text-align:center;font-size:.8rem;font-weight:600;color:var(--muted);padding:4px 10px;margin:2px 0;border-radius:12px;background:color-mix(in srgb,var(--ink) 6%,transparent);max-width:88vw;line-height:1.8;max-height:6.2em;overflow-y:auto;overscroll-behavior:contain}
+.rq .hrd:empty{display:none}.rq .hrd span{color:var(--ink);font-size:1.12rem;font-weight:700}.rq .hrd b{color:#2e9d5b;font-size:1.3rem}.rq .hrd.hq{color:#b5650f;white-space:normal}
+.rq .hrd button{display:inline-flex!important;width:auto!important;flex:none;vertical-align:middle;padding:2px 8px;font-size:.72rem;margin-inline-start:4px}
+.hhov{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:18px}
+.hhbox{background:var(--surface,#fff);color:var(--ink,#222);border-radius:18px;padding:18px 18px 14px;max-width:420px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.3);font-size:1rem;line-height:1.6}
+.hhbox ol{margin:10px 0 14px;padding-inline-start:22px}.hhbox li{margin:0 0 8px}
+.hhok{display:block;margin:0 auto;border:0;border-radius:999px;padding:8px 26px;font:inherit;font-weight:700;background:#2e9d5b;color:#fff;cursor:pointer}
 </style>
 </head>
 <body>
@@ -1616,7 +1623,7 @@ en:{repeat:"repeat",auPlay:"Play",auPause:"Pause",auStop:"Stop",auPos:"Move thro
  daysLeft:"Deleted in {d} days",lastDay:"Deleted today",save:"Save",del:"Delete",recSaved:"Recording saved. It will be deleted on {d}.",
  inFrame:"<b>The microphone cannot work in this preview.</b> Open the website in Safari or Chrome to recite aloud. You can still mark yourself with ✓ and ✗.",
  micAsk:"Allow the microphone so the website can hear you recite.",micOn:"Turn on microphone",
- micDenied:"<b>The microphone is blocked.</b> In Safari tap <b>aA</b> → <b>Website Settings</b> → <b>Microphone</b> → <b>Allow</b>, then reload.",
+ micDenied:"<b>The microphone is blocked.</b> In Safari tap <b>aA</b> → <b>Website Settings</b> → <b>Microphone</b> → <b>Allow</b>, then reload. <button type=\"button\" class=\"btn sm out\" data-hearhelp>More help</button>",
  noSR:"<b>Voice checking is not available in this browser.</b> Mark each word with ✓ / ✗.",
  tipTap:"Stuck? Tap the highlighted word to show it.",
  qTypes:"Question types",qCount:"Number of questions",qStart:"Start quiz",
@@ -1661,7 +1668,7 @@ ar:{repeat:"تكرار",auPlay:"تشغيل",auPause:"إيقاف مؤقت",auStop
  daysLeft:"يُحذف بعد {d} أيام",lastDay:"يُحذف اليوم",save:"حفظ",del:"حذف",recSaved:"حُفظ التسجيل، وسيُحذف بتاريخ {d}.",
  inFrame:"<b>الميكروفون لا يعمل في هذه المعاينة.</b> افتح الموقع في Safari أو Chrome لتسمّع بصوتك، ويمكنك التصحيح بـ ✓ و ✗.",
  micAsk:"اسمح بالميكروفون ليسمع الموقع تسميعك.",micOn:"تشغيل الميكروفون",
- micDenied:"<b>الميكروفون محجوب.</b> في Safari اضغط <b>aA</b> ← <b>إعدادات موقع الويب</b> ← <b>الميكروفون</b> ← <b>سماح</b>، ثم أعد التحميل.",
+ micDenied:"<b>الميكروفون محجوب.</b> في Safari اضغط <b>aA</b> ← <b>إعدادات موقع الويب</b> ← <b>الميكروفون</b> ← <b>سماح</b>، ثم أعد التحميل. <button type=\"button\" class=\"btn sm out\" data-hearhelp>مساعدة أكثر</button>",
  noSR:"<b>التصحيح الصوتي غير متاح في هذا المتصفح.</b> صحّح كل كلمة بـ ✓ / ✗.",
  tipTap:"إذا توقفت فاضغط على الكلمة المظللة لتظهر.",
  qTypes:"أنواع الأسئلة",qCount:"عدد الأسئلة",qStart:"ابدأ الاختبار",
@@ -2026,7 +2033,7 @@ const MV={list:[],i:0,all:false,h:{},
   const p=e.target.closest("[data-mplay]");if(p){const m=this.list.find(x=>x.id===p.dataset.mplay);if(this.h.play)this.h.play(m,p);else MISL.play(m.id,p);return}
   const x=e.target.closest("[data-mx]");if(x&&this.h.go){this.h.go(this.list.find(y=>y.id===x.dataset.mx))}}};
 class Listener{constructor(onWords,onState){this.onWords=onWords;this.onState=onState;this.active=false;this.done=0;this.text="";this.finalText=""}
- start(){if(!SR)return false;this.active=true;lastAct=this.last=Date.now();this._spin();clearInterval(this.dog);
+ start(){if(!SR)return false;this.active=true;this.quiet();lastAct=this.last=Date.now();this._spin();clearInterval(this.dog);
   /* The iPhone sometimes stops sending words without saying so. If nothing has come for a while, start again quietly. */
   this.dog=setInterval(()=>{if(this.active&&Date.now()-this.last>7000)this.refresh()},1000);return true}
  /* Listen afresh. The phone guesses each word from the words before it, so after one misheard word it can keep hearing
@@ -2050,7 +2057,7 @@ class Listener{constructor(onWords,onState){this.onWords=onWords;this.onState=on
    /* rev = how many of the words passed on are only the phone rewriting words it already gave (it often fixes the last
       word or two as you go on). Those may still complete the word you are on, but never count as a mistake. */
    const rev=fresh?0:Math.max(0,Math.min(P.length,ws.length)-from);
-   this.prev=ws.slice();if(ws.length>from)this.onWords(ws.slice(from),rev);
+   this.heard1(ws,tail);this.prev=ws.slice();if(ws.length>from)this.onWords(ws.slice(from),rev);
    /* The phone's other guesses for the newest word (where it gives them) are tried too. */
    const alts=[];if(tail){const L=e.results[e.results.length-1];for(let a=1;a<(L.length||1);a++){const w=toks(L[a].transcript||"");if(w.length)alts.push(w[w.length-1])}}
    clearTimeout(this.ft);if(tail&&this.onPeek&&[tail].concat(alts).some(w=>this.onPeek(w)))this.prev.push(tail);
@@ -2061,8 +2068,38 @@ class Listener{constructor(onWords,onState){this.onWords=onWords;this.onState=on
   r.onend=()=>{if(this.r!==r)return;if(this.active){this.finalText+=" "+this.text;this.text="";setTimeout(()=>{if(this.active&&this.r===r)this._spin(1)},0)}else this.onState("stopped")};
   try{r.start();this.tries=0}catch(e){if(again)return this._retry();this.active=false;clearInterval(this.dog);micState="denied";this.onState("denied")}}
  _retry(){this.tries=(this.tries||0)+1;const r=this.r;setTimeout(()=>{if(this.active&&this.r===r)this._spin(1)},Math.min(2000,300*this.tries))}
- stop(){this.active=false;clearInterval(this.dog);clearTimeout(this.ft);try{this.r&&this.r.stop()}catch(e){}}
- transcript(){return (this.finalText+" "+this.text).trim()}}
+ stop(){this.active=false;clearInterval(this.dog);clearTimeout(this.ft);clearTimeout(this.qt);try{this.r&&this.r.stop()}catch(e){}}
+ transcript(){return (this.finalText+" "+this.text).trim()}
+ /* If nothing at all is heard in the first 8 seconds, say so and offer help (see hearHelp). */
+ quiet(){this.got=false;this.said0="";this.said1="";clearTimeout(this.qt);this.qt=setTimeout(()=>{if(this.active&&!this.got&&this.onHear)this.onHear(null,true)},8000)}
+ /* Everything heard since the mic was turned on, also across the phone's quiet restarts, so you see the whole thing you said. */
+ heard1(ws,tail){this.got=true;clearTimeout(this.qt);if(this.r!==this.r1){this.r1=this.r;this.said0=(this.said0+" "+this.said1).trim()}
+  this.said1=ws.concat(tail?[tail]:[]).join(" ");if(this.onHear)this.onHear((this.said0+" "+this.said1).trim())}}
+/* What the phone heard, and help when it hears nothing (the same on every site). New languages: add a block to HEAR. */
+const IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+const HEAR={
+ ar:{heard:"سمعتُ:",quiet:"لا يصلني صوتك بعد",help:"مساعدة",title:"إذا لم يسمعك الهاتف",ok:"حسنًا",steps:[
+  "افتح «الإعدادات» ← «عام» ← «لوحة المفاتيح»، وشغّل «تفعيل الإملاء».",
+  "في Safari اضغط «aA» بجانب العنوان ← «إعدادات موقع الويب» ← «الميكروفون» ← «سماح».",
+  "افتح الموقع من Safari نفسه (لا من أيقونة الشاشة الرئيسية)، ثم اضغط زر الميكروفون."]},
+ en:{heard:"Heard:",quiet:"I can't hear you yet",help:"Help",title:"If the phone does not hear you",ok:"OK",steps:[
+  "Open Settings › General › Keyboard and turn on “Enable Dictation”.",
+  "In Safari tap “aA” next to the address › Website Settings › Microphone › Allow.",
+  "Open the site in Safari itself (not from the Home Screen icon), then tap the mic."]}};
+const HT=()=>HEAR[LANG]||HEAR.en;
+const hesc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+/* The small grey line under "Listening": the last words the phone wrote down, so you can see it is hearing you. */
+function heardLine(el,txt,quiet){if(!el)return;const T=HT();
+ if(quiet){el.className="hrd hq";el.innerHTML=`${hesc(T.quiet)} <button type="button" data-hearhelp>${hesc(T.help)}</button>`;return}
+ if(txt==null){el.className="hrd";el.innerHTML="";return}
+ const a=String(txt).trim().split(/\s+/).filter(Boolean).slice(-80),last=a.pop();el.className="hrd";
+ /* the newest word stands out, so you can follow along word by word */
+ el.innerHTML=last?`${hesc(T.heard)} <span lang="ar" dir="rtl">${hesc(a.join(" "))} <b>${hesc(last)}</b></span>`:"";el.scrollTop=el.scrollHeight}
+function hearHelp(){const T=HT();let o=document.getElementById("hearhelp");if(o)o.remove();o=document.createElement("div");o.id="hearhelp";o.className="hhov";
+ o.innerHTML=`<div class="hhbox" role="dialog" dir="${LANG==="ar"?"rtl":"ltr"}"><b>${hesc(T.title)}</b><ol>${T.steps.map(s=>`<li>${hesc(s)}</li>`).join("")}</ol><button type="button" class="hhok">${hesc(T.ok)}</button></div>`;
+ o.onclick=e=>{if(e.target===o||e.target.closest(".hhok"))o.remove()};document.body.appendChild(o)}
+document.addEventListener("click",e=>{if(e.target.closest("[data-hearhelp]")){e.preventDefault();e.stopPropagation();hearHelp()}},true);
+
 /* English read-aloud: a man's voice only (never a woman's). Tap the same line or button again to stop; any other audio stops it too. */
 const EN_MALE=/\b(Daniel|Aaron|Arthur|Fred|Gordon|Rishi|Oliver|Alex|Tom|Reed|Rocko|Eddy|Grandpa|Ralph|Albert|Junior|Lee|Thomas|Guy|Ryan|Christopher|Eric|Roger|Brian|George|David|Mark|James|Male)\b/i;
 const enVoice=()=>{try{const v=speechSynthesis.getVoices().filter(x=>/^en/i.test(x.lang));return v.find(x=>EN_MALE.test(x.name)&&/en[-_]US/i.test(x.lang))||v.find(x=>EN_MALE.test(x.name))||null}catch(e){return null}};
@@ -2189,7 +2226,7 @@ function weakHTML(){const c=weakCounts(),mx=Math.max(0,...Object.values(c)),lv=n
 document.addEventListener("click",e=>{const b=e.target.closest("[data-weak]");if(b){reciteList([+b.dataset.weak]);return}
  if(e.target.closest("[data-weakgo]")){const c=weakCounts();reciteList(Object.keys(c).map(Number).sort((a,b)=>c[b]-c[a]).slice(0,5))}});
 function reciteList(vs){if(!vs.length)return;Sheet.close();unlockAudio();Player.stop();if(Mem.run&&Mem.listening)Mem.stopMic(true);
- Mem.newRun(vs.slice().sort((a,b)=>a-b));Mem.run.view=2;Mem.save();history.pushState(null,"","#memorize/run");route();window.scrollTo(0,0);if(Mem.run&&!Mem.listening)Mem.toggleMic()}
+ Mem.newRun(vs.slice().sort((a,b)=>a-b));Mem.run.view=2;Mem.save();history.pushState(null,"","#memorize/run");route();window.scrollTo(0,0)}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-plan]");if(b)reciteList(dailyPlan()[b.dataset.plan]||[])});
 
 /* ================= poem view ================= */
@@ -2340,9 +2377,9 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   $("#tRec").onclick=()=>{Sheet.open(`<div class="shd"><span class="t">${t("recs")}</span><button class="x" type="button" aria-label="close">${IC.close}</button></div><div id="recbox"></div>`);const fill=()=>recsHTML().then(h=>{const b=$("#recbox");if(b){b.innerHTML=h;bindRecs(b,fill)}});fill()};
   $("#tHist").onclick=()=>Sheet.open(`<div class="shd"><span class="t">${t("hist")}</span><button class="x" type="button" aria-label="close">${IC.close}</button></div>${hist.length?`<div class="list">${hist.slice(0,20).map(h=>`<div class="it"><div class="g"><b>${rangeLabel(h.vs)}</b><div class="note">${fmtD(h.date)} · ${fmtT(h.time)}</div></div><span class="pill ${h.acc>=90?"ok":h.acc>=70?"warn":"bad"}">${num(h.acc)}%</span></div>`).join("")}</div>`:`<p class="note">${t("noHist")}</p>`}`);
   $("#misOpen").onclick=()=>MISL.openSheet();
-  rp.bind(m);const go=view=>{unlockAudio();this.newRun(range(this.setup.from,this.setup.to));this.run.view=view;this.save();history.pushState(null,"","#memorize/run");this.render();window.scrollTo(0,0);bismillah();if(SR&&!this.listening)this.toggleMic()};
+  rp.bind(m);const go=view=>{unlockAudio();this.newRun(range(this.setup.from,this.setup.to));this.run.view=view;this.save();history.pushState(null,"","#memorize/run");this.render();window.scrollTo(0,0);bismillah()};
   $("#mstart").onclick=()=>go(ps.get("lastView",0));
-  if(saved){$("#mcont").onclick=()=>{unlockAudio();this.run=saved;history.pushState(null,"","#memorize/run");this.render();bismillah();if(SR&&!this.listening)this.toggleMic()};$("#mdisc").onclick=()=>{const bid=BIN.add("ls",{en:t("discard"),ar:t("discard"),ls:BIN.snap("tuhfa2.p."+PID+".session")});ps.del("session");this.render();BIN.pop(["bin:"+bid],1)}}
+  if(saved){$("#mcont").onclick=()=>{unlockAudio();this.run=saved;history.pushState(null,"","#memorize/run");this.render();bismillah()};$("#mdisc").onclick=()=>{const bid=BIN.add("ls",{en:t("discard"),ar:t("discard"),ls:BIN.snap("tuhfa2.p."+PID+".session")});ps.del("session");this.render();BIN.pop(["bin:"+bid],1)}}
 },
  wordHTML(k){const r=this.run,w=this.W[k],s=r.st[k]||0;const cls=["m"];let inner=qh(w.w);if(w.q)cls.push("qt");
   if(s===0&&r.pk&&r.pk[k]){cls.push("peeked","seen");if(k===r.idx)cls.push("cur")}
@@ -2355,7 +2392,7 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   <button class="qk" type="button" id="qBack">${IC.undo}<span>${t("backL")}</span></button>`},
  chNav(){const r=this.run;const a=chOf(r.verses[0]),b=chOf(r.verses[r.verses.length-1]);
   return `${a>0?`<button class="qk" type="button" id="chPrev">${IC.back}<span>${t("prevCh")}</span></button>`:""}${b<CH.length-1?`<button class="qk" type="button" id="chNext"><span>${t("nextCh")}</span><span class="flipx2">${IC.back.replace('class="flipx" ',"")}</span></button>`:""}`},
- goChapter(i){const view=this.run?this.run.view||0:0;this.stopMic(true);const c=CH[i];this.setup={from:c[0],to:c[1]};ps.set("memRange",this.setup);this.newRun(range(c[0],c[1]));this.run.view=view;this.save();this.render();window.scrollTo(0,0);bismillah();if(SR&&!this.listening)this.toggleMic()},
+ goChapter(i){const view=this.run?this.run.view||0:0;this.stopMic(true);const c=CH[i];this.setup={from:c[0],to:c[1]};ps.set("memRange",this.setup);this.newRun(range(c[0],c[1]));this.run.view=view;this.save();this.render();window.scrollTo(0,0);bismillah()},
  /* "again": you are already trying this word (a slip was heard, or nothing moved for a few words), so a close word is enough. */
  again(){const r=this.run;return !!r.tries[r.idx]||(this.stuck||0)>=2},
  /* The expected word was heard. If an earlier try was also close, that was the phone mishearing you, not a mistake. */
@@ -2376,9 +2413,9 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   b.innerHTML=this.listening?`${IC.pause}<b>${t("pauseL")}</b>`:paused?`${IC.play}<b>${t("resumeL")}</b>`:`${IC.mic}<b>${t("startL")}</b>`;
   const l=$("#micl");l.className="mst "+(this.listening?"live":paused?"pz":"");l.innerHTML=this.listening?`<i></i>${t("listening")}`:paused?`${IC.pause}${t("paused")}`:t("startL");this.tryUI()},
  /* The slim row above the buttons: what is happening now, and three helpers (one word back, skip a word, start again). */
- rqHTML(){return `<div class="rq" id="rq"><span class="rs" id="rqS"></span><button type="button" data-rq="back">${IC.wback}${t("wBack")}</button><button type="button" data-rq="skip">${IC.wskip}${t("wSkip")}</button><button type="button" data-rq="again">${IC.wagain}${t("wAgain")}</button></div>`},
+ rqHTML(){return `<div class="rq" id="rq"><span class="rs" id="rqS"></span><span class="hrd" id="rqH"></span><button type="button" data-rq="back">${IC.wback}${t("wBack")}</button><button type="button" data-rq="skip">${IC.wskip}${t("wSkip")}</button><button type="button" data-rq="again">${IC.wagain}${t("wAgain")}</button></div>`},
  rqBind(){const q=$("#rq");if(!q)return;q.onclick=e=>{const b=e.target.closest("[data-rq]");if(!b||!this.run)return;const k=b.dataset.rq;if(k==="back")this.wordBack();else if(k==="skip")this.skipWord();else this.again2()};this.tryUI()},
- tryUI(){const s=$("#rqS"),r=this.run;if(!s||!r)return;const n=r.tries[r.idx]||0,paused=!this.listening&&r.part;
+ tryUI(){const s=$("#rqS"),r=this.run;if(!s||!r)return;if(!this.listening)heardLine($("#rqH"),null);const n=r.tries[r.idx]||0,paused=!this.listening&&r.part;
   s.className="rs"+(n&&this.listening?" tr":this.listening?"":paused?" ps":" off");
   s.innerHTML=`<i></i>${n&&this.listening?(ST.tries?t("tryN").replace("{a}",num(n+1)).replace("{b}",num(ST.tries)):t("tryAgain")):this.listening?t("listening"):paused?t("paused"):t("startL")}`},
  /* One word back: the last word is open again (hidden if the words are hidden), so you can say it again. */
@@ -2524,8 +2561,9 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
    r.tries[i]=(r.tries[i]||0)+1;r.said[i]=raw;r.mist++;(r.mt=r.mt||{})[i]=Date.now();this.undo=(this.undo||[]).concat([i]).slice(-2);this.misUI();onWrong();this.attention(i);this.tryUI();
    if(ST.tries&&r.tries[i]>=ST.tries){triedOut();r.st[i]=2;this.advance();this.offerHint()}else this.save()}},
  async toggleMic(){unlockAudio();if(this.listening){this.stopMic(true);return}if(IN_FRAME||micState==="denied"){this.note();return}
-  const r=this.run;let recOK=false;if(ST.rec){r.part=(r.part||0)+1;recOK=await Rec.start(rangeLabel(r.verses)+(r.part>1?" · "+num(r.part):""))}
-  let srOK=false;if(ST.mode==="voice"&&SR){this.lis=new Listener((w,rev)=>this.heard(w,rev),s=>{if(s==="denied"){this.stopMic(true);this.note()}});this.lis.onPeek=w=>this.peek(w);srOK=this.lis.start()}
+  const r=this.run;r.part=(r.part||0)+1;let srOK=false;if(ST.mode==="voice"&&SR){this.lis=new Listener((w,rev)=>this.heard(w,rev),s=>{if(s==="denied"){this.stopMic(true);this.note()}});this.lis.onPeek=w=>this.peek(w);this.lis.onHear=(x,q)=>heardLine($("#rqH"),x,q);srOK=this.lis.start()}
+  /* On iPhone, recording your voice at the same time stops the phone from hearing you, so there it only listens. */
+  let recOK=false;if(ST.rec&&!(IOS&&srOK))recOK=await Rec.start(rangeLabel(r.verses)+(r.part>1?" · "+num(r.part):""));
   if(!recOK&&!srOK){if(ST.rec||(ST.mode==="voice"&&SR))micState="denied";this.note();return}
   this.listening=true;this.held=false;$("#mhint")&&$("#jYes")&&($("#mhint").innerHTML="");this.micUI();$("#mlive").innerHTML=`<span class="pill live">${srOK?t("listening"):t("recording")}</span>`;this.note();bismillah()},
  stopMic(save){if(this.lis){this.lis.stop();this.lis=null}this.listening=false;Rec.stop(save&&ST.rec);this.micUI();const l=$("#mlive");if(l)l.innerHTML=this.run?`<span class="pill">${t("paused")}</span>`:"";this.save()},
@@ -2548,7 +2586,7 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
    <div class="row">${mvs.length?`<button class="btn pri" type="button" id="fm">${t("retryM")}</button>`:""}<button class="btn out" type="button" id="fa">${IC.retry}${t("again")}</button><button class="btn soft" type="button" id="fn">${t("newS")}</button><button class="btn soft" type="button" id="fmis">${OW("Recitation review","مراجعة التسميع")}</button></div>
    ${(()=>{const a=chOf(r.verses[0]),b=chOf(r.verses[r.verses.length-1]);return `<nav class="pgnav">${a>0?`<button type="button" class="pg-prev" id="fprev"><small>${t("prevCh")}</small><b lang="ar">${CH[a-1][2]}</b></button>`:"<span></span>"}${b<CH.length-1?`<button type="button" class="pg-next" id="fnext"><small>${t("nextCh")}</small><b lang="ar">${CH[b+1][2]}</b></button>`:""}</nav>`})()}</div></div>`;
   {const a=chOf(r.verses[0]),b=chOf(r.verses[r.verses.length-1]);const fp=$("#fprev"),fx=$("#fnext");const go=i=>{$("#modal").innerHTML="";this.run={view:r.view||0};this.goChapter(i)};if(fp)fp.onclick=()=>go(a-1);if(fx)fx.onclick=()=>go(b+1)}
-  if(mvs.length)$("#fm").onclick=()=>{this.newRun(mvs);this.render();bismillah();this.toggleMic()};$("#fa").onclick=()=>{this.newRun(r.verses);this.render();bismillah();this.toggleMic()};$("#fn").onclick=()=>this.render();$("#fmis").onclick=()=>MISL.openSheet();
+  if(mvs.length)$("#fm").onclick=()=>{this.newRun(mvs);this.render();bismillah()};$("#fa").onclick=()=>{this.newRun(r.verses);this.render();bismillah()};$("#fn").onclick=()=>this.render();$("#fmis").onclick=()=>MISL.openSheet();
   if($("#fmv"))$("#fmv").onclick=()=>MV.open(MISL.all().filter(m=>m.t===r.misDate),0,{del:m=>{BIN.pop([BIN.mis(m.id)],1);const i=+m.id.split("-")[1];r.mist=Math.max(0,r.mist-(r.tries[i]||1));r.st[i]=5;delete r.said[i];delete r.tries[i];const y=scrollY;this.showResults(r,W,false);scrollTo(0,y)}});
   $$("[data-play]",this.root()).forEach(b=>b.onclick=()=>{unlockAudio();const w=W[+b.dataset.play];Player.playSeg(AUDIO.words[`${w.v}:${w.h}:${w.i}`],1,"word")});
   $$("[data-ok]",this.root()).forEach(b=>b.onclick=()=>{const i=+b.dataset.ok;if(r.misDate)MISL.del(r.misDate.toString(36)+"-"+i);r.mist=Math.max(0,r.mist-(r.tries[i]||1));r.st[i]=5;delete r.said[i];delete r.tries[i];toast(t("undoDone"));const y=scrollY;this.showResults(r,W,false);scrollTo(0,y)});
