@@ -2600,7 +2600,11 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
  /* Reciting from any verse: at the end of a chapter, carry on into the next one instead of stopping. */
  advanceAny(){const r=this.run,last=r.verses[r.verses.length-1];if(!r.any||last>=61)return false;const c=CH[chOf(last+1)];r.verses=r.verses.concat(range(last+1,c[1]));this.save();this.renderRun();return true},
  /* Where are you reciting? The last two or three words heard, in a row, anywhere in the poem (nearest first). */
- locate(seq){const cur=this.W[this.run.idx];if(!cur)return null;const cg=gOf(cur);
+ locate(seq){const c0=this.locate0(seq);if(!c0)return null;
+  /* Words your own verse also has (الإخفاء، الباء، ميما، بغنة…) never take you elsewhere: that is a slip in this verse (Tasnim) */
+  const cur=this.W[this.run.idx],own=ALLW.filter(x=>Math.abs(x.v-cur.v)<=0||x.v===cur.v-1&&x.h===1).map(x=>x.n),tail=seq.slice(-(c0.L||2));
+  if(tail.filter(h=>own.some(n=>wmatch(h,n))).length*2>=tail.length)return null;return c0},
+ locate0(seq){const cur=this.W[this.run.idx];if(!cur)return null;const cg=gOf(cur);
   for(const L of [3,2]){if(seq.length<L)continue;const tail=seq.slice(-L);if(tail.join("").length<5)continue;let best=null;
    for(let p=L-1;p<ALLW.length-1;p++){let ok=true;for(let k=0;k<L;k++)if(!wmatch(tail[k],ALLW[p-L+1+k].n)){ok=false;break}
     if(!ok)continue;const g=p+1;if(best==null||Math.abs(g-cg)<Math.abs(best-cg))best=g}
