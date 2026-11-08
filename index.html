@@ -1683,7 +1683,9 @@ function wnear(h,e,again){if(wmatch(h,e))return true;if(!h||!e)return false;cons
  if(t(fold(h),fold(e))||t(fold("-"+h).slice(1),fold("-"+e).slice(1)))return true;
  /* the phone writes a related form (غنه heard as يغنون): same core letters, when you are on that word */
  const stem=x=>{x=fold(x);if(x.length>3)x=x.replace(/^[يتن]/,"");return x.replace(/(ون|ين|ان|ه|ي|و)$/,"")};
- return !!again&&e.length>=3&&stem(e).length>=2&&stem(h)===stem(e)}
+ if(!again)return false;if(e.length>=3&&stem(e).length>=2&&stem(h)===stem(e))return true;
+ /* the phone caught only the start of a long word (كَرِّرَنَّهْ heard as "كرر"): most of it, when you are on that word */
+ return e.length>=5&&h.length>=3&&h.length>=.6*e.length&&(e.startsWith(h)||fold(e).startsWith(fold(h)))}
 /* Reading on without stopping: do the last words heard match words a little further on? Then you are there.
    Two words in a row are enough (kindly checked), or one long word heard exactly. anch = how many heard words matched. */
 function catchUp(S,W,i){const L=S.length;if(!L)return null;const end=Math.min(W.length,i+11);
@@ -2191,6 +2193,10 @@ const HEAR={
 const HT=()=>HEAR[LANG]||HEAR.en;
 const hesc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 /* The small grey line under "Listening": the last words the phone wrote down, so you can see it is hearing you. */
+/* A slow, gentle scroll (Tasnim: "scroll slowly so I see the last verse"), never a jump. */
+function slowBy(dy,ms){if(Math.abs(dy)<6)return;if(matchMedia("(prefers-reduced-motion: reduce)").matches){scrollBy({top:dy,behavior:"instant"});return}ms=ms||Math.min(1100,450+Math.abs(dy)*1.2);
+ const y0=scrollY,t0=performance.now(),id=(slowBy.id=(slowBy.id||0)+1);const ease=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2;
+ const st=n=>{if(id!==slowBy.id)return;const k=Math.min(1,(n-t0)/ms);scrollTo({top:y0+dy*ease(k),behavior:"instant"});if(k<1)requestAnimationFrame(st)};requestAnimationFrame(st)}
 function heardLine(el,txt,quiet){if(!el)return;const T=HT();
  if(quiet){el.className="hrd hq";el.innerHTML=`${hesc(T.quiet)} <button type="button" data-hearhelp>${hesc(T.help)}</button>`;return}
  if(txt==null){el.className="hrd";el.innerHTML="";return}
@@ -2383,7 +2389,15 @@ poemEl.addEventListener("click",e=>{const w=e.target.closest(".w");if(w){const [
 /* ================= zoom fits the screen: all lines grow together and shrink just enough to fit, words never move ================= */
 function fitLines(){const roots=[$("#poemText"),$("#mz")].filter(x=>x&&x.offsetParent);for(const root of roots){root.style.setProperty("--fit",1);
   let k=1;root.querySelectorAll(".hm").forEach(h=>{if(!h.offsetParent)return;const w=h.clientWidth,sw=h.scrollWidth;if(sw>w+1)k=Math.min(k,w/sw)});
-  if(k<1)root.style.setProperty("--fit",Math.max(.4,k*.97).toFixed(3))}}
+  if(k<1)root.style.setProperty("--fit",Math.max(.4,k*.97).toFixed(3))}
+ /* each half-verse on one line (Tasnim: "سَمَا" alone on a line in verse 16): a long half gets a little smaller, only as much as needed */
+ const mz=$("#mz");if(mz&&mz.offsetParent)mz.querySelectorAll(".bayt .hm p").forEach(p=>{p.style.fontSize="";const ws=[...p.querySelectorAll(".m")];if(ws.length<2)return;
+  const R=ws.map(w=>w.getBoundingClientRect());if(Math.abs(R[0].top-R[R.length-1].top)<R[0].height/2)return;
+  /* wraps: words + the spaces between them (measured on the first line) must fit the line */
+  let g=0,gn=0;for(let k=1;k<R.length;k++)if(Math.abs(R[k].top-R[k-1].top)<2){g+=Math.abs(R[k-1].left-R[k].right);gn++}const gap=gn?g/gn:8;
+  const need=R.reduce((a,r)=>a+r.width,0)+gap*(R.length-1),cs=getComputedStyle(p),cw=p.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight)-2;if(!(cw>0&&need>cw))return;let f=Math.max(.68,cw/need*.96);p.style.fontSize=f.toFixed(3)+"em";
+  const one=()=>{const a=ws[0].getBoundingClientRect(),b=ws[ws.length-1].getBoundingClientRect();return Math.abs(a.top-b.top)<a.height/2};
+  for(let t=0;t<5&&f>.68&&!one();t++){f=Math.max(.68,f*.95);p.style.fontSize=f.toFixed(3)+"em"}})}
 let fitT=0;const refit=()=>{cancelAnimationFrame(fitT);fitT=requestAnimationFrame(()=>requestAnimationFrame(fitLines))};
 window.addEventListener("resize",refit);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(refit);
 /* ================= book view: one page (chapter) at a time; swipe or tap to turn ================= */
@@ -2574,9 +2588,18 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   for(const L of [3,2]){if(seq.length<L)continue;const tail=seq.slice(-L);if(tail.join("").length<5)continue;let best=null;
    for(let p=L-1;p<ALLW.length-1;p++){let ok=true;for(let k=0;k<L;k++)if(!wmatch(tail[k],ALLW[p-L+1+k].n)){ok=false;break}
     if(!ok)continue;const g=p+1;if(best==null||Math.abs(g-cg)<Math.abs(best-cg))best=g}
-   if(best!=null&&L===2&&Math.abs(best-cg)>14)continue;if(best!=null)return best===cg?null:{g:best,L}}return null},
+   if(best!=null&&L===2&&Math.abs(best-cg)>14)continue;if(best!=null)return best===cg?null:{g:best,L}}
+  /* You went to another chapter or verse far away (Tasnim: "I'm reading a different chapter and it's not following me"):
+     the last words heard, found in ONE place only in the whole poem, even if the phone wrote one of them a little differently. */
+  const H=(this.hbuf||seq).slice(-5);
+  for(const L of [4,3,2]){if(H.length<L)continue;const tail=H.slice(-L);if(tail.join("").length<(L===2?7:8))continue;const hits=[];
+   for(let p=L-1;p<ALLW.length;p++){let ok=0;for(let k=0;k<L;k++){const n=ALLW[p-L+1+k].n,h=tail[k];if(wmatch(h,n)||(h.length>=2&&fold(n).endsWith(fold(h))&&k===0))ok++}
+    if(ok>=(L===4?3:L)&&wmatch(tail[L-1],ALLW[p].n))hits.push(p+1)}
+   if(hits.length===1){const g=hits[0];return g===cg||!ALLW[g]?null:{g,L}}if(hits.length>1)continue}return null},
  /* Follow the reader back or ahead. The words that led there were not mistakes. A long way keeps a button to return. */
  follow(g,L){const r=this.run,cur=this.W[r.idx],cg=gOf(cur),tg=ALLW[g];if(!tg)return;
+  /* the phone will send the words before this again: they must not pull you back to where you were (Tasnim: went back to verse 12, stayed on 13) */
+  this.fol=1;
   for(const k of this.undo||[])if(r.tries[k]){r.tries[k]--;r.mist=Math.max(0,r.mist-1);if(!r.tries[k]){delete r.tries[k];delete r.said[k];if(r.st[k]===2)delete r.st[k]}}
   this.undo=[];this.trail=[];this.cand=null;
   if(Math.abs(g-cg)>16||Math.abs(tg.v-cur.v)>=2){if(!r.ret||(g<cg&&cg>gOf(r.ret))){r.ret={v:cur.v,h:cur.h,i:cur.i};r.retDir=g<cg?1:-1}}
@@ -2668,13 +2691,16 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
  curVerse(){$$("#mz .bayt.cur").forEach(x=>x.classList.remove("cur"));const w=this.W[this.run.idx];if(w){const b=$("#m"+w.v);b&&b.classList.add("cur")}
   /* the chapter you are reading in, always in the top bar */
   const m=$("#mch");if(m){const ci=w?chOf(w.v):-1;m.textContent=ci<0?"":(LANG==="ar"?CH[ci][2]:CH[ci][3]);m.hidden=ci<0}},
- scrollCur(instant){const el=$(`#mz .m[data-k="${this.run.idx}"]`);if(!el)return;const rc=el.getBoundingClientRect(),d=$(".dock .rq")||$(".dock"),lim=d?d.getBoundingClientRect().top-24:innerHeight-150;
+ /* Keep the verse you just finished in view above the one you are on, so you remember how it goes. */
+ scrollCur(instant){const el=$(`#mz .m[data-k="${this.run.idx}"]`);if(!el)return;const rc=el.getBoundingClientRect(),vis=x=>x&&x.getBoundingClientRect().height>0?x:null,d=vis($(".dock .rq"))||vis($(".dock")),lim=d?d.getBoundingClientRect().top-24:innerHeight-150;
   /* keep the word you are on above the buttons at the bottom, never under them */
   /* and never under the bar at the top either (Tasnim: "I can't even see what I'm reading") */
   const hd=$(".mhead"),top=Math.max(120,(hd?hd.getBoundingClientRect().bottom:120)+16);
   /* show the whole verse you are on when it fits, starting just under the top bar */
   const b=el.closest(".bayt"),br=b&&b.getBoundingClientRect(),fits=br&&br.height<lim-top-8;
-  if(rc.top<top||rc.bottom>lim||(fits&&br.top<top-6)){const dy=fits?br.top-(top+4):rc.top-Math.max(top,top+(lim-top)/2-rc.height);window.scrollBy({top:dy,behavior:instant?"auto":"smooth"})}},
+  const pv=b&&b.id&&$("#mz #m"+(+b.id.slice(1)-1)),pr=pv&&pv.getBoundingClientRect(),both=fits&&pr&&br.bottom-pr.top<lim-top-8;
+  const need=rc.top<top||rc.bottom>lim||(fits&&(br.top<top-6||br.bottom>lim))||(both&&pr.top<top-6);if(!need)return;
+  const dy=both?pr.top-(top+4):fits?br.top-(top+4):rc.top-Math.max(top,top+(lim-top)/2-rc.height);if(instant)window.scrollBy(0,dy);else slowBy(dy)},
  advance(){const r=this.run;const old=r.idx;this.stuck=0;this.trail=[];this.since=[];{const s=r.st[old];const el=$(`#mz .m[data-k="${old}"]`);if(s===1||s===4){this.combo=(this.combo||0)+1;addXP(s===1?5:2,el);if(this.combo%10===0&&ST.game)setTimeout(()=>popFx(`${t("combo")} ×${num(this.combo)}`,el,"combo"),200)}else this.combo=0;const w=this.W[old],nx=this.W[old+1];if(w&&(!nx||nx.v!==w.v)){const good=this.W.every((x,k)=>x.v!==w.v||r.st[k]===1||r.st[k]===5);if(good)addXP(20,el)}}r.idx++;this.setW(old);if(r.idx<this.W.length)this.setW(r.idx);this.prog();this.curVerse();this.tryUI();
   if(r.ret&&r.retDir>0&&r.idx<this.W.length&&gOf(this.W[r.idx])>=gOf(r.ret)){r.ret=null;this.retUI()}this.save();if(r.idx>=this.W.length){if(!this.advanceAny()&&!this.askNext())this.finish();return}this.scrollCur()},
  /* End of a chapter (Tasnim): "Continue to the next chapter" or "Done". Just reading on into the next chapter also continues. */
@@ -2693,11 +2719,11 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   $("#hintOn").onclick=()=>{this.run.view=1;this.applyView();this.save();n.innerHTML=""};clearTimeout(this._ht);this._ht=setTimeout(()=>{if($("#mhint"))$("#mhint").innerHTML=""},7000)},
  revealVerse(){const r=this.run;const v=this.W[r.idx]&&this.W[r.idx].v;while(r.idx<this.W.length&&this.W[r.idx].v===v){r.st[r.idx]=3;r.peeks++;this.setW(r.idx);r.idx++}
   if(r.idx<this.W.length)this.setW(r.idx);this.prog();this.curVerse();this.save();if(r.idx>=this.W.length)this.finish();else this.scrollCur()},
- heard(words,rev){rev=rev||0;const r=this.run;if(!r||this.held)return;if(r.find){this.findHeard(words,rev);return}
+ heard(words,rev){rev=rev||0;if(!rev)this.fol=0;const r=this.run;if(!r||this.held)return;if(r.find){this.findHeard(words,rev);return}
   if(r.choose){const v=r.verses[r.verses.length-1]+1,f=ALLW.find(x=>x.v===v),tw=this.titleW(v);
    for(let wi=0;wi<words.length;wi++){const h=norm(words[wi]);if(h&&(wnear(h,f.n,false)||tw.some(x=>x===h||(h.length>3&&sim(h,x)>=.75)))){this.contNext();return this.heard(words.slice(wi),Math.max(0,rev-wi))}}return}for(let wi=0;wi<words.length;wi++){const raw=words[wi];if(this.held)return;const h=norm(raw);if(r.idx>=this.W.length)return;const W=this.W,i=r.idx,e=W[i];
    /* a rewrite (from the phone) of a word you already passed is just that: never use it again (repeated phrases) */
-   if(wi<rev){let back=false;for(let b=1;b<=12;b++)if(W[i-b]&&wnear(h,W[i-b].n,false)){back=true;break}if(back)continue}
+   if(wi<rev&&this.fol)continue;if(wi<rev){let back=false;for(let b=1;b<=12;b++)if(W[i-b]&&wnear(h,W[i-b].n,false)){back=true;break}if(back)continue}
    if(h){this.hbuf=(this.hbuf||[]).concat([h]).slice(-6)}
    /* A chapter title said before the chapter's first verse (e.g. أحكام الميم الساكنة): taken as the title, never as a mistake,
       and never matched to the verse's own words. Skipping the title is fine too. */
@@ -2715,6 +2741,7 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
    if(i>0&&W[i-1].v===e.v&&wnear(h,W[i-1].n+e.n,true)){this.hit();continue}
    /* The phone rewrote words it already gave (iPhone does this all the time): they can still show you read on (Tasnim: stuck on حاء
       while "مهملة ثم غين خاء" was heard). Then catch up with you; rewritten words never make mistakes. */
+   if(wi<rev&&this.fol)continue;
    if(wi<rev){/* a rewrite of words already passed is just that: only words not found just behind can move you on */
     {let back=false;for(let b=1;b<=12;b++)if(W[i-b]&&wnear(h,W[i-b].n,false)){back=true;break}if(back){this.since=[];continue}}
     const S=(this.since||[]).concat([h]);const c=catchUp(S,W,i);
