@@ -1502,6 +1502,13 @@ body.dockpad #memRoot{margin-top:-20px}
 
 /* Tasnim: the Arabic interface uses IBM Plex Sans Arabic everywhere; the poem, Quran, hadith and the names keep their vowelled book fonts */
 html[lang="ar"] .top .brand,html[lang="ar"] .top .brand b,.top .brand [lang="ar"],.top .brand b.l-ar,footer .fbn,.lvt,.toast [lang="ar"]{font-family:"Plex Arabic","IBM Plex Sans Arabic",system-ui,sans-serif!important;font-weight:700!important;letter-spacing:0}
+
+/* Home page polish (Tasnim, 2026-11-08): no second book name above the big title on a phone; readable facts row; interface font for the tagline and facts; less empty space on top */
+@media (max-width:560px){body.athome .top .brand{display:none!important}body.athome .top .bar1{padding-top:8px!important}}
+section.hero .lead,section.hero .lead *,section.hero .facts,section.hero .facts *{font-family:"Site","Plex Arabic","IBM Plex Sans Arabic",system-ui,sans-serif!important}
+section.hero .facts{opacity:1!important;color:var(--muted)!important}
+section.hero .facts li,section.hero .facts li *{font-size:.86rem!important;line-height:1.5}section.hero .facts b{color:var(--ink)!important;font-weight:700!important}
+@media (max-width:560px){section.hero.pat{padding-top:18px!important}section.hero .facts{flex-wrap:wrap!important;white-space:normal!important;row-gap:6px;justify-content:center}}
 </style>
 </head>
 <body>
@@ -3251,5 +3258,6 @@ addEventListener("scroll",tuckFab,{passive:true});addEventListener("hashchange",
 </script>
 
 <script>/* the sticky bars sit right under the header, whatever its height */(function(){const t=document.querySelector(".top");if(!t)return;const f=()=>document.documentElement.style.setProperty("--toph",t.offsetHeight+"px");f();try{new ResizeObserver(f).observe(t)}catch(e){addEventListener("resize",f)}})();</script>
+<script>(()=>{const h=()=>document.body.classList.toggle("athome",!location.hash||/^#home\b/.test(location.hash));addEventListener("hashchange",h);addEventListener("popstate",h);if(document.body)h();else addEventListener("DOMContentLoaded",h)})()</script>
 </body>
 </html>
