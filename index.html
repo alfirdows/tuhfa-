@@ -2535,7 +2535,7 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
  /* Peek: show the current hidden word. It then counts as read, not from memory. */
  peekCur(){const r=this.run,k=r&&r.idx;if(!r||r.find||k>=this.W.length||r.st[k]||(r.view||0)===2)return;r.pk=r.pk||{};if(r.pk[k])return;r.pk[k]=1;r.peeks++;this.setW(k);this.save()},
  ok(k){const r=this.run;return (r.view||0)===2||(r.pk&&r.pk[k])?3:1},
- hit(){const r=this.run,i=r.idx,e=this.W[i];onRight();this.cand=null;this.undo=[];
+ hit(){const r=this.run,i=r.idx,e=this.W[i];onRight();this.cand=null;this.undo=[];this.fcand=null;
   if(r.tries[i]&&r.said[i]&&wnear(norm(r.said[i]),e.n,true)){r.mist=Math.max(0,r.mist-r.tries[i]);delete r.tries[i];delete r.said[i]}
   r.st[i]=r.tries[i]?4:this.ok(i);this.advance();this.misUI()},
  /* Is this heard word part of the chapter title, said before the chapter's first verse? (Tasnim: saying
@@ -2798,7 +2798,9 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
    this.trail=(this.trail||[]).concat([h]).slice(-3);if(this.trail.length>=2){const c=this.locate(this.trail);
     /* Tasnim: "don't follow me to another verse unless I repeat 3 times": follow only after 3 words in a row read on from that other place.
        Until then you stay on your verse, and those words are not mistakes. */
-    if(c){const f=this.fcand;if(f&&f.at===r.idx&&c.g>f.g&&c.g-f.g<=4){f.n++;f.g=c.g}else this.fcand={g:c.g,n:1,at:r.idx};
+    /* one "time" = one go at that verse: a new go starts when you begin it again or after a pause */
+    if(c){const tv=ALLW[c.g]?ALLW[c.g].v:-1,now=Date.now(),f=this.fcand;
+     if(f&&f.v===tv){if(c.g<=f.g||now-f.t>2500)f.n++;f.g=c.g;f.t=now}else this.fcand={v:tv,g:c.g,n:1,t:now};
      if(this.fcand.n>=3){this.fcand=null;this.follow(c.g,c.L);return}continue}}
    /* Repeating a word just said (to get going again) is fine. */
    let rep=false;for(let b=1;b<=8;b++)if(W[i-b]&&wnear(h,W[i-b].n,true)){rep=true;break}if(rep)continue;
