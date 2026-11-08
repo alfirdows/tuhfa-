@@ -1439,13 +1439,19 @@ html,body{overflow-x:clip}
 /* Recite screen, compact (Tasnim: "too big, barely a few verses"): many more verses fit on a phone; nothing removed */
 .mtext{padding:2px 10px!important}
 .mtext .bayt{padding:7px 2px!important;gap:0!important}
-.mtext .hm{font-size:min(calc(1.3rem*var(--fs)),5.6vw)!important;line-height:1.7!important;gap:0 .4em!important;overflow:visible!important}
+.mtext .hm{font-size:min(calc(1.34rem*var(--fs)),5.7vw)!important;line-height:2.1!important;word-spacing:.14em;gap:0 .4em!important;overflow:visible!important}
 /* a half-verse never runs off the screen: it wraps instead (Tasnim: words cut off) */
 .mtext .hm p{white-space:normal!important;overflow-wrap:anywhere}.mtext .hm p.a{padding-right:3%!important}
 .mtext .chh{padding:6px 8px 5px!important;margin:4px 0 0!important}
 .mtext .chh h3{font-size:1.02rem!important;line-height:1.45!important}
 .mtext .chh p{font-size:.78rem}
-body.dockpad #memRoot{margin-top:-14px}
+body.dockpad #memRoot{margin-top:-20px}
+.mtext .bayt{padding:4px 2px!important}
+/* the book name is shown in full on a phone: it may take two short lines instead of being cut off (Tasnim) */
+@media (max-width:520px){.brand b,.brand .ebrand{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;font-size:1.02rem!important;line-height:1.2!important}.brand{overflow:visible!important;min-width:92px!important;flex:1 1 0!important}}
+/* Memorize start page: less empty space (Tasnim) */
+#memRoot .stack{gap:12px!important}#memRoot .head h2{margin-bottom:2px}#memRoot .head p{margin:0}
+#view-memorize .sec{padding-top:10px!important}
 </style>
 </head>
 <body>
