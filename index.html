@@ -2670,6 +2670,8 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
     ${manual?`<button class="db ok" type="button" id="dok">${IC.ok}<span>${t("correct")}</span></button>`:`<button class="db" type="button" id="mvOpen">${IC.rev}<span>${OW("Review","مراجعة")}</span><b class="cnt" id="mmis" hidden></b></button>`}
     <button class="db endb" type="button" id="dend"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg><span>${t("endL")}</span></button></div></div>`;
   this.applyView();this.prog();this.note();this.curVerse();this.micUI();this.misUI();this.retUI();refit();this.rqBind();
+  /* after drawing again (e.g. going on to the next chapter) stop any old scroll and bring you to where you are: the verse before, the new chapter title, your verse */
+  slowBy.id=(slowBy.id||0)+1;clearTimeout(this._rs);this._rs=setTimeout(()=>{if(this.run&&ROUTE==="memorize")this.scrollCur()},120);
   if(!IN_FRAME&&!micGranted&&micState!=="denied"&&(ST.rec||ST.mode==="voice"))askMic().then(()=>this.note());
   const setView=(v,quiet)=>{if(v===(r.view||0))return;r.view=v;if(v)r.peeks++;ps.set("lastView",v);this.applyView();this.save();if(!quiet)toast([t("vHidden"),t("vHint"),t("vShown")][v],"",3000);const b=$("#vBtn");if(b)b.innerHTML=`${v===2?IC.eyeoff:IC.eye}<span>${v===2?OW("Hide words","أخفِ الكلمات"):OW("Show words","أظهر الكلمات")}</span>`;const pb=$("#pkW");if(pb)pb.hidden=v===2;const hb=$("#hintBtn");if(hb){hb.classList.toggle("on",v===1);hb.setAttribute("aria-pressed",v===1)}};
   if($("#pkBtn"))$("#pkBtn").onclick=()=>this.peekCur();
@@ -2789,7 +2791,11 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
    /* Nothing moved: after a few words, listen afresh so the phone stops repeating the same wrong guess. */
    this.stuck=(this.stuck||0)+1;if(this.stuck===3&&this.lis)this.lis.refresh();
    /* Words from another place: after two in a row, follow you there, back or ahead, anywhere in the poem. */
-   this.trail=(this.trail||[]).concat([h]).slice(-3);if(this.trail.length>=2){const c=this.locate(this.trail);if(c){this.follow(c.g,c.L);return}}
+   this.trail=(this.trail||[]).concat([h]).slice(-3);if(this.trail.length>=2){const c=this.locate(this.trail);
+    /* Tasnim: "don't follow me to another verse unless I repeat 3 times": follow only after 3 words in a row read on from that other place.
+       Until then you stay on your verse, and those words are not mistakes. */
+    if(c){const f=this.fcand;if(f&&f.at===r.idx&&c.g>f.g&&c.g-f.g<=4){f.n++;f.g=c.g}else this.fcand={g:c.g,n:1,at:r.idx};
+     if(this.fcand.n>=3){this.fcand=null;this.follow(c.g,c.L);return}continue}}
    /* Repeating a word just said (to get going again) is fine. */
    let rep=false;for(let b=1;b<=8;b++)if(W[i-b]&&wnear(h,W[i-b].n,true)){rep=true;break}if(rep)continue;
    r.tries[i]=(r.tries[i]||0)+1;r.said[i]=raw;r.mist++;(r.mt=r.mt||{})[i]=Date.now();this.undo=(this.undo||[]).concat([i]).slice(-2);this.misUI();
@@ -3259,5 +3265,11 @@ addEventListener("scroll",tuckFab,{passive:true});addEventListener("hashchange",
 
 <script>/* the sticky bars sit right under the header, whatever its height */(function(){const t=document.querySelector(".top");if(!t)return;const f=()=>document.documentElement.style.setProperty("--toph",t.offsetHeight+"px");f();try{new ResizeObserver(f).observe(t)}catch(e){addEventListener("resize",f)}})();</script>
 <script>(()=>{const h=()=>document.body.classList.toggle("athome",!location.hash||/^#home\b/.test(location.hash));addEventListener("hashchange",h);addEventListener("popstate",h);if(document.body)h();else addEventListener("DOMContentLoaded",h)})()</script>
+<script>(()=>{/* Guard (Tasnim: "why are you hiding"): while reciting, the verse you are on can never end up out of view. If the page ever
+  scrolls away from it (and you are not scrolling yourself), it comes straight back with the verse before it. */
+ let touch=0;["touchstart","touchmove","wheel","keydown"].forEach(e=>addEventListener(e,()=>{touch=Date.now()},{passive:true}));
+ setInterval(()=>{try{if(typeof Mem==="undefined"||!Mem.run||!Mem.listening||ROUTE!=="memorize"||Date.now()-touch<4000)return;const z=document.getElementById("mz");if(!z)return;
+  if(!z.querySelector(".bayt")){Mem.renderRun();return}const c=z.querySelector(".bayt.cur");if(!c)return;const r=c.getBoundingClientRect(),hd=document.querySelector(".mhead"),top=hd?hd.getBoundingClientRect().bottom:120;
+  const d=document.querySelector(".dock"),lim=d&&d.offsetHeight?d.getBoundingClientRect().top:innerHeight;if(r.bottom<top+20||r.top>lim-20||!r.height){slowBy.id=(slowBy.id||0)+1;Mem.scrollCur(true)}}catch(e){}},700)})()</script>
 </body>
 </html>
