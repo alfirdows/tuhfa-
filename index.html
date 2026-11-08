@@ -1043,6 +1043,8 @@ body.dockpad .toast,body.pbon .toast{bottom:calc(84px + env(safe-area-inset-bott
 html[lang="en"] .facts b{font-size:.6rem!important}html[lang="en"] .facts li>span{font-size:.58rem!important}
 .dsh{font-family:"Plex Arabic",sans-serif;font-weight:400;margin-inline:.25em;display:inline-block}
 
+.nxc{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(150px + env(safe-area-inset-bottom,0px));z-index:66;width:min(420px,calc(100vw - 24px));display:grid;gap:6px;padding:14px 16px;border-radius:18px;background:var(--surface);border:1.5px solid var(--acc);box-shadow:0 10px 28px rgba(0,0,0,.25);text-align:center}
+.nxc .row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:4px}.nxc .note{margin:0}
 .anyv{display:flex;align-items:center;gap:14px;width:100%;text-align:start;border:1.5px solid var(--acc);background:var(--acc-soft);color:inherit;border-radius:16px;padding:14px 16px;cursor:pointer;font:inherit}
 .anyv .ic{flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--acc);color:#fff}.anyv .ic svg{width:24px;height:24px}
 .anyv .tx{display:flex;flex-direction:column;gap:3px;min-width:0}.anyv b{font-size:1.08rem}.anyv small{color:var(--muted);font-size:.86rem;line-height:1.45}
@@ -2502,14 +2504,17 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   for(const L of [3,2]){if(seq.length<L)continue;const tail=seq.slice(-L);if(tail.join("").length<5)continue;let best=null;
    for(let p=L-1;p<ALLW.length-1;p++){let ok=true;for(let k=0;k<L;k++)if(!wmatch(tail[k],ALLW[p-L+1+k].n)){ok=false;break}
     if(!ok)continue;const g=p+1;if(best==null||Math.abs(g-cg)<Math.abs(best-cg))best=g}
-   if(best!=null&&L===2&&Math.abs(best-cg)>14)continue;if(best!=null)return best===cg?null:{g:best}}return null},
+   if(best!=null&&L===2&&Math.abs(best-cg)>14)continue;if(best!=null)return best===cg?null:{g:best,L}}return null},
  /* Follow the reader back or ahead. The words that led there were not mistakes. A long way keeps a button to return. */
- follow(g){const r=this.run,cur=this.W[r.idx],cg=gOf(cur),tg=ALLW[g];
+ follow(g,L){const r=this.run,cur=this.W[r.idx],cg=gOf(cur),tg=ALLW[g];if(!tg)return;
   for(const k of this.undo||[])if(r.tries[k]){r.tries[k]--;r.mist=Math.max(0,r.mist-1);if(!r.tries[k]){delete r.tries[k];delete r.said[k];if(r.st[k]===2)delete r.st[k]}}
   this.undo=[];this.trail=[];this.cand=null;
   if(Math.abs(g-cg)>16||Math.abs(tg.v-cur.v)>=2){if(!r.ret||(g<cg&&cg>gOf(r.ret))){r.ret={v:cur.v,h:cur.h,i:cur.i};r.retDir=g<cg?1:-1}}
-  toast(OW("Following you from verse ","أتابعك من البيت ")+num(tg.v));this.jumpTo(tg)},
- retUI(){const r=this.run;let c=$("#retc");if(!r||!r.ret||ROUTE!=="memorize"){if(c)c.remove();return}
+  toast(OW("Following you from verse ","أتابعك من البيت ")+num(tg.v));this.jumpTo(tg);
+  /* the words that showed where you are were said: show them as said, not as left out (and a small word just before them too) */
+  const R=this.run;if(!R)return;const a=R.idx-(L||2);for(let k=Math.max(0,a-1);k<R.idx;k++){if(k===a-1&&!(this.W[k]&&this.W[k].n.length<=3&&this.W[k].v===this.W[a].v))continue;if(!R.st[k]||R.st[k]===6){R.st[k]=this.ok(k);this.setW(k)}}
+  this.save();this.scrollCur()},
+ retUI(){this.nextUI();const r=this.run;let c=$("#retc");if(!r||!r.ret||ROUTE!=="memorize"){if(c)c.remove();return}
   if(!c){c=document.createElement("div");c.id="retc";c.className="retc";document.body.appendChild(c)}
   c.innerHTML=`<button class="go" type="button">${IC.undo}<span>${OW("Back to where you were","ارجع إلى حيث كنت")} · ${t("verse")} ${num(r.ret.v)}</span></button><button class="x" type="button" aria-label="${OW("Close","إغلاق")}">${IC.close}</button>`;
   $(".go",c).onclick=()=>{const tg=r.ret;r.ret=null;this.jumpTo(tg);toast(OW("Back where you were","رجعتَ إلى موضعك"))};$(".x",c).onclick=()=>{r.ret=null;this.save();this.retUI()}},
@@ -2597,7 +2602,14 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   const hd=$(".mhead"),top=Math.max(120,(hd?hd.getBoundingClientRect().bottom:120)+16);
   if(rc.top<top||rc.bottom>lim)window.scrollBy({top:rc.top-Math.max(top,top+(lim-top)/2-rc.height),behavior:instant?"auto":"smooth"})},
  advance(){const r=this.run;const old=r.idx;this.stuck=0;this.trail=[];this.since=[];{const s=r.st[old];const el=$(`#mz .m[data-k="${old}"]`);if(s===1||s===4){this.combo=(this.combo||0)+1;addXP(s===1?5:2,el);if(this.combo%10===0&&ST.game)setTimeout(()=>popFx(`${t("combo")} ×${num(this.combo)}`,el,"combo"),200)}else this.combo=0;const w=this.W[old],nx=this.W[old+1];if(w&&(!nx||nx.v!==w.v)){const good=this.W.every((x,k)=>x.v!==w.v||r.st[k]===1||r.st[k]===5);if(good)addXP(20,el)}}r.idx++;this.setW(old);if(r.idx<this.W.length)this.setW(r.idx);this.prog();this.curVerse();this.tryUI();
-  if(r.ret&&r.retDir>0&&r.idx<this.W.length&&gOf(this.W[r.idx])>=gOf(r.ret)){r.ret=null;this.retUI()}this.save();if(r.idx>=this.W.length){if(!this.advanceAny())this.finish();return}this.scrollCur()},
+  if(r.ret&&r.retDir>0&&r.idx<this.W.length&&gOf(this.W[r.idx])>=gOf(r.ret)){r.ret=null;this.retUI()}this.save();if(r.idx>=this.W.length){if(!this.advanceAny()&&!this.askNext())this.finish();return}this.scrollCur()},
+ /* End of a chapter (Tasnim): "Continue to the next chapter" or "Done". Just reading on into the next chapter also continues. */
+ askNext(){const r=this.run,last=r.verses[r.verses.length-1];if(last>=61)return false;r.choose=1;r.ret=null;this.save();this.retUI();return true},
+ nextUI(){const r=this.run;let c=$("#nxc");if(!r||!r.choose||ROUTE!=="memorize"){if(c)c.remove();return}const ni=chOf(r.verses[r.verses.length-1]+1);
+  if(!c){c=document.createElement("div");c.id="nxc";c.className="nxc";document.body.appendChild(c)}
+  c.innerHTML=`<b>${OW("Chapter finished","انتهى الباب")}</b><span class="note">${OW("Next: ","التالي: ")}${chName(ni)}</span><div class="row"><button class="btn pri" type="button" data-nx="go">${OW("Continue to next chapter","تابع إلى الباب التالي")}</button><button class="btn soft" type="button" data-nx="done">${OW("Done","انتهيت")}</button></div>`;
+  c.onclick=e=>{const b=e.target.closest("[data-nx]");if(!b)return;if(b.dataset.nx==="go")this.contNext();else{r.choose=0;c.remove();this.finish()}}},
+ contNext(){const r=this.run;if(!r)return;r.choose=0;const c=$("#nxc");if(c)c.remove();const last=r.verses[r.verses.length-1],ch=CH[chOf(last+1)];r.verses=r.verses.concat(range(last+1,ch[1]));this.save();this.renderRun()},
  mark(s){const r=this.run;if(!r||r.idx>=this.W.length)return;if(s===3)r.peeks++;r.st[r.idx]=s;this.advance()},
  attention(i){const el=$(`#mz .m[data-k="${i}"]`);if(el){el.classList.remove("wring");void el.offsetWidth;el.classList.add("wring");setTimeout(()=>el.classList.remove("wring"),1300)}},
  manualWrong(){const r=this.run;if(!r||r.idx>=this.W.length)return;const i=r.idx;r.tries[i]=(r.tries[i]||0)+1;r.mist++;this.misUI();onWrong();
@@ -2607,7 +2619,9 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   $("#hintOn").onclick=()=>{this.run.view=1;this.applyView();this.save();n.innerHTML=""};clearTimeout(this._ht);this._ht=setTimeout(()=>{if($("#mhint"))$("#mhint").innerHTML=""},7000)},
  revealVerse(){const r=this.run;const v=this.W[r.idx]&&this.W[r.idx].v;while(r.idx<this.W.length&&this.W[r.idx].v===v){r.st[r.idx]=3;r.peeks++;this.setW(r.idx);r.idx++}
   if(r.idx<this.W.length)this.setW(r.idx);this.prog();this.curVerse();this.save();if(r.idx>=this.W.length)this.finish();else this.scrollCur()},
- heard(words,rev){rev=rev||0;const r=this.run;if(!r||this.held)return;if(r.find){this.findHeard(words,rev);return}for(let wi=0;wi<words.length;wi++){const raw=words[wi];if(this.held)return;const h=norm(raw);if(r.idx>=this.W.length)return;const W=this.W,i=r.idx,e=W[i];
+ heard(words,rev){rev=rev||0;const r=this.run;if(!r||this.held)return;if(r.find){this.findHeard(words,rev);return}
+  if(r.choose){const v=r.verses[r.verses.length-1]+1,f=ALLW.find(x=>x.v===v),tw=this.titleW(v);
+   for(let wi=0;wi<words.length;wi++){const h=norm(words[wi]);if(h&&(wnear(h,f.n,false)||tw.some(x=>x===h||(h.length>3&&sim(h,x)>=.75)))){this.contNext();return this.heard(words.slice(wi),Math.max(0,rev-wi))}}return}for(let wi=0;wi<words.length;wi++){const raw=words[wi];if(this.held)return;const h=norm(raw);if(r.idx>=this.W.length)return;const W=this.W,i=r.idx,e=W[i];
    if(h){this.hbuf=(this.hbuf||[]).concat([h]).slice(-6)}
    /* A chapter title said before the chapter's first verse (e.g. أحكام الميم الساكنة): taken as the title, never as a mistake,
       and never matched to the verse's own words. Skipping the title is fine too. */
@@ -2648,7 +2662,7 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
    /* Nothing moved: after a few words, listen afresh so the phone stops repeating the same wrong guess. */
    this.stuck=(this.stuck||0)+1;if(this.stuck===3&&this.lis)this.lis.refresh();
    /* Words from another place: after two in a row, follow you there, back or ahead, anywhere in the poem. */
-   this.trail=(this.trail||[]).concat([h]).slice(-3);if(this.trail.length>=2){const c=this.locate(this.trail);if(c){this.follow(c.g);return}}
+   this.trail=(this.trail||[]).concat([h]).slice(-3);if(this.trail.length>=2){const c=this.locate(this.trail);if(c){this.follow(c.g,c.L);return}}
    /* Repeating a word just said (to get going again) is fine. */
    let rep=false;for(let b=1;b<=8;b++)if(W[i-b]&&wmatch(h,W[i-b].n)){rep=true;break}if(rep)continue;
    r.tries[i]=(r.tries[i]||0)+1;r.said[i]=raw;r.mist++;(r.mt=r.mt||{})[i]=Date.now();this.undo=(this.undo||[]).concat([i]).slice(-2);this.misUI();
