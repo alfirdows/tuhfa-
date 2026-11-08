@@ -1043,6 +1043,10 @@ body.dockpad .toast,body.pbon .toast{bottom:calc(84px + env(safe-area-inset-bott
 html[lang="en"] .facts b{font-size:.6rem!important}html[lang="en"] .facts li>span{font-size:.58rem!important}
 .dsh{font-family:"Plex Arabic",sans-serif;font-weight:400;margin-inline:.25em;display:inline-block}
 
+.anyv{display:flex;align-items:center;gap:14px;width:100%;text-align:start;border:1.5px solid var(--acc);background:var(--acc-soft);color:inherit;border-radius:16px;padding:14px 16px;cursor:pointer;font:inherit}
+.anyv .ic{flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--acc);color:#fff}.anyv .ic svg{width:24px;height:24px}
+.anyv .tx{display:flex;flex-direction:column;gap:3px;min-width:0}.anyv b{font-size:1.08rem}.anyv small{color:var(--muted);font-size:.86rem;line-height:1.45}
+.anyfind{text-align:center;padding:48px 18px;color:var(--muted)}.anyfind svg{width:40px;height:40px;color:var(--acc);display:block;margin:0 auto 12px}.anyfind b{display:block;color:var(--ink);font-size:1.15rem;margin-bottom:6px}.anyfind p{margin:0;line-height:1.6}
 .startbar{position:sticky;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:5;display:flex;justify-content:center;padding:6px 0}
 .startbar .btn{min-height:40px!important;padding:6px 20px!important;font-size:.88rem!important;box-shadow:0 4px 14px rgba(0,0,0,.12)}
 .viewseg button{min-height:28px!important;padding:3px 10px!important;font-size:.74rem!important}
@@ -1196,6 +1200,7 @@ html[lang="ar"] .menu a{font-size:.74rem!important}
 .crline .tagv{display:block;font-family:var(--font);font-size:.72rem}
 .cw{display:inline-block;min-width:2.2em;border-bottom:2px dotted var(--stone-d);margin:0 2px}
 .cw.ok{border-bottom:0;color:var(--ink);animation:bloom .3s both}
+.m.cur:not(.h){box-shadow:inset 0 -3px 0 var(--acc);border-radius:4px}
 .cw.cur{border-bottom:2.5px solid var(--acc)}
 .crush{display:grid;grid-template-columns:repeat(var(--c),1fr);gap:8px;direction:rtl}
 .ct{min-height:62px;border-radius:14px;border:2px solid;font-family:var(--text);font-size:calc(1.15rem*var(--fs));line-height:1.6;padding:4px;transition:transform .15s;color:var(--ink);box-shadow:0 3px 0 rgba(0,0,0,.08)}
@@ -1426,6 +1431,14 @@ html,body{overflow-x:clip}
 .pbar .pbi>*{display:inline!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
 .pbar .pbi span{font-size:.78rem}
 }
+/* Recite screen, compact (Tasnim: "too big, barely a few verses"): many more verses fit on a phone; nothing removed */
+.mtext{padding:2px 10px!important}
+.mtext .bayt{padding:7px 2px!important;gap:0!important}
+.mtext .hm{font-size:calc(1.38rem*var(--fs))!important;line-height:1.7!important;gap:0 .4em!important}
+.mtext .chh{padding:6px 8px 5px!important;margin:4px 0 0!important}
+.mtext .chh h3{font-size:1.02rem!important;line-height:1.45!important}
+.mtext .chh p{font-size:.78rem}
+body.dockpad #memRoot{margin-top:-14px}
 </style>
 </head>
 <body>
@@ -1607,8 +1620,8 @@ function wmatch(h,e){if(!h||!e)return false;if(h===e)return true;const need=L=>L
  const ok=(a,b)=>{const L=Math.max(a.length,b.length);return L<=3?a===b:sim(a,b)>=need(L)};if(ok(h,e))return true;
  const h2=h.replace(/^[وف]/,""),e2=e.replace(/^[وف]/,"");if(h2.length>1&&e2.length>1&&(h2!==h||e2!==e)&&ok(h2,e2))return true;
  const a=h.replace(/^ال/,""),b=e.replace(/^ال/,"");return a.length>2&&b.length>2&&ok(a,b)}
-/* Sounds the phone often mixes up (ص/س, ض/د, ط/ت, ق/ك, ح/ه, ذ/ظ/ز, ث/س, ع and alif) count as one, and "ال" (with و ف ب ك ل before it) is ignored. */
-const fold=s=>s.replace(/^[وف]?[بكل]?ال/,"").replace(/[صث]/g,"س").replace(/ض/g,"د").replace(/[ذظ]/g,"ز").replace(/ط/g,"ت").replace(/ق/g,"ك").replace(/ح/g,"ه").replace(/غ/g,"خ").replace(/[عا]/g,"").replace(/(.)\1+/g,"$1");
+/* Sounds the phone often mixes up (ص/س, ض/د/ط/ت (يدغما heard as يتغمد),  ق/ك, ح/ه, ذ/ظ/ز, ث/س, ع and alif) count as one, and "ال" (with و ف ب ك ل before it) is ignored. */
+const fold=s=>s.replace(/^[وف]?[بكل]?ال/,"").replace(/[صث]/g,"س").replace(/[ضدط]/g,"ت").replace(/[ذظ]/g,"ز").replace(/ق/g,"ك").replace(/ح/g,"ه").replace(/غ/g,"خ").replace(/[عا]/g,"").replace(/(.)\1+/g,"$1");
 /* Kinder check: the same word as the phone usually mishears it. "again" = you are already trying this word, so a close word is enough. */
 function wnear(h,e,again){if(wmatch(h,e))return true;if(!h||!e)return false;const t=(a,b)=>{if(!a||!b)return false;if(a===b)return true;if(!again)return false;
   const L=Math.max(a.length,b.length);return L<=2?false:L<=4?lev(a,b)<=1:sim(a,b)>=.6};
@@ -2404,6 +2417,7 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
    cont=`<div class="panel"><b>${t("cont")}</b><div class="note">${rangeLabel(saved.verses)} · ${t("contSub").replace("{v}",num(w.v)).replace("{p}",num(Math.round(saved.idx/W.length*100)))}</div>
    <div class="row"><button class="btn pri" type="button" id="mcont">${t("cont")}</button><button class="btn soft" type="button" id="mdisc">${t("discard")}</button></div></div>`}
   m.innerHTML=`<div class="stack"><div class="head" style="margin-bottom:0"><h2>${LANG==="ar"?"سمّع من حفظك":"Recite from memory"}</h2><p>${t("tipTap")}</p></div>
+   <button type="button" class="anyv" id="manyv"><span class="ic">${IC.mic}</span><span class="tx"><b>${OW("Recite from any verse","سمّع من أي بيت")}</b><small>${OW("No need to choose. Tap, then start reading anywhere in the poem. I find your place.","لا حاجة للاختيار. اضغط، ثم ابدأ القراءة من أي موضع في المنظومة، وأنا أجد مكانك.")}</small></span></button>
    <div class="panel"><h3>${t("range")}</h3>${rp.html}<div class="startbar"><button class="btn pri" type="button" id="mstart">${IC.mic}${t("startL")} · ${rangeLabel(range(this.setup.from,this.setup.to))}</button></div><p class="note" style="margin:0">${t("viewLater")}</p></div>${cont}
    <div class="mtile"><button type="button" id="tRec">${IC.mic}<span>${t("recs")}</span></button><button type="button" id="misOpen">${IC.rev}<span>${OW("Recitation review","مراجعة التسميع")}</span>${MISL.all().length?`<b class="cnt">${num(MISL.all().length)}</b>`:""}</button><button type="button" id="tHist">${IC.cal}<span>${t("hist")}</span></button></div></div>`;
   $("#tRec").onclick=()=>{Sheet.open(`<div class="shd"><span class="t">${t("recs")}</span><button class="x" type="button" aria-label="close">${IC.close}</button></div><div id="recbox"></div>`);const fill=()=>recsHTML().then(h=>{const b=$("#recbox");if(b){b.innerHTML=h;bindRecs(b,fill)}});fill()};
@@ -2411,12 +2425,14 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   $("#misOpen").onclick=()=>MISL.openSheet();
   rp.bind(m);const go=view=>{unlockAudio();this.newRun(range(this.setup.from,this.setup.to));this.run.view=view;this.save();history.pushState(null,"","#memorize/run");this.render();window.scrollTo(0,0);bismillah()};
   $("#mstart").onclick=()=>go(ps.get("lastView",0));
+  $("#manyv").onclick=()=>this.startAny();
   if(saved){$("#mcont").onclick=()=>{unlockAudio();this.run=saved;history.pushState(null,"","#memorize/run");this.render();bismillah()};$("#mdisc").onclick=()=>{const bid=BIN.add("ls",{en:t("discard"),ar:t("discard"),ls:BIN.snap("tuhfa2.p."+PID+".session")});ps.del("session");this.render();BIN.pop(["bin:"+bid],1)}}
 },
  wordHTML(k){const r=this.run,w=this.W[k],s=r.st[k]||0;const cls=["m"];let inner=qh(w.w);if(w.q)cls.push("qt");
   if(s===0&&r.pk&&r.pk[k]){cls.push("peeked","seen");if(k===r.idx)cls.push("cur")}
   else if(s===0){cls.push("h");if(k===r.idx)cls.push("cur");if(ST.hide==="first"&&w.i===0)cls.push("fl");if(ST.hide==="letters")cls.push("lt")}
   else if(s===1||s===5)cls.push("ok");else if(s===3)cls.push("peeked");else if(s===4)cls.push("fixed");else if(s===6)cls.push("h","skip");else if(s===2)cls.push("bad")
+  if(k===r.idx&&!cls.includes("cur"))cls.push("cur");
   return `<span class="${cls.join(" ")}" data-k="${k}">${inner}</span>`},
  viewBtn(){return `${IC.bulb}<span>${[t("hidden"),t("hint"),t("shown")][this.run.view||0]}</span>`},
  quick(){return `<button class="qk" type="button" id="qTries">${IC.x}<span>${ST.tries?num(ST.tries)+"× "+t("tries"):t("noLimit")}</span></button>
@@ -2430,12 +2446,18 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
  /* The expected word was heard. If an earlier try was also close, that was the phone mishearing you, not a mistake. */
  /* Said right: from memory if the word was hidden; read (blue) if the words were shown or you peeked at it. */
  /* Peek: show the current hidden word. It then counts as read, not from memory. */
- peekCur(){const r=this.run,k=r.idx;if(!r||k>=this.W.length||r.st[k]||(r.view||0)===2)return;r.pk=r.pk||{};if(r.pk[k])return;r.pk[k]=1;r.peeks++;this.setW(k);this.save()},
+ peekCur(){const r=this.run,k=r&&r.idx;if(!r||r.find||k>=this.W.length||r.st[k]||(r.view||0)===2)return;r.pk=r.pk||{};if(r.pk[k])return;r.pk[k]=1;r.peeks++;this.setW(k);this.save()},
  ok(k){const r=this.run;return (r.view||0)===2||(r.pk&&r.pk[k])?3:1},
  hit(){const r=this.run,i=r.idx,e=this.W[i];onRight();this.cand=null;this.undo=[];
   if(r.tries[i]&&r.said[i]&&wnear(norm(r.said[i]),e.n,true)){r.mist=Math.max(0,r.mist-r.tries[i]);delete r.tries[i];delete r.said[i]}
   r.st[i]=r.tries[i]?4:this.ok(i);this.advance();this.misUI()},
+ /* Is this heard word part of the chapter title, said before the chapter's first verse? (Tasnim: saying
+    "أحكام النون الساكنة والتنوين" was taken as verse 6.) A title word wins when it is closer to the title than to the verse word. */
+ titleHit(h,i){const W=this.W,e=W[i];if(!h||!e||!(i===0||W[i-1].v!==e.v)||!CH.some(c=>c[0]===e.v)||h===e.n)return -1;
+  const tw=this.titleW(e.v),k=tw.findIndex(x=>x===h||(h.length>3&&sim(h,x)>=.75));if(k<0)return -1;return tw[k]===h||sim(h,tw[k])>sim(h,e.n)?k:-1},
  peek(raw){const r=this.run;if(!r||this.held||r.idx>=this.W.length)return false;const h=norm(raw),e=this.W[r.idx];
+  /* while a chapter title is being said, the words are the title's: let the full check below decide */
+  if(r.ttl&&r.ttl.i===r.idx)return false;if(this.titleHit(h,r.idx)>=0)return false;
   if(h&&(wnear(h,e.n,true)||(this.frag&&wnear(this.frag+h,e.n,true)))){this.frag=null;this.hbuf=(this.hbuf||[]).concat([h]).slice(-6);this.hit();return true}return false},
  titleW(v){const ci=chOf(v);return toks("باب "+(CHH[ci]||"")).map(norm).filter(Boolean)},
  extra(v){/* chapter-heading words and the basmala: if a student reads them it is fine, and skipping them is fine too */
@@ -2446,7 +2468,7 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   const l=$("#micl");l.className="mst "+(this.listening?"live":paused?"pz":"");l.innerHTML=this.listening?`<i></i>${t("listening")}`:paused?`${IC.pause}${t("paused")}`:t("startL");this.tryUI()},
  /* The slim row above the buttons: what is happening now, and three helpers (one word back, skip a word, start again). */
  rqHTML(){return `<div class="rq" id="rq"><span class="rqtop"><span class="rs" id="rqS"></span><span class="hrd" id="rqH"></span></span><button type="button" data-rq="back" aria-label="${t("wBack")}" title="${t("wBack")}">${IC.wback}${t("wBack")}</button><button type="button" data-rq="skip" aria-label="${t("wSkip")}" title="${t("wSkip")}">${IC.wskip}${t("wSkip")}</button><button type="button" data-rq="again" aria-label="${t("wAgain")}" title="${t("wAgain")}">${IC.wagain}${t("wAgain")}</button></div>`},
- rqBind(){const q=$("#rq");if(!q)return;q.onclick=e=>{const b=e.target.closest("[data-rq]");if(!b||!this.run)return;const k=b.dataset.rq;if(k==="back")this.wordBack();else if(k==="skip")this.skipWord();else this.again2()};this.tryUI()},
+ rqBind(){const q=$("#rq");if(!q)return;q.onclick=e=>{const b=e.target.closest("[data-rq]");if(!b||!this.run||this.run.find)return;const k=b.dataset.rq;if(k==="back")this.wordBack();else if(k==="skip")this.skipWord();else this.again2()};this.tryUI()},
  tryUI(){const s=$("#rqS"),r=this.run;if(!s||!r)return;if(!this.listening)heardLine($("#rqH"),null);const n=r.tries[r.idx]||0,paused=!this.listening&&r.part;
   s.className="rs"+(n&&this.listening?" tr":this.listening?"":paused?" ps":" off");
   s.innerHTML=`<i></i>${n&&this.listening?(ST.tries?t("tryN").replace("{a}",num(n+1)).replace("{b}",num(ST.tries)):t("tryAgain")):this.listening?t("listening"):paused?t("paused"):t("startL")}`},
@@ -2457,12 +2479,30 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
  skipWord(){const r=this.run;if(!r||r.idx>=this.W.length)return;const k=r.idx;if(r.tries[k]){r.mist=Math.max(0,r.mist-r.tries[k]);delete r.tries[k];delete r.said[k]}this.mark(3);this.misUI();this.tryUI()},
  /* Start these verses again from the first word; listening carries on if it was on. */
  again2(){const r=this.run;if(!r)return;const was=this.listening;this.stopMic(false);this.newRun(r.verses);this.run.view=r.view||0;this.render();window.scrollTo(0,0);if(was&&!this.listening)this.toggleMic()},
+ /* Recite from any verse: no chapter to choose. The microphone listens, finds where in the poem you are reading,
+    then follows you from there and carries on into the next chapters. */
+ startAny(){unlockAudio();Player.stop();this.newRun(range(1,61));const r=this.run;r.find=1;r.any=1;r.view=ps.get("lastView",0);this.fbuf=[];this.save();
+  history.pushState(null,"","#memorize/run");this.render();window.scrollTo(0,0);if(!this.listening)this.toggleMic()},
+ /* The words heard so far, matched against the whole poem. Only a place that fits and is the only one that fits. */
+ findAny(seq){const A=ALLW.filter(x=>fold(x.n).length>1);for(const L of [8,7,6,5,4,3,2]){if(seq.length<L)continue;const tail=seq.slice(-L);if(tail.join("").length<6)continue;const hits=[];
+   for(let p=L-1;p<A.length;p++){let ok=true;for(let k=0;k<L;k++)if(!wmatch(tail[k],A[p-L+1+k].n)){ok=false;break}if(ok){hits.push(p);if(hits.length>1)break}}
+   if(hits.length===1)return {s:ALLW.indexOf(A[hits[0]-L+1]),e:ALLW.indexOf(A[hits[0]])};if(hits.length>1)return null}return null},
+ findHeard(words,rev){const b=(this.fbuf||[]).slice(0,Math.max(0,(this.fbuf||[]).length-rev));for(const w of words){const h=norm(w);if(h&&fold(h).length>1)b.push(h)}this.fbuf=b.slice(-8);
+  const f=this.findAny(this.fbuf);if(!f)return;const r=this.run,a=ALLW[f.s],c=CH[chOf(a.v)];this.fbuf=[];
+  r.find=0;r.verses=range(a.v,c[1]);r.idx=0;r.st={};r.tries={};r.said={};r.mist=0;this.W=this.build(r.verses);
+  const key=w=>w.v+":"+w.h+":"+w.i;const s=this.W.findIndex(w=>key(w)===key(a));
+  /* the phone often drops the first word or two of a line: those count as said; anything earlier is simply not part of this time (no mistake) */
+  if(a.i<=2)for(let k=s-a.i;k<s;k++)r.st[k]=this.ok(k);
+  for(let k=s;k<=s+f.e-f.s&&k<this.W.length;k++)r.st[k]=this.ok(k);r.idx=Math.min(s+f.e-f.s+1,this.W.length);
+  this.save();this.renderRun();toast(OW("Found you · verse ","وجدتُك · البيت ")+num(a.v));if(r.idx>=this.W.length)this.advanceAny()},
+ /* Reciting from any verse: at the end of a chapter, carry on into the next one instead of stopping. */
+ advanceAny(){const r=this.run,last=r.verses[r.verses.length-1];if(!r.any||last>=61)return false;const c=CH[chOf(last+1)];r.verses=r.verses.concat(range(last+1,c[1]));this.save();this.renderRun();return true},
  /* Where are you reciting? The last two or three words heard, in a row, anywhere in the poem (nearest first). */
  locate(seq){const cur=this.W[this.run.idx];if(!cur)return null;const cg=gOf(cur);
   for(const L of [3,2]){if(seq.length<L)continue;const tail=seq.slice(-L);if(tail.join("").length<5)continue;let best=null;
    for(let p=L-1;p<ALLW.length-1;p++){let ok=true;for(let k=0;k<L;k++)if(!wmatch(tail[k],ALLW[p-L+1+k].n)){ok=false;break}
     if(!ok)continue;const g=p+1;if(best==null||Math.abs(g-cg)<Math.abs(best-cg))best=g}
-   if(best!=null)return best===cg?null:{g:best}}return null},
+   if(best!=null&&L===2&&Math.abs(best-cg)>14)continue;if(best!=null)return best===cg?null:{g:best}}return null},
  /* Follow the reader back or ahead. The words that led there were not mistakes. A long way keeps a button to return. */
  follow(g){const r=this.run,cur=this.W[r.idx],cg=gOf(cur),tg=ALLW[g];
   for(const k of this.undo||[])if(r.tries[k]){r.tries[k]--;r.mist=Math.max(0,r.mist-1);if(!r.tries[k]){delete r.tries[k];delete r.said[k];if(r.st[k]===2)delete r.st[k]}}
@@ -2496,16 +2536,18 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   r.verses=vs;const W=this.build(vs);r.st={};r.tries={};r.said={};W.forEach((w,k)=>{const kk=key(w);if(st[kk])r.st[k]=st[kk];if(tr[kk])r.tries[k]=tr[kk];if(sd[kk])r.said[k]=sd[kk]});
   const ni=W.findIndex(w=>w.v===tg.v&&w.h===tg.h&&w.i===tg.i);const oi=oldKey?W.findIndex(w=>key(w)===oldKey):W.length;
   /* Going back keeps what you had already recited, so coming forward again (or tapping "back to where you were") restores it. */
-  if(ni<oi){r.stash=r.stash||{};for(let k=ni;k<oi;k++){if(r.st[k]){r.stash[key(W[k])]=[r.st[k],r.tries[k]||0,r.said[k]||null];r.mist=Math.max(0,r.mist-(r.tries[k]||0))}delete r.st[k];delete r.tries[k];delete r.said[k]}}
+  /* Going back: what you already recited stays on screen (Tasnim: words disappeared). Saying it again replaces it. */
+  if(ni<oi){for(let k=ni;k<oi;k++)if(r.tries[k]){r.mist=Math.max(0,r.mist-r.tries[k]);delete r.tries[k]}}
   else{for(let k=oi;k<ni;k++)if(!r.st[k]){if(r.tries[k]){r.mist=Math.max(0,r.mist-r.tries[k]);delete r.tries[k];delete r.said[k]}const sv=r.stash&&r.stash[key(W[k])];if(sv){r.st[k]=sv[0];if(sv[1]){r.tries[k]=sv[1];r.mist+=sv[1]}if(sv[2])r.said[k]=sv[2]}else r.st[k]=6}}
   r.idx=ni;this.held=false;this.hbuf=[];this.cand=null;this.trail=[];this.undo=[];this.stuck=0;this.save();this.renderRun()},
  renderRun(){const r=this.run;this.W=this.build(r.verses);const m=this.root();document.body.classList.add("dockpad");
   let body="",prev=0;for(const v of r.verses){const ci=chOf(v);if(CH[ci][0]===v||(prev&&v!==prev+1))body+=`<header class="chh" style="margin-top:12px"><h3><a class="chl" href="#poem/c${ci+1}">${chName(ci)}</a></h3></header>`;
    const parts=[[],[]];this.W.forEach((w,k)=>{if(w.v===v)parts[w.h].push(this.wordHTML(k))});body+=verseBlock(v,parts[0].join(" "),parts[1].join(" "));prev=v}
+  if(r.find)body=`<div class="anyfind">${IC.mic}<b>${OW("Start reading from any verse","ابدأ القراءة من أي بيت")}</b><p>${OW("Tap the microphone if it is off. After a few words I find your place and follow you.","اضغط على الميكروفون إن كان مطفأً. بعد كلمات قليلة أجد مكانك وأتابعك.")}</p></div>`;
   /* A calm screen: the verses in the middle, one slim line on top, and four buttons at the bottom
      (how much to show, the microphone, the review, end). Everything else waits in Tools. */
   const manual=ST.mode==="manual"||!SR,vw=r.view||0;
-  m.innerHTML=`<div class="mhead calm"><div class="r"><b>${rangeLabel(r.verses)}</b><span id="mlive"></span><span class="sp"></span><span class="pill" id="mtime">${fmtT(r.elapsed)}</span><button class="ib" type="button" id="dmore" aria-label="${OW("Tools","أدوات")}">${IC.dots}</button></div>
+  m.innerHTML=`<div class="mhead calm"><div class="r"><b>${r.find?OW("Any verse","أي بيت"):rangeLabel(r.verses)}</b><span id="mlive"></span><span class="sp"></span><span class="pill" id="mtime">${fmtT(r.elapsed)}</span><button class="ib" type="button" id="dmore" aria-label="${OW("Tools","أدوات")}">${IC.dots}</button></div>
    <div class="prog"><i id="mprog"></i></div></div>
    <div id="mnote"></div><div id="mhint" style="margin-bottom:8px"></div><div class="mtext" id="mz">${body}</div><div class="spacer"></div>
    <div class="dock calm">${manual?"":this.rqHTML()}<div class="in">
@@ -2551,9 +2593,11 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
  curVerse(){$$("#mz .bayt.cur").forEach(x=>x.classList.remove("cur"));const w=this.W[this.run.idx];if(w){const b=$("#m"+w.v);b&&b.classList.add("cur")}},
  scrollCur(instant){const el=$(`#mz .m[data-k="${this.run.idx}"]`);if(!el)return;const rc=el.getBoundingClientRect(),d=$(".dock .rq")||$(".dock"),lim=d?d.getBoundingClientRect().top-24:innerHeight-150;
   /* keep the word you are on above the buttons at the bottom, never under them */
-  if(rc.top<200||rc.bottom>lim)window.scrollBy({top:rc.top-Math.max(200,(lim-200)/2),behavior:instant?"auto":"smooth"})},
+  /* and never under the bar at the top either (Tasnim: "I can't even see what I'm reading") */
+  const hd=$(".mhead"),top=Math.max(120,(hd?hd.getBoundingClientRect().bottom:120)+16);
+  if(rc.top<top||rc.bottom>lim)window.scrollBy({top:rc.top-Math.max(top,top+(lim-top)/2-rc.height),behavior:instant?"auto":"smooth"})},
  advance(){const r=this.run;const old=r.idx;this.stuck=0;this.trail=[];this.since=[];{const s=r.st[old];const el=$(`#mz .m[data-k="${old}"]`);if(s===1||s===4){this.combo=(this.combo||0)+1;addXP(s===1?5:2,el);if(this.combo%10===0&&ST.game)setTimeout(()=>popFx(`${t("combo")} ×${num(this.combo)}`,el,"combo"),200)}else this.combo=0;const w=this.W[old],nx=this.W[old+1];if(w&&(!nx||nx.v!==w.v)){const good=this.W.every((x,k)=>x.v!==w.v||r.st[k]===1||r.st[k]===5);if(good)addXP(20,el)}}r.idx++;this.setW(old);if(r.idx<this.W.length)this.setW(r.idx);this.prog();this.curVerse();this.tryUI();
-  if(r.ret&&r.retDir>0&&r.idx<this.W.length&&gOf(this.W[r.idx])>=gOf(r.ret)){r.ret=null;this.retUI()}this.save();if(r.idx>=this.W.length){this.finish();return}this.scrollCur()},
+  if(r.ret&&r.retDir>0&&r.idx<this.W.length&&gOf(this.W[r.idx])>=gOf(r.ret)){r.ret=null;this.retUI()}this.save();if(r.idx>=this.W.length){if(!this.advanceAny())this.finish();return}this.scrollCur()},
  mark(s){const r=this.run;if(!r||r.idx>=this.W.length)return;if(s===3)r.peeks++;r.st[r.idx]=s;this.advance()},
  attention(i){const el=$(`#mz .m[data-k="${i}"]`);if(el){el.classList.remove("wring");void el.offsetWidth;el.classList.add("wring");setTimeout(()=>el.classList.remove("wring"),1300)}},
  manualWrong(){const r=this.run;if(!r||r.idx>=this.W.length)return;const i=r.idx;r.tries[i]=(r.tries[i]||0)+1;r.mist++;this.misUI();onWrong();
@@ -2563,12 +2607,14 @@ const Mem={setup:null,run:null,W:null,lis:null,listening:false,timer:null,
   $("#hintOn").onclick=()=>{this.run.view=1;this.applyView();this.save();n.innerHTML=""};clearTimeout(this._ht);this._ht=setTimeout(()=>{if($("#mhint"))$("#mhint").innerHTML=""},7000)},
  revealVerse(){const r=this.run;const v=this.W[r.idx]&&this.W[r.idx].v;while(r.idx<this.W.length&&this.W[r.idx].v===v){r.st[r.idx]=3;r.peeks++;this.setW(r.idx);r.idx++}
   if(r.idx<this.W.length)this.setW(r.idx);this.prog();this.curVerse();this.save();if(r.idx>=this.W.length)this.finish();else this.scrollCur()},
- heard(words,rev){rev=rev||0;const r=this.run;if(!r||this.held)return;for(let wi=0;wi<words.length;wi++){const raw=words[wi];if(this.held)return;const h=norm(raw);if(r.idx>=this.W.length)return;const W=this.W,i=r.idx,e=W[i];
+ heard(words,rev){rev=rev||0;const r=this.run;if(!r||this.held)return;if(r.find){this.findHeard(words,rev);return}for(let wi=0;wi<words.length;wi++){const raw=words[wi];if(this.held)return;const h=norm(raw);if(r.idx>=this.W.length)return;const W=this.W,i=r.idx,e=W[i];
    if(h){this.hbuf=(this.hbuf||[]).concat([h]).slice(-6)}
    /* A chapter title said before the chapter's first verse (e.g. أحكام الميم الساكنة): taken as the title, never as a mistake,
       and never matched to the verse's own words. Skipping the title is fine too. */
-   if(h&&r.ttl&&r.ttl.i===i){const k=r.ttl.w.findIndex(x=>x===h||(h.length>3&&sim(h,x)>=.75));if(k>=0){r.ttl.w=r.ttl.w.slice(k+1);if(!r.ttl.w.length)r.ttl=null;continue}r.ttl=null}
-   if(h&&(i===0||W[i-1].v!==e.v)&&CH.some(c=>c[0]===e.v)&&!wmatch(h,e.n)){const tw=this.titleW(e.v),k=tw.findIndex(x=>x===h||(h.length>3&&sim(h,x)>=.75));if(k>=0){r.ttl={i,w:tw.slice(k+1)};continue}}
+   if(h&&r.ttl&&r.ttl.i===i){const k=r.ttl.w.findIndex(x=>x===h||(h.length>3&&sim(h,x)>=.75));if(k>=0){r.ttl.w=r.ttl.w.slice(k+1);r.ttl.n=(r.ttl.n||1)+1;if(!r.ttl.w.length)r.ttl=null;continue}
+    /* only one word looked like the title and it was really the verse's first word: count it, then check this word again */
+    const one=(r.ttl.n||1)<=1&&r.ttl.first&&wnear(r.ttl.first,e.n,true);r.ttl=null;if(one){onRight();r.st[i]=this.ok(i);this.advance();wi--;continue}}
+   if(h){const tw=this.titleW(e.v),k=this.titleHit(h,i);if(k>=0){r.ttl={i,w:tw.slice(k+1),n:1,first:h};continue}}
    /* The word you are on is checked kindly every time (the phone rarely writes a recited word exactly), so it works at
       a normal reading speed, not only when you go slowly and repeat. */
    if(wnear(h,e.n,true)){this.frag=null;this.hit();continue}
