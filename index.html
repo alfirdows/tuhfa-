@@ -1509,16 +1509,66 @@ section.hero .lead,section.hero .lead *,section.hero .facts,section.hero .facts 
 section.hero .facts{opacity:1!important;color:var(--muted)!important}
 section.hero .facts li,section.hero .facts li *{font-size:.86rem!important;line-height:1.5}section.hero .facts b{color:var(--ink)!important;font-weight:700!important}
 @media (max-width:560px){section.hero.pat{padding-top:18px!important}section.hero .facts{flex-wrap:wrap!important;white-space:normal!important;row-gap:6px;justify-content:center}}
+/* Header option 2 (Tasnim picked 2026-11-08): menu button on the start side, book name centred, language switch on the end side.
+   Your name is not in the header (it stays in Settings). Same on every site. */
+header.top .bar1.hdr2{display:grid!important;grid-template-columns:1fr auto 1fr!important;align-items:center!important;flex-wrap:nowrap!important;height:auto!important;min-height:58px;padding:6px 0!important;gap:8px!important;row-gap:0!important}
+header.top .bar1.hdr2>.hmenu{grid-column:1;grid-row:1;justify-self:start;width:40px;height:40px;border-radius:50%;border:0;background:none;color:var(--ink);display:grid;place-items:center;cursor:pointer;padding:0;margin-inline-start:-6px;-webkit-tap-highlight-color:transparent}
+header.top .bar1.hdr2>.hmenu:active{background:var(--surface-2,rgba(0,0,0,.06))}
+header.top .bar1.hdr2>.hmenu svg{width:24px;height:24px}
+header.top .bar1.hdr2>.brand{grid-column:2;grid-row:1;justify-self:center;display:flex!important;flex-direction:column;align-items:center;justify-content:center;text-align:center;margin:0!important;flex:none!important;min-width:0!important;max-width:min(62vw,520px);overflow:visible!important;line-height:1.2}
+header.top .bar1.hdr2>.brand b,header.top .bar1.hdr2>.brand>span{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;font-size:1.12rem!important;line-height:1.3!important;font-weight:700!important;color:var(--ink)!important;display:block}
+header.top .bar1.hdr2>.brand .bsub{display:block;font-family:"Site","Plex Arabic","IBM Plex Sans Arabic",system-ui,sans-serif!important;font-size:.7rem!important;font-weight:600;letter-spacing:.02em!important;text-transform:none!important;color:var(--gold,var(--muted))!important;margin-top:1px}
+html[lang="ar"] header.top .bar1.hdr2>.brand .bsub.l-en,html[lang="en"] header.top .bar1.hdr2>.brand .bsub.l-ar{display:none!important}
+header.top .bar1.hdr2>.xpchip,header.top .bar1.hdr2 #pfBtn,header.top .bar1.hdr2 .hctl>a.hbtn{display:none!important}
+header.top .bar1.hdr2>.hctl{grid-column:3;grid-row:1;justify-self:end;flex:none!important;margin:0!important;height:auto!important;border:0!important;background:none!important;border-radius:0!important;overflow:visible!important;box-shadow:none!important}
+header.top .bar1.hdr2 .hctl>.lsw{display:inline-flex!important;direction:ltr;height:32px!important;padding:3px!important;gap:2px;border:0!important;border-radius:999px!important;background:color-mix(in srgb,var(--ink) 7%,transparent)!important;box-shadow:none!important}
+header.top .bar1.hdr2 .hctl>.lsw button{height:26px!important;padding:0 11px!important;border:0!important;border-radius:999px!important;background:none!important;color:var(--muted)!important;font:inherit;font-size:.78rem!important;font-weight:600!important;box-shadow:none!important;cursor:pointer}
+header.top .bar1.hdr2 .hctl>.lsw button.on{background:var(--surface,#fff)!important;color:var(--ink)!important;box-shadow:0 1px 3px rgba(0,0,0,.14)!important}
+@media (max-width:560px){
+ header.top .bar1.hdr2 .hctl>.lsw button{font-size:0!important;padding:0 10px!important;min-width:34px}
+ header.top .bar1.hdr2 .hctl>.lsw button::after{content:attr(data-short);font-size:.8rem;font-weight:600}
+ body.athome header.top .bar1.hdr2>.brand{display:none!important}
+}
+@media (max-width:560px){header.top .bar1.hdr2>.brand.en>span{font-size:1rem!important}}
+@media (max-width:360px){header.top .bar1.hdr2>.brand b,header.top .bar1.hdr2>.brand>span{font-size:1rem!important}}
+/* the menu */
+.hdov{position:fixed;inset:0;z-index:300}
+.hdov[hidden]{display:none}
+.hdov .hdscrim{position:absolute;inset:0;background:rgba(15,17,20,.34);opacity:0;transition:opacity .2s}
+.hdov .hdpanel{position:absolute;top:0;bottom:0;inset-inline-start:0;width:min(300px,84vw);background:var(--bg);color:var(--ink);box-shadow:0 0 40px rgba(0,0,0,.22);padding:calc(14px + env(safe-area-inset-top,0px)) 14px calc(14px + env(safe-area-inset-bottom,0px));overflow-y:auto;transform:translateX(-104%);transition:transform .22s ease;font-family:"Site","Plex Arabic","IBM Plex Sans Arabic",system-ui,sans-serif}
+html[dir="rtl"] .hdov .hdpanel{transform:translateX(104%)}
+.hdov.open .hdscrim{opacity:1}
+.hdov.open .hdpanel{transform:none!important}
+.hdov .hdhead{display:flex;align-items:center;gap:10px;padding:4px 4px 14px;border-bottom:1px solid var(--line);margin-bottom:6px}
+.hdov .hdhead img{width:36px;height:36px;border-radius:10px;flex:none}
+.hdov .hdhead b{flex:1;min-width:0;font-size:1rem;font-weight:700;line-height:1.3}
+.hdov .hdx{width:36px;height:36px;border-radius:50%;border:0;background:none;color:var(--muted);display:grid;place-items:center;cursor:pointer;flex:none}
+.hdov .hdx svg{width:20px;height:20px}
+.hdov .hdsec{font-size:.76rem;font-weight:600;color:var(--muted);padding:14px 6px 6px}
+.hdov .hdlang{display:flex;gap:3px;padding:3px;border-radius:999px;background:color-mix(in srgb,var(--ink) 7%,transparent);direction:ltr}
+.hdov .hdlang button{flex:1;height:34px;border:0;border-radius:999px;background:none;color:var(--muted);font:inherit;font-size:.9rem;font-weight:600;cursor:pointer}
+.hdov .hdlang button.on{background:var(--surface,#fff);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.14)}
+.hdov .hdi{display:flex;align-items:center;gap:12px;width:100%;min-height:46px;padding:0 8px;border:0;border-radius:12px;background:none;color:var(--ink);font:inherit;font-size:.98rem;text-decoration:none;text-align:start;cursor:pointer}
+.hdov .hdi:active{background:color-mix(in srgb,var(--ink) 6%,transparent)}
+.hdov .hdi svg{width:21px;height:21px;color:var(--muted);flex:none}
+.hdov .hdi span{flex:1}
+.hdov .hdsw{width:40px;height:24px;border-radius:999px;background:color-mix(in srgb,var(--ink) 16%,transparent);position:relative;flex:none;transition:background .2s}
+.hdov .hdsw::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .2s}
+.hdov .hdsw.on{background:var(--acc)}
+.hdov .hdsw.on::after{transform:translateX(16px)}
+html[dir="rtl"] .hdov .hdsw::after{left:auto;right:3px}html[dir="rtl"] .hdov .hdsw.on::after{transform:translateX(-16px)}
+@media (prefers-reduced-motion:reduce){.hdov .hdpanel,.hdov .hdscrim{transition:none}}
 </style>
 </head>
 <body>
 <header class="top"><div class="wrap">
- <div class="bar1">
-  <a class="brand" href="#home"><b class="l-ar" lang="ar">متن تحفة الأطفال</b><b class="l-en ebrand" lang="en"><span class="bm">Matn </span>Tuḥfat al-Aṭfāl</b></a>
+ <div class="bar1 hdr2">
+  <button class="hmenu" id="hMenu" type="button" aria-label="Menu" aria-haspopup="dialog" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+  <a class="brand" href="#home"><b class="l-ar" lang="ar">متن تحفة الأطفال</b><b class="l-en ebrand" lang="en"><span class="bm">Matn </span>Tuḥfat al-Aṭfāl</b><small class="bsub l-ar" lang="ar">نظم الجمزوري</small><small class="bsub l-en" lang="en">by al-Jamzūrī</small></a>
   <button class="xpchip" id="xpChip" type="button" hidden onclick="location.hash='#progress'"></button>
   <div class="hctl">
   <button class="hbtn pfchip" id="pfBtn" type="button" aria-label="Learner"></button>
-  <div class="lsw" id="langSw" role="group" aria-label="Language · اللغة"><button type="button" data-lg="ar" lang="ar">عربي</button><button type="button" data-lg="en" lang="en">English</button></div>
+  <div class="lsw" id="langSw" role="group" aria-label="Language · اللغة"><button type="button" data-lg="ar" lang="ar" data-short="ع">عربي</button><button type="button" data-lg="en" lang="en" data-short="EN">English</button></div>
   <a class="hbtn icon" href="#settings" aria-label="Settings"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></a>
   </div>
  </div>
@@ -3277,5 +3327,38 @@ addEventListener("scroll",tuckFab,{passive:true});addEventListener("hashchange",
  setInterval(()=>{try{if(typeof Mem==="undefined"||!Mem.run||!Mem.listening||ROUTE!=="memorize"||Date.now()-touch<4000)return;const z=document.getElementById("mz");if(!z)return;
   if(!z.querySelector(".bayt")){Mem.renderRun();return}const c=z.querySelector(".bayt.cur");if(!c)return;const r=c.getBoundingClientRect(),hd=document.querySelector(".mhead"),top=hd?hd.getBoundingClientRect().bottom:120;
   const d=document.querySelector(".dock"),lim=d&&d.offsetHeight?d.getBoundingClientRect().top:innerHeight;if(r.bottom<top+20||r.top>lim-20||!r.height){slowBy.id=(slowBy.id||0)+1;Mem.scrollCur(true)}}catch(e){}},700)})()</script>
+<script>window.HDR={title:l=>l==="en"?"Tuḥfat al-Aṭfāl":"متن تحفة الأطفال",dark:v=>{ST.theme=v?"dark":"light";saveSet();applyTheme()}};
+/* Header option 2: the menu (language, Settings, Progress, dark mode). Same on every site; each site sets window.HDR first. */
+(()=>{const btn=document.getElementById("hMenu");if(!btn)return;const S=window.HDR||{};let ov=null,last=null;
+const TX={ar:{menu:"القائمة",lang:"اللغة",more:"المزيد",set:"الإعدادات",prog:"تقدّمي",dark:"الوضع الليلي",close:"إغلاق"},
+ en:{menu:"Menu",lang:"Language",more:"More",set:"Settings",prog:"Progress",dark:"Dark mode",close:"Close"}};
+const IC={set:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>',
+ prog:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
+ moon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>',
+ x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>'};
+const L=()=>document.documentElement.lang==="en"?"en":"ar";
+const dark=()=>{const d=document.documentElement.dataset.theme;return d?d==="dark":!!(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)};
+const langs=()=>[...document.querySelectorAll("#langSw button[data-lg]")];
+function draw(){const t=TX[L()];
+ ov.innerHTML=`<div class="hdscrim" data-x></div><div class="hdpanel" role="dialog" aria-modal="true" aria-label="${t.menu}">
+ <div class="hdhead"><img src="icon-180.png" alt=""><b>${S.title?S.title(L()):""}</b><button type="button" class="hdx" data-x aria-label="${t.close}">${IC.x}</button></div>
+ <div class="hdsec">${t.lang}</div><div class="hdlang" role="group" aria-label="${t.lang}">${langs().map(b=>`<button type="button" data-lg="${b.dataset.lg}" lang="${b.dataset.lg}" class="${b.dataset.lg===L()?"on":""}" aria-pressed="${b.dataset.lg===L()}">${b.textContent.trim()}</button>`).join("")}</div>
+ <div class="hdsec">${t.more}</div>
+ <a class="hdi" href="#settings" data-x>${IC.set}<span>${t.set}</span></a>
+ <a class="hdi" href="#progress" data-x>${IC.prog}<span>${t.prog}</span></a>
+ ${S.dark?`<button type="button" class="hdi" data-dark role="switch" aria-checked="${dark()}">${IC.moon}<span>${t.dark}</span><i class="hdsw ${dark()?"on":""}"></i></button>`:""}
+ </div>`}
+function open(){if(!ov){ov=document.createElement("div");ov.className="hdov";ov.hidden=true;document.body.appendChild(ov);
+  ov.addEventListener("click",e=>{const lg=e.target.closest(".hdlang [data-lg]");if(lg){const src=langs().find(b=>b.dataset.lg===lg.dataset.lg);close();if(src&&lg.dataset.lg!==L())src.click();return}
+   const dk=e.target.closest("[data-dark]");if(dk){try{S.dark(!dark())}catch(_){}const on=dark();dk.setAttribute("aria-checked",on);dk.querySelector(".hdsw").classList.toggle("on",on);return}
+   if(e.target.closest("[data-x]"))close()})}
+ last=document.activeElement;draw();ov.hidden=false;void ov.offsetWidth;ov.classList.add("open");btn.setAttribute("aria-expanded","true");
+ setTimeout(()=>{const f=ov.querySelector(".hdlang button.on")||ov.querySelector(".hdx");f&&f.focus({preventScroll:true})},60)}
+function close(){if(!ov||ov.hidden)return;ov.classList.remove("open");btn.setAttribute("aria-expanded","false");setTimeout(()=>{if(!ov.classList.contains("open"))ov.hidden=true},230);try{last&&last.focus({preventScroll:true})}catch(_){}}
+btn.addEventListener("click",()=>ov&&!ov.hidden?close():open());
+addEventListener("keydown",e=>{if(e.key==="Escape")close()});addEventListener("hashchange",close);
+const lab=()=>btn.setAttribute("aria-label",TX[L()].menu);lab();try{new MutationObserver(lab).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]})}catch(_){}
+})();
+</script>
 </body>
 </html>
